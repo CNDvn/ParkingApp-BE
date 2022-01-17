@@ -27,6 +27,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.1.5",
     "@nestjs/typeorm": "^8.0.2",
     "@types/hapi__joi": "^17.1.8",
     "cors": "^2.8.5",
@@ -35,6 +36,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.3.0",
     "typeorm": "^0.2.41"
   },
   "devDependencies": {
