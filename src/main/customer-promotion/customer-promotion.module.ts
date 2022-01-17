@@ -4,6 +4,6 @@ import { CustomerPromotionController } from './customer-promotion.controller';
 
 @Module({
   controllers: [CustomerPromotionController],
-  providers: [CustomerPromotionService]
+  providers: [CustomerPromotionService],
 })
 export class CustomerPromotionModule {}
