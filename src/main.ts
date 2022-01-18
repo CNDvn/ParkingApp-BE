@@ -1,13 +1,18 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+import { AppModule } from './app.module';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
-  const port: number = configService.get('PORT');
+  // setup cookie
+  app.use(cookieParser());
 
+  const configService = app.get(ConfigService);
+  const versionOpenApi: string = configService.get('VERSION_OPEN_API');
+  const port: number = configService.get('PORT');
+  app.setGlobalPrefix(versionOpenApi);
   // setup open api - swagger
   const config = new DocumentBuilder()
     .setTitle('Parking App')
@@ -15,7 +20,7 @@ async function bootstrap(): Promise<void> {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup(versionOpenApi, app, document);
   // end setup open api
 
   await app.listen(port, () => {

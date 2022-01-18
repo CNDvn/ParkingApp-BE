@@ -32,6 +32,7 @@ import { PriceListDetailModule } from './main/price-list-detail/price-list-detai
         MYSQL_PASSWORD: Joi.string().required(),
         MYSQL_DB: Joi.string().required(),
         PORT: Joi.number(),
+        VERSION_OPEN_API: Joi.string(),
       }),
     }),
     DatabaseModule,
