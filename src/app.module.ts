@@ -21,18 +21,19 @@ import { AdminModule } from './main/admin/admin.module';
 import { CustomerPromotionModule } from './main/customer-promotion/customer-promotion.module';
 import { PriceListModule } from './main/price-list/price-list.module';
 import { PriceListDetailModule } from './main/price-list-detail/price-list-detail.module';
+import { AuthModule } from './main/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
+import { RolesGuard } from './main/auth/role/roles.guard';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
       validationSchema: Joi.object({
-        MYSQL_HOST: Joi.string().required(),
         MYSQL_PORT: Joi.number().required(),
-        MYSQL_USER: Joi.string().required(),
-        MYSQL_PASSWORD: Joi.string().required(),
-        MYSQL_DB: Joi.string().required(),
         PORT: Joi.number(),
-        VERSION_OPEN_API: Joi.string(),
       }),
     }),
     DatabaseModule,
@@ -53,8 +54,13 @@ import { PriceListDetailModule } from './main/price-list-detail/price-list-detai
     CustomerPromotionModule,
     PriceListModule,
     PriceListDetailModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
+  ],
 })
 export class AppModule {}
