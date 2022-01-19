@@ -5,11 +5,13 @@ import { Role } from './role/role.enum';
 import { LoginAuthDto } from './dto/loginAuthDto';
 import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
+import { AdminService } from '../admin/admin.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
+    private adminService: AdminService,
     private jwtService: JwtService,
   ) {}
 

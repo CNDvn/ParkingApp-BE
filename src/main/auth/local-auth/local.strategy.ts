@@ -16,12 +16,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     username: string,
     password: string,
   ): Promise<Payload> {
-    const user = await this.authService.validateUser(
-      username,
-      password,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      req.body.role,
-    );
+    const { role } = req.body as { role: string };
+    const user = await this.authService.validateUser(username, password, role);
     if (!user) {
       throw new UnauthorizedException();
     }
