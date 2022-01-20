@@ -3,7 +3,7 @@ import { EntityId } from 'typeorm/repository/EntityId';
 import BaseEntity from './base.entity';
 
 export class BaseService<T extends BaseEntity> {
-  constructor(private readonly repository: Repository<T>) {}
+  constructor(private readonly repository: Repository<T>) { }
 
   async getAll(): Promise<T[]> {
     return await this.repository.find();
@@ -28,5 +28,9 @@ export class BaseService<T extends BaseEntity> {
 
   async deleteById(id: EntityId): Promise<DeleteResult> {
     return await this.repository.delete(id);
+  }
+
+  async store(data: DeepPartial<T>): Promise<T> {
+    return await this.repository.save(data);
   }
 }
