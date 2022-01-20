@@ -1,3 +1,4 @@
+import { BusinessService } from './../business/business.service';
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -6,6 +7,8 @@ import { LoginAuthDto } from './dto/loginAuthDto';
 import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
 import { AdminService } from '../admin/admin.service';
+import { CustomerService } from '../customer/customer.service';
+import { HashService } from 'src/share/hash.service';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +16,9 @@ export class AuthService {
     private userService: UserService,
     private adminService: AdminService,
     private jwtService: JwtService,
+    private bussinessService: BusinessService,
+    private customerService: CustomerService,
+    private hashService: HashService,
   ) {}
 
   async validateUser(
@@ -20,14 +26,39 @@ export class AuthService {
     password: string,
     role: string,
   ): Promise<Payload | undefined> {
-    const user = await this.userService.findOne(username);
-    if (user && user.password === password) {
-      user.password = undefined;
+    const hashPassword = await this.hashService.hashPassword(password);
+    const user = await this.userService.findByUserName(username);
+    const isMatch = await this.hashService.checkPassword(
+      user.password,
+      hashPassword,
+    );
+    if (user && isMatch) {
       if (role === Role.Admin) {
+        const admin = await this.adminService.findById(user.id);
+        if (!admin) return null;
+        return {
+          id: admin.id,
+          roles: [Role.Admin],
+          username: admin.firstName + ' ' + admin.lastName,
+        };
       }
       if (role === Role.Business) {
+        const business = await this.bussinessService.findById(user.id);
+        if (!business) return null;
+        return {
+          id: business.id,
+          roles: [Role.Business],
+          username: business.firstName + ' ' + business.lastName,
+        };
       }
       if (role === Role.Customer) {
+        const customer = await this.customerService.findById(user.id);
+        if (!customer) return null;
+        return {
+          id: customer.id,
+          roles: [Role.Customer],
+          username: customer.firstName + ' ' + customer.lastName,
+        };
       }
     }
     return null;

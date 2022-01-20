@@ -8,9 +8,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { AdminModule } from '../admin/admin.module';
+import { BusinessModule } from '../business/business.module';
+import { ShareModule } from 'src/share/share.module';
+import { CustomerModule } from '../customer/customer.module';
 
 @Module({
   imports: [
+    ShareModule,
+    CustomerModule,
+    BusinessModule,
     AdminModule,
     UserModule,
     PassportModule,

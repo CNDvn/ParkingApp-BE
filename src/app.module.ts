@@ -25,6 +25,7 @@ import { AuthModule } from './main/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
+import { ShareModule } from './share/share.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { RolesGuard } from './main/auth/role/roles.guard';
     PriceListModule,
     PriceListDetailModule,
     AuthModule,
+    ShareModule,
   ],
   controllers: [AppController],
   providers: [
