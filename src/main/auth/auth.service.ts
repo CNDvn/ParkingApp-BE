@@ -39,7 +39,7 @@ export class AuthService {
         return {
           id: admin.id,
           roles: [Role.Admin],
-          username: admin.firstName + ' ' + admin.lastName,
+          username: username,
         };
       }
       if (role === Role.Business) {
@@ -48,7 +48,7 @@ export class AuthService {
         return {
           id: business.id,
           roles: [Role.Business],
-          username: business.firstName + ' ' + business.lastName,
+          username: username,
         };
       }
       if (role === Role.Customer) {
@@ -57,7 +57,7 @@ export class AuthService {
         return {
           id: customer.id,
           roles: [Role.Customer],
-          username: customer.firstName + ' ' + customer.lastName,
+          username: username,
         };
       }
     }
