@@ -22,9 +22,10 @@ import { CustomerPromotionModule } from './main/customer-promotion/customer-prom
 import { PriceListModule } from './main/price-list/price-list.module';
 import { PriceListDetailModule } from './main/price-list-detail/price-list-detail.module';
 import { AuthModule } from './main/auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
+import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { RolesGuard } from './main/auth/role/roles.guard';
   controllers: [AppController],
   providers: [
     AppService,
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
