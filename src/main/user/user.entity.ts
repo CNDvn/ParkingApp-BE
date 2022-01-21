@@ -1,10 +1,11 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Admin from '../admin/admin.entity';
+import BaseEntity from '../base/base.entity';
 import Business from '../business/business.entity';
 import Customer from '../customer/customer.entity';
 
 @Entity()
-class User {
+class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'Id' })
   public id: string;
   @Column({ name: 'Username' })

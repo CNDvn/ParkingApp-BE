@@ -1,15 +1,11 @@
+import { CustomerRepository } from './customer.repository';
+import { BaseService } from './../base/base.service';
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import Customer from './customer.entity';
 
 @Injectable()
-export class CustomerService {
-  @InjectRepository(Customer)
-  private customerRepository: Repository<Customer>;
-
-  hello = (): void => {
-    // eslint-disable-next-line no-console
-    console.log('chao');
-  };
+export class CustomerService extends BaseService<Customer> {
+  constructor(private customerRepository: CustomerRepository) {
+    super(customerRepository);
+  }
 }
