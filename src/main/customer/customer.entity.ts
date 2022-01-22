@@ -31,8 +31,6 @@ class Customer extends BaseEntity {
   public customerPromotion: CustomerPromotion[];
   @OneToMany(() => Car, (car) => car.customer)
   public car: Car[];
-  @OneToMany(() => Wallet, (wallet) => wallet.customer)
-  public wallet: Wallet[];
 }
 
 export default Customer;

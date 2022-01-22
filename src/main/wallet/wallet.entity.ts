@@ -1,17 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import Customer from '../customer/customer.entity';
 import Transaction from '../transaction/transaction.entity';
+import User from '../user/user.entity';
 
 @Entity()
 class Wallet extends BaseEntity {
-  @Column({ name: 'TotalPrice' })
+  @Column('int', { name: 'TotalPrice', default: 0, nullable: false })
   public totalPrice: number;
-  @Column({ name: 'Name' })
-  public name: string;
-  @ManyToOne(() => Customer, (customer) => customer.wallet)
-  @JoinColumn({ name: 'CustomerId' })
-  public customer: Customer;
+  @OneToOne(() => User, (user) => user.wallet)
+  @JoinColumn({ name: 'UserId' })
+  public user: User;
   @OneToMany(() => Transaction, (transaction) => transaction.wallet)
   public transaction: Transaction[];
 }

@@ -5,13 +5,13 @@ import Parking from '../parking/parking.entity';
 
 @Entity()
 class Service extends BaseEntity {
-  @Column({ name: 'Name' })
+  @Column('nvarchar', { name: 'Name', length: 100, nullable: false })
   public name: string;
-  @Column({ name: 'Description' })
+  @Column('nvarchar', { name: 'Description' })
   public description: string;
-  @Column({ name: 'Price' })
+  @Column('int', { name: 'Price', nullable: false })
   public price: number;
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @ManyToOne(() => Parking, (parking) => parking.service)
   @JoinColumn({ name: 'ParkingId' })

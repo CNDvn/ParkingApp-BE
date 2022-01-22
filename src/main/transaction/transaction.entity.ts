@@ -5,9 +5,9 @@ import Wallet from '../wallet/wallet.entity';
 
 @Entity()
 class Transaction extends BaseEntity {
-  @Column('datetime', { name: 'Date' })
+  @Column('datetime', { name: 'Date', nullable: false, default: () => `now()` })
   public date: Date;
-  @Column({ name: 'Amount' })
+  @Column('int', { name: 'Amount', nullable: false })
   public amount: number;
   @ManyToOne(() => Wallet, (wallet) => wallet.transaction)
   @JoinColumn({ name: 'WalletId' })

@@ -17,7 +17,6 @@ import { TransactionModule } from './main/transaction/transaction.module';
 import { ServiceModule } from './main/service/service.module';
 import { PromotionModule } from './main/promotion/promotion.module';
 import { BusinessModule } from './main/business/business.module';
-import { AdminModule } from './main/admin/admin.module';
 import { CustomerPromotionModule } from './main/customer-promotion/customer-promotion.module';
 import { PriceListModule } from './main/price-list/price-list.module';
 import { PriceListDetailModule } from './main/price-list-detail/price-list-detail.module';
@@ -25,6 +24,7 @@ import { AuthModule } from './main/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
+import { RoleModule } from './main/role/role.module';
 
 @Module({
   imports: [
@@ -50,11 +50,11 @@ import { RolesGuard } from './main/auth/role/roles.guard';
     ServiceModule,
     PromotionModule,
     BusinessModule,
-    AdminModule,
     CustomerPromotionModule,
     PriceListModule,
     PriceListDetailModule,
     AuthModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [
