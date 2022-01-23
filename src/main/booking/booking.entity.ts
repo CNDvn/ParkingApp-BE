@@ -8,11 +8,15 @@ import Service from '../service/service.entity';
 
 @Entity()
 class Booking extends BaseEntity {
-  @Column('time', { name: 'StartTime' })
+  @Column('time', {
+    name: 'StartTime',
+    default: () => 'now()',
+    nullable: false,
+  })
   public startTime: Date;
   @Column('time', { name: 'EndTime' })
   public endTime: Date;
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @ManyToOne(() => Service, (service) => service.booking)
   @JoinColumn({ name: 'ServiceId' })

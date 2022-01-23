@@ -6,15 +6,15 @@ import TypeCar from '../type-car/type-car.entity';
 
 @Entity()
 class Car extends BaseEntity {
-  @Column({ name: 'NPlates' })
+  @Column('varchar', { name: 'NPlates', length: 15, nullable: false })
   nPlates: string;
-  @Column({ name: 'Brand' })
+  @Column('varchar', { name: 'Brand', length: 50, nullable: false })
   public brand: string;
-  @Column({ name: 'Color' })
+  @Column('varchar', { name: 'Color', length: 20, nullable: false })
   public color: string;
-  @Column({ name: 'Model' })
+  @Column('varchar', { name: 'Model', length: 20, nullable: false })
   public modelCode: string;
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @ManyToOne(() => Customer, (customer) => customer.car)
   @JoinColumn({ name: 'CustomerId' })

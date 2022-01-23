@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Business from '../business/business.entity';
 import Customer from '../customer/customer.entity';

@@ -5,9 +5,9 @@ import Parking from '../parking/parking.entity';
 
 @Entity()
 class ParkingSlot extends BaseEntity {
-  @Column({ name: 'LocationName' })
+  @Column('varchar', { name: 'LocationName', length: 10, nullable: false })
   public locationName: string;
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @OneToMany(() => Booking, (booking) => booking.parkingSlot)
   public booking: Booking[];

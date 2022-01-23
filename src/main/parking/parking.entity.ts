@@ -8,17 +8,15 @@ import Service from '../service/service.entity';
 
 @Entity()
 class Parking extends BaseEntity {
-  @Column({ name: 'Address' })
+  @Column('varchar', { name: 'Address', length: 200 })
   public address: string;
-  @Column({ name: 'Longitude' })
-  public longitude: number;
-  @Column({ name: 'Latitude' })
-  public latitude: number;
+  @Column('point', { name: 'Coordinate' })
+  public coordinate: [lat: number, lon: number];
   @Column('time', { name: 'OpenTime' })
   public openTime: Date;
   @Column('time', { name: 'CloseTime' })
   public closeTime: Date;
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @OneToMany(() => PriceList, (priceList) => priceList.parking)
   public priceList: PriceList[];

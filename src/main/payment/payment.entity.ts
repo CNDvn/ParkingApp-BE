@@ -5,9 +5,9 @@ import Transaction from '../transaction/transaction.entity';
 
 @Entity()
 class Payment extends BaseEntity {
-  @Column({ name: 'Amount' })
+  @Column('int', { name: 'Amount', nullable: false })
   public amount: string;
-  @Column({ name: 'Type' })
+  @Column('varchar', { name: 'Type', nullable: false })
   public type: string;
   @OneToMany(() => Transaction, (transaction) => transaction.payment)
   public transaction: Transaction[];

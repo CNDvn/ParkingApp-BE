@@ -5,7 +5,7 @@ import Promotion from '../promotion/promotion.entity';
 
 @Entity()
 class CustomerPromotion extends BaseEntity {
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @ManyToOne(() => Customer, (customer) => customer.customerPromotion)
   @JoinColumn({ name: 'CustomerId' })

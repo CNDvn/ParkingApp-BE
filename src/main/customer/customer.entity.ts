@@ -7,20 +7,12 @@ import Wallet from '../wallet/wallet.entity';
 
 @Entity()
 class Customer extends BaseEntity {
-  @Column({ name: 'FirstName' })
-  public firstName: string;
-  @Column({ name: 'LastName' })
-  public lastName: string;
-  @Column('date', { name: 'DOB' })
-  public DOB: Date;
-  @Column({ name: 'PhoneNumber' })
-  public phoneNumber: string;
-  @Column({ name: 'Address' })
+  @Column('varchar', { name: 'Address', nullable: false })
   public address: string;
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
-  @Column({ name: 'Level' })
-  public level: string;
+  @Column('int', { name: 'Level', nullable: false, default: 0 })
+  public level: number;
   @OneToOne(() => User, (user) => user.customer)
   @JoinColumn({ name: 'UserId' })
   public user: User;

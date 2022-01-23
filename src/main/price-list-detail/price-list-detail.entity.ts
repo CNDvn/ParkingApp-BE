@@ -5,9 +5,7 @@ import TypeCar from '../type-car/type-car.entity';
 
 @Entity()
 class PriceListDetail extends BaseEntity {
-  @Column({ name: 'PriceTwoHours' })
-  public priceTwoHours: number;
-  @Column({ name: 'Price' })
+  @Column('int', { name: 'Price', nullable: false })
   public price: number;
   @ManyToOne(() => TypeCar, (typeCar) => typeCar.priceListDetail)
   @JoinColumn({ name: 'TypeCarId' })
