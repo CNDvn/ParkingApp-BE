@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Parking from '../parking/parking.entity';
+import Promotion from '../promotion/promotion.entity';
 import User from '../user/user.entity';
 
 @Entity()
@@ -13,6 +14,8 @@ class Business extends BaseEntity {
   @JoinColumn({ name: 'UserId' })
   public user: User;
   @OneToMany(() => Parking, (parking) => parking.business)
-  public parking: Parking[];
+  public parkings: Parking[];
+  @OneToMany(() => Promotion, (promotion) => promotion.business)
+  public promotions: Promotion[];
 }
 export default Business;

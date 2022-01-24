@@ -10,8 +10,8 @@ class Payment extends BaseEntity {
   @Column('varchar', { name: 'Type', nullable: false })
   public type: string;
   @OneToMany(() => Transaction, (transaction) => transaction.payment)
-  public transaction: Transaction[];
-  @ManyToOne(() => Booking, (booking) => booking.payment)
+  public transactions: Transaction[];
+  @ManyToOne(() => Booking, (booking) => booking.payments)
   @JoinColumn({ name: 'PaymentId' })
   public booking: Booking;
 }

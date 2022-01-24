@@ -13,8 +13,8 @@ class PriceList extends BaseEntity {
     () => PriceListDetail,
     (priceListDetail) => priceListDetail.priceList,
   )
-  public priceListDetail: PriceListDetail[];
-  @ManyToOne(() => Parking, (parking) => parking.priceList)
+  public priceListDetails: PriceListDetail[];
+  @ManyToOne(() => Parking, (parking) => parking.priceLists)
   @JoinColumn({ name: 'ParkingId' })
   public parking: Parking;
 }

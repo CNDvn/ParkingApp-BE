@@ -22,7 +22,7 @@ class User extends BaseEntity {
     unique: true,
   })
   public username: string;
-  @Column({ name: 'Password', nullable: false })
+  @Column('varchar', { name: 'Password', nullable: false })
   public password: string;
   @Column('varchar', {
     name: 'PhoneNumber',

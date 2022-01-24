@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
+import Business from '../business/business.entity';
 import CustomerPromotion from '../customer-promotion/customer-promotion.entity';
 
 @Entity()
@@ -16,7 +17,9 @@ class Promotion extends BaseEntity {
     () => CustomerPromotion,
     (customerPromotion) => customerPromotion.promotion,
   )
-  public customerPromotion: CustomerPromotion[];
+  public customerPromotions: CustomerPromotion[];
+  @ManyToOne(() => Business, (business) => business.promotions)
+  public business: Business;
 }
 
 export default Promotion;

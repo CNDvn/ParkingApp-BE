@@ -13,10 +13,10 @@ class Service extends BaseEntity {
   public price: number;
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
-  @ManyToOne(() => Parking, (parking) => parking.service)
+  @ManyToOne(() => Parking, (parking) => parking.services)
   @JoinColumn({ name: 'ParkingId' })
   public parking: Parking;
   @OneToMany(() => Booking, (booking) => booking.service)
-  public booking: Booking[];
+  public bookings: Booking[];
 }
 export default Service;

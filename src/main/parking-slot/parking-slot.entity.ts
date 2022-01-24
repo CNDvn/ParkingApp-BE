@@ -10,8 +10,8 @@ class ParkingSlot extends BaseEntity {
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @OneToMany(() => Booking, (booking) => booking.parkingSlot)
-  public booking: Booking[];
-  @ManyToOne(() => Parking, (parking) => parking.parkingSlot)
+  public bookings: Booking[];
+  @ManyToOne(() => Parking, (parking) => parking.parkingSlots)
   @JoinColumn({ name: 'ParkingId' })
   public parking: Parking;
 }

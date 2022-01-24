@@ -1,7 +1,10 @@
+import { GeometryTransformer } from 'src/utils/geometry-transformer';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Geometry } from 'wkx';
 import BaseEntity from '../base/base.entity';
 import Booking from '../booking/booking.entity';
 import Business from '../business/business.entity';
+import Image from '../image/image.entity';
 import ParkingSlot from '../parking-slot/parking-slot.entity';
 import PriceList from '../price-list/price-list.entity';
 import Service from '../service/service.entity';
@@ -10,8 +13,13 @@ import Service from '../service/service.entity';
 class Parking extends BaseEntity {
   @Column('varchar', { name: 'Address', length: 200 })
   public address: string;
-  @Column('point', { name: 'Coordinate' })
-  public coordinate: [lat: number, lon: number];
+  @Column({
+    name: 'Coordinate',
+    type: 'geometry',
+    spatialFeatureType: 'Point',
+    transformer: new GeometryTransformer(),
+  })
+  public coordinate: Geometry;
   @Column('time', { name: 'OpenTime' })
   public openTime: Date;
   @Column('time', { name: 'CloseTime' })
@@ -19,15 +27,17 @@ class Parking extends BaseEntity {
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @OneToMany(() => PriceList, (priceList) => priceList.parking)
-  public priceList: PriceList[];
-  @ManyToOne(() => Business, (business) => business.parking)
+  public priceLists: PriceList[];
+  @ManyToOne(() => Business, (business) => business.parkings)
   @JoinColumn({ name: 'BusinessId' })
   public business: Business;
   @OneToMany(() => Service, (service) => service.parking)
-  public service: Service[];
+  public services: Service[];
   @OneToMany(() => Booking, (booking) => booking.parking)
-  public booking: Booking[];
+  public bookings: Booking[];
   @OneToMany(() => ParkingSlot, (parkingSlot) => parkingSlot.parking)
-  public parkingSlot: ParkingSlot[];
+  public parkingSlots: ParkingSlot[];
+  @OneToMany(() => Image, (image) => image.parking)
+  public images: Image[];
 }
 export default Parking;

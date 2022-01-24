@@ -25,6 +25,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
 import { RoleModule } from './main/role/role.module';
+import { TranferTypeModule } from './main/tranfer-type/tranfer-type.module';
+import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
+import { ImageModule } from './main/image/image.module';
 
 @Module({
   imports: [
@@ -55,6 +58,9 @@ import { RoleModule } from './main/role/role.module';
     PriceListDetailModule,
     AuthModule,
     RoleModule,
+    TranferTypeModule,
+    CashTransferModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [

@@ -3,7 +3,6 @@ import BaseEntity from '../base/base.entity';
 import Car from '../car/car.entity';
 import CustomerPromotion from '../customer-promotion/customer-promotion.entity';
 import User from '../user/user.entity';
-import Wallet from '../wallet/wallet.entity';
 
 @Entity()
 class Customer extends BaseEntity {
@@ -20,9 +19,9 @@ class Customer extends BaseEntity {
     () => CustomerPromotion,
     (customerPromotion) => customerPromotion.customer,
   )
-  public customerPromotion: CustomerPromotion[];
+  public customerPromotions: CustomerPromotion[];
   @OneToMany(() => Car, (car) => car.customer)
-  public car: Car[];
+  public cars: Car[];
 }
 
 export default Customer;
