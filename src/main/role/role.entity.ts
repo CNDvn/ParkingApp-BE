@@ -11,6 +11,7 @@ class Role extends BaseEntity {
     unique: true,
   })
   public name: string;
+
   @OneToMany(() => User, (user) => user.role)
   public users: User[];
 }

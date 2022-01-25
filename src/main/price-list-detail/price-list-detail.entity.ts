@@ -7,13 +7,17 @@ import TypeCar from '../type-car/type-car.entity';
 class PriceListDetail extends BaseEntity {
   @Column('int', { name: 'Price', nullable: false })
   public price: number;
+
   @Column('int', { name: 'Deposit', default: 0, nullable: false })
-  publicdeposit: number;
+  public deposit: number;
+
   @Column('int', { name: 'TimePercent' })
   public timePercent: number;
+
   @ManyToOne(() => TypeCar, (typeCar) => typeCar.priceListDetails)
   @JoinColumn({ name: 'TypeCarId' })
   public typeCar: TypeCar;
+
   @ManyToOne(() => PriceList, (priceList) => priceList.priceListDetails)
   @JoinColumn({ name: 'PriceListId' })
   public priceList: PriceList;

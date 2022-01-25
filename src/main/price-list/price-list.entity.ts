@@ -7,13 +7,16 @@ import PriceListDetail from '../price-list-detail/price-list-detail.entity';
 class PriceList extends BaseEntity {
   @Column('varchar', { name: 'Name', length: 100, nullable: false })
   public name: string;
+
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
+
   @OneToMany(
     () => PriceListDetail,
     (priceListDetail) => priceListDetail.priceList,
   )
   public priceListDetails: PriceListDetail[];
+
   @ManyToOne(() => Parking, (parking) => parking.priceLists)
   @JoinColumn({ name: 'ParkingId' })
   public parking: Parking;

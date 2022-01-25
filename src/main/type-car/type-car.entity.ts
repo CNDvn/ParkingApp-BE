@@ -7,8 +7,10 @@ import PriceListDetail from '../price-list-detail/price-list-detail.entity';
 class TypeCar extends BaseEntity {
   @Column('nvarchar', { name: 'Name', length: 100, nullable: false })
   public name: string;
+
   @OneToMany(() => Car, (car) => car.typeCar)
   public cars: Car[];
+
   @OneToMany(
     () => PriceListDetail,
     (priceListDetail) => priceListDetail.typeCar,

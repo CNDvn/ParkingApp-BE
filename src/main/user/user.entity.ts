@@ -9,12 +9,16 @@ import Wallet from '../wallet/wallet.entity';
 class User extends BaseEntity {
   @Column('nvarchar', { name: 'FirstName', length: 20, nullable: false })
   public firstName: string;
+
   @Column('nvarchar', { name: 'LastName', length: 30, nullable: false })
   public lastName: string;
+
   @Column('date', { name: 'DOB', nullable: false })
   public DOB: Date;
+
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
+
   @Column('varchar', {
     name: 'Username',
     length: 100,
@@ -22,8 +26,10 @@ class User extends BaseEntity {
     unique: true,
   })
   public username: string;
+
   @Column('varchar', { name: 'Password', nullable: false })
   public password: string;
+
   @Column('varchar', {
     name: 'PhoneNumber',
     length: 15,
@@ -31,6 +37,7 @@ class User extends BaseEntity {
     nullable: false,
   })
   public phoneNumber: string;
+
   @Column('varchar', {
     name: 'Email',
     length: 100,
@@ -38,14 +45,19 @@ class User extends BaseEntity {
     unique: true,
   })
   public email: string;
+
   @Column({ name: 'RefreshToken' })
   public refreshToken: string;
+
   @OneToOne(() => Customer, (customer) => customer.user)
   public customer: Customer;
+
   @OneToOne(() => Business, (business) => business.user)
   public business: Business;
+
   @OneToOne(() => Wallet, (wallet) => wallet.user)
   public wallet: Wallet;
+
   @ManyToOne(() => Role, (role) => role.users)
   public role: Role;
 }

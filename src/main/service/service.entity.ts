@@ -7,15 +7,20 @@ import Parking from '../parking/parking.entity';
 class Service extends BaseEntity {
   @Column('nvarchar', { name: 'Name', length: 100, nullable: false })
   public name: string;
-  @Column('nvarchar', { name: 'Description' })
+
+  @Column('text', { name: 'Description' })
   public description: string;
+
   @Column('int', { name: 'Price', nullable: false })
   public price: number;
+
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
+
   @ManyToOne(() => Parking, (parking) => parking.services)
   @JoinColumn({ name: 'ParkingId' })
   public parking: Parking;
+
   @OneToMany(() => Booking, (booking) => booking.service)
   public bookings: Booking[];
 }

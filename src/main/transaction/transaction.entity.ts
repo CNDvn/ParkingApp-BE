@@ -8,16 +8,25 @@ import Wallet from '../wallet/wallet.entity';
 class Transaction extends BaseEntity {
   @Column('datetime', { name: 'Date', nullable: false, default: () => `now()` })
   public date: Date;
+
   @Column('int', { name: 'Amount', nullable: false })
   public amount: number;
+
   @Column('text', { name: 'Description', nullable: true })
   public description: string;
-  @ManyToOne(() => Wallet, (wallet) => wallet.transactions)
-  @JoinColumn({ name: 'WalletId' })
-  public wallet: Wallet;
+
+  @ManyToOne(() => Wallet, (wallet) => wallet.transactionsTo)
+  @JoinColumn({ name: 'ToWalletId' })
+  public walletTo: Wallet;
+
+  @ManyToOne(() => Wallet, (wallet) => wallet.transactionsForm)
+  @JoinColumn({ name: 'FormWalletId' })
+  public walletForm: Wallet;
+
   @ManyToOne(() => Payment, (payment) => payment.transactions)
   @JoinColumn({ name: 'PaymentId' })
   public payment: Payment;
+
   @ManyToOne(() => CashTransfer, (cashTransfer) => cashTransfer.transactions)
   @JoinColumn({ name: 'CashTransferId' })
   public cashTransfer = CashTransfer;

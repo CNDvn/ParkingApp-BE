@@ -7,10 +7,13 @@ import Transaction from '../transaction/transaction.entity';
 class Payment extends BaseEntity {
   @Column('int', { name: 'Amount', nullable: false })
   public amount: string;
+
   @Column('varchar', { name: 'Type', nullable: false })
   public type: string;
+
   @OneToMany(() => Transaction, (transaction) => transaction.payment)
   public transactions: Transaction[];
+
   @ManyToOne(() => Booking, (booking) => booking.payments)
   @JoinColumn({ name: 'PaymentId' })
   public booking: Booking;

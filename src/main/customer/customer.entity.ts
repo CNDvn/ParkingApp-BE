@@ -8,18 +8,23 @@ import User from '../user/user.entity';
 class Customer extends BaseEntity {
   @Column('varchar', { name: 'Address', nullable: false })
   public address: string;
+
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
+
   @Column('int', { name: 'Level', nullable: false, default: 0 })
   public level: number;
+
   @OneToOne(() => User, (user) => user.customer)
   @JoinColumn({ name: 'UserId' })
   public user: User;
+
   @OneToMany(
     () => CustomerPromotion,
     (customerPromotion) => customerPromotion.customer,
   )
   public customerPromotions: CustomerPromotion[];
+
   @OneToMany(() => Car, (car) => car.customer)
   public cars: Car[];
 }

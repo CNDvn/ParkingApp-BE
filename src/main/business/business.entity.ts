@@ -8,13 +8,17 @@ import User from '../user/user.entity';
 class Business extends BaseEntity {
   @Column('varchar', { name: 'Address', nullable: false })
   public address: string;
+
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
+
   @OneToOne(() => User, (user) => user.business)
   @JoinColumn({ name: 'UserId' })
   public user: User;
+
   @OneToMany(() => Parking, (parking) => parking.business)
   public parkings: Parking[];
+
   @OneToMany(() => Promotion, (promotion) => promotion.business)
   public promotions: Promotion[];
 }

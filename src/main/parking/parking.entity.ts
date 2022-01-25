@@ -13,6 +13,7 @@ import Service from '../service/service.entity';
 class Parking extends BaseEntity {
   @Column('varchar', { name: 'Address', length: 200 })
   public address: string;
+
   @Column({
     name: 'Coordinate',
     type: 'geometry',
@@ -20,23 +21,32 @@ class Parking extends BaseEntity {
     transformer: new GeometryTransformer(),
   })
   public coordinate: Geometry;
+
   @Column('time', { name: 'OpenTime' })
   public openTime: Date;
+
   @Column('time', { name: 'CloseTime' })
   public closeTime: Date;
+
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
+
   @OneToMany(() => PriceList, (priceList) => priceList.parking)
   public priceLists: PriceList[];
+
   @ManyToOne(() => Business, (business) => business.parkings)
   @JoinColumn({ name: 'BusinessId' })
   public business: Business;
+
   @OneToMany(() => Service, (service) => service.parking)
   public services: Service[];
+
   @OneToMany(() => Booking, (booking) => booking.parking)
   public bookings: Booking[];
+
   @OneToMany(() => ParkingSlot, (parkingSlot) => parkingSlot.parking)
   public parkingSlots: ParkingSlot[];
+
   @OneToMany(() => Image, (image) => image.parking)
   public images: Image[];
 }
