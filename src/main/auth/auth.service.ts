@@ -6,6 +6,7 @@ import { LoginAuthDto } from './dto/loginAuthDto';
 import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
 import User from '../user/user.entity';
+import { Status } from 'src/utils/status.enum';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,7 @@ export class AuthService {
   ): Promise<User | undefined> {
     const user = await this.userService.findByUsername(username);
 
-    if (user && user.password === password) {
+    if (user && user.password === password && user.status === Status.ACTIVE) {
       user.password = undefined;
       if (user.role.name === role) {
         return user;
