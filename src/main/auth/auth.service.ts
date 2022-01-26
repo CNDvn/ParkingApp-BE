@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from './role/role.enum';
 import { LoginAuthDto } from './dto/loginAuthDto';
 import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
+import User from '../user/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -17,21 +18,27 @@ export class AuthService {
     username: string,
     password: string,
     role: string,
-  ): Promise<Payload | undefined> {
-    const user = await this.userService.findOne(username);
+  ): Promise<User | undefined> {
+    const user = await this.userService.findByUsername(username);
+
     if (user && user.password === password) {
       user.password = undefined;
-      if (role === Role.Admin) {
-      }
-      if (role === Role.Business) {
-      }
-      if (role === Role.Customer) {
+      if (user.role.name === role) {
+        return user;
       }
     }
-    return null;
+    throw new HttpException(
+      'Username or password invalid',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
-  login(payload: Payload): LoginAuthDto {
+  login(user: User): LoginAuthDto {
+    const payload: Payload = {
+      id: user.id,
+      username: user.username,
+      roles: [user.role.name],
+    };
     return {
       access_token: this.jwtService.sign(payload, {
         secret: jwtConstants.accessTokenSecret,

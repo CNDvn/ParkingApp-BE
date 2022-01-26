@@ -46,7 +46,7 @@ class User extends BaseEntity {
   })
   public email: string;
 
-  @Column({ name: 'RefreshToken' })
+  @Column({ name: 'RefreshToken', nullable: true })
   public refreshToken: string;
 
   @OneToOne(() => Customer, (customer) => customer.user)
