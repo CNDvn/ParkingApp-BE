@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { Payload } from '../jwt/payload';
 import { Request } from 'express';
+import User from 'src/main/user/user.entity';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     req: Request,
     username: string,
     password: string,
-  ): Promise<Payload> {
+  ): Promise<User> {
     const { role } = req.body as { role: string };
     const user = await this.authService.validateUser(username, password, role);
     if (!user) {
