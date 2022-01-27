@@ -1,5 +1,21 @@
 import { EntityRepository, Repository } from 'typeorm';
+import Role from '../role/role.entity';
+import { UserCreateDto } from './dto/user.create.dto';
 import User from './user.entity';
 
 @EntityRepository(User)
-export class UsersRepository extends Repository<User> {}
+export class UsersRepository extends Repository<User> {
+  async createUser(data: UserCreateDto, role: Role): Promise<User> {
+    const user = new User();
+    user.firstName = data.firstName;
+    user.lastName = data.lastName;
+    user.DOB = data.DOB;
+    user.status = data.status;
+    user.username = data.username;
+    user.password = data.password;
+    user.phoneNumber = data.phoneNumber;
+    user.email = data.email;
+    user.role = role;
+    return await this.save(user);
+  }
+}
