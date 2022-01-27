@@ -7,6 +7,8 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt/jwt.strategy';
+import { CustomerModule } from '../customer/customer.module';
+import { BusinessModule } from '../business/business.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { JwtStrategy } from './jwt/jwt.strategy';
       secret: jwtConstants.accessTokenSecret,
       signOptions: { expiresIn: '2d' },
     }),
+    CustomerModule,
+    BusinessModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],

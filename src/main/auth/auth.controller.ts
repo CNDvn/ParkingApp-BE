@@ -1,7 +1,11 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { GetUser } from 'src/decorator/getUser.decorator';
+import Business from '../business/business.entity';
+import { BusinessSignUpDto } from '../business/dto/business.signup.dto';
+import Customer from '../customer/customer.entity';
+import { CustomerSignUpDto } from '../customer/dto/customer.signup';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/loginDto';
 import { Payload } from './jwt/payload';
@@ -9,6 +13,7 @@ import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -33,5 +38,31 @@ export class AuthController {
         secure: true,
       });
     return data.message;
+  }
+
+  @Public()
+  @Post('/signUpCustomer')
+  @ApiResponse({
+    status: 201,
+    description: 'SignUp Customer Successfully',
+    type: CustomerSignUpDto,
+  })
+  async signUpCustomer(
+    @Body() customerSignUpDto: CustomerSignUpDto,
+  ): Promise<Customer> {
+    return await this.authService.signUpAuthCustomer(customerSignUpDto);
+  }
+
+  @Public()
+  @Post('/signUpBusiness')
+  @ApiResponse({
+    status: 201,
+    description: 'SignUp Business Successfully',
+    type: BusinessSignUpDto,
+  })
+  async signUpBusiness(
+    @Body() businessSignUpDto: BusinessSignUpDto,
+  ): Promise<Business> {
+    return await this.authService.signUpAuthBusiness(businessSignUpDto);
   }
 }

@@ -5,12 +5,20 @@ import { Role } from './role/role.enum';
 import { LoginAuthDto } from './dto/loginAuthDto';
 import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
+import Customer from '../customer/customer.entity';
+import { CustomerSignUpDto } from '../customer/dto/customer.signup';
+import { CustomerService } from '../customer/customer.service';
+import { BusinessSignUpDto } from '../business/dto/business.signup.dto';
+import Business from '../business/business.entity';
+import { BusinessService } from '../business/business.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private customerService: CustomerService,
+    private businessService: BusinessService,
   ) {}
 
   async validateUser(
@@ -46,5 +54,13 @@ export class AuthService {
       ),
       message: 'Success',
     };
+  }
+
+  async signUpAuthCustomer(data: CustomerSignUpDto): Promise<Customer> {
+    return await this.customerService.signUpCustomer(data);
+  }
+
+  async signUpAuthBusiness(data: BusinessSignUpDto): Promise<Business> {
+    return await this.businessService.signUpBusiness(data);
   }
 }
