@@ -6,8 +6,8 @@ import { CustomerRepository } from './customer.repository';
 import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
 import { Role } from '../auth/role/role.enum';
-import { Status } from 'src/utils/status.constants';
 import { UserService } from '../user/user.service';
+import { Status } from 'src/utils/status.enum';
 @Injectable()
 export class CustomerService extends BaseService<Customer> {
   constructor(
@@ -27,27 +27,25 @@ export class CustomerService extends BaseService<Customer> {
     return await bcrypt.hash(password, salt);
   }
 
-  async signUpCustomer(data: CustomerSignUpDto): Promise<Customer> {
-    const roleCustomer = await this.roleService.findOne(Role.Customer);
+  async signUpCustomer(data: CustomerSignUpDto): Promise<string> {
+    console.log('dasda');
+    const roleCustomer = await this.roleService.findByNameRole(Role.CUSTOMER);
+    console.log('abc');
+    const salt: string = await bcrypt.genSalt();
+    const hashPassword = await this.hashPassword(data.password, salt);
     const user = await this.userService.createUser(
       {
-        DOB: data.DOB,
+        DOB: new Date(data.DOB).toISOString().slice(0, 10),
         email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
-        password: data.lastName,
+        password: hashPassword,
         phoneNumber: data.phoneNumber,
         status: Status.ACTIVE,
         username: data.username,
       },
       roleCustomer,
     );
-    const salt: string = await bcrypt.genSalt();
-    const hashPassword = await this.hashPassword(data.password, salt);
-    data.status = Status.ACTIVE;
-    data.level = 0;
-    data.password = hashPassword;
-    const customer: Customer = await this.customerRepository.signUp(data);
-    return customer;
+    return await this.customerRepository.signUp(data, user);
   }
 }

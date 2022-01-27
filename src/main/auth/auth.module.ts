@@ -16,7 +16,7 @@ import { BusinessModule } from '../business/business.module';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.accessTokenSecret,
-      signOptions: { expiresIn: '2d' },
+      signOptions: { expiresIn: '3d' },
     }),
     CustomerModule,
     BusinessModule,

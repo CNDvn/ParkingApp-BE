@@ -8,4 +8,8 @@ export class RoleService extends BaseService<Role> {
   constructor(private roleRepository: RoleRepository) {
     super(roleRepository);
   }
+
+  async findByNameRole(roleName: string): Promise<Role> {
+    return this.roleRepository.findOne({ where: { name: roleName } });
+  }
 }

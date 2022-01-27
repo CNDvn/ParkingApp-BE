@@ -18,11 +18,11 @@ class BaseEntity {
   })
   public updatedAt: Date;
 
-  @Column({ name: 'CreatedBy', nullable: true })
-  public createdBy: string;
+  // @Column({ name: 'CreatedBy', nullable: true })
+  // public createdBy: string;
 
-  @Column({ name: 'UpdatedBy', nullable: true })
-  public updatedBy: string;
+  // @Column({ name: 'UpdatedBy', nullable: true })
+  // public updatedBy: string;
 }
 
 export default BaseEntity;

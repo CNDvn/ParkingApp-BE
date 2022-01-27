@@ -29,8 +29,4 @@ export class BaseService<T extends BaseEntity> {
   async deleteById(id: EntityId): Promise<DeleteResult> {
     return await this.repository.delete(id);
   }
-
-  async findOne(key: string): Promise<T> {
-    return await this.repository.findOne({ where: { key } });
-  }
 }

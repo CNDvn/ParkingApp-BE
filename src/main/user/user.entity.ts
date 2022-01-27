@@ -14,7 +14,7 @@ class User extends BaseEntity {
   public lastName: string;
 
   @Column('date', { name: 'DOB', nullable: false })
-  public DOB: Date;
+  public DOB: string;
 
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
@@ -46,7 +46,7 @@ class User extends BaseEntity {
   })
   public email: string;
 
-  @Column({ name: 'RefreshToken' })
+  @Column({ name: 'RefreshToken', nullable: true })
   public refreshToken: string;
 
   @OneToOne(() => Customer, (customer) => customer.user)

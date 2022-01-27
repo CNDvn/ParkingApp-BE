@@ -12,7 +12,7 @@ export class UserCreateDto {
 
   @IsNotEmpty()
   @ApiProperty({ type: Date, description: 'dateOfBirth' })
-  public DOB: Date;
+  public DOB: string;
 
   // @IsNotEmpty()
   // @ApiProperty({ type: String, description: 'status', default: 'active' })

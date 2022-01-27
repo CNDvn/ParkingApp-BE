@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { Role } from './role/role.enum';
 import { LoginAuthDto } from './dto/loginAuthDto';
 import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
-import Customer from '../customer/customer.entity';
 import { CustomerSignUpDto } from '../customer/dto/customer.signup';
 import { CustomerService } from '../customer/customer.service';
 import { BusinessSignUpDto } from '../business/dto/business.signup.dto';
 import Business from '../business/business.entity';
 import { BusinessService } from '../business/business.service';
+import User from '../user/user.entity';
+import { Status } from 'src/utils/status.enum';
 
 @Injectable()
 export class AuthService {
@@ -25,21 +25,27 @@ export class AuthService {
     username: string,
     password: string,
     role: string,
-  ): Promise<Payload | undefined> {
-    const user = await this.userService.findOne(username);
-    if (user && user.password === password) {
+  ): Promise<User | undefined> {
+    const user = await this.userService.findByUsername(username);
+
+    if (user && user.password === password && user.status === Status.ACTIVE) {
       user.password = undefined;
-      if (role === Role.Admin) {
-      }
-      if (role === Role.Business) {
-      }
-      if (role === Role.Customer) {
+      if (user.role.name === role) {
+        return user;
       }
     }
-    return null;
+    throw new HttpException(
+      'Username or password invalid',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
-  login(payload: Payload): LoginAuthDto {
+  login(user: User): LoginAuthDto {
+    const payload: Payload = {
+      id: user.id,
+      username: user.username,
+      roles: [user.role.name],
+    };
     return {
       access_token: this.jwtService.sign(payload, {
         secret: jwtConstants.accessTokenSecret,
@@ -56,7 +62,7 @@ export class AuthService {
     };
   }
 
-  async signUpAuthCustomer(data: CustomerSignUpDto): Promise<Customer> {
+  async signUpAuthCustomer(data: CustomerSignUpDto): Promise<string> {
     return await this.customerService.signUpCustomer(data);
   }
 

@@ -1,10 +1,13 @@
+import { Status } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
+import User from '../user/user.entity';
 import Customer from './customer.entity';
 import { CustomerSignUpDto } from './dto/customer.signup';
 
 @EntityRepository(Customer)
 export class CustomerRepository extends Repository<Customer> {
-  async signUp(data: CustomerSignUpDto): Promise<Customer> {
+  async signUp(data: CustomerSignUpDto, user: User): Promise<string> {
+    console.log('CustomerRepository');
     console.log(data);
     // const customer = new Customer();
     // customer.user.firstName = data.firstName;
@@ -21,7 +24,13 @@ export class CustomerRepository extends Repository<Customer> {
     await this.createQueryBuilder()
       .insert()
       .into(Customer)
-      .values({ address: data.address, status: data.status });
-    return;
+      .values({
+        address: data.address,
+        status: Status.ACTIVE,
+        user: user,
+        level: 0,
+      })
+      .execute();
+    return 'Create Successfully';
   }
 }

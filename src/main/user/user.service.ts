@@ -10,8 +10,11 @@ export class UserService extends BaseService<User> {
   constructor(private readonly userRepository: UsersRepository) {
     super(userRepository);
   }
-  async findOne(username: string): Promise<User | undefined> {
-    return await this.userRepository.findOne({ username });
+  async findByUsername(username: string): Promise<User> {
+    return await this.userRepository.findOne(
+      { username },
+      { relations: ['role'] },
+    );
   }
   async createUser(userCreateDTO: UserCreateDto, role: Role): Promise<User> {
     return await this.userRepository.createUser(userCreateDTO, role);
