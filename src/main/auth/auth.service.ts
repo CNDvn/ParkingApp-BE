@@ -11,6 +11,8 @@ import Business from '../business/business.entity';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { Status } from 'src/utils/status.enum';
+import { SharedService } from 'src/shared/shared/shared.service';
+import { Role } from './role/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +21,7 @@ export class AuthService {
     private jwtService: JwtService,
     private customerService: CustomerService,
     private businessService: BusinessService,
+    private sharedService: SharedService,
   ) {}
 
   async validateUser(
@@ -27,8 +30,11 @@ export class AuthService {
     role: string,
   ): Promise<User | undefined> {
     const user = await this.userService.findByUsername(username);
-
-    if (user && user.password === password && user.status === Status.ACTIVE) {
+    const isMatch = await this.sharedService.comparePassword(
+      password,
+      user.password,
+    );
+    if (user && isMatch && user.status === Status.ACTIVE) {
       user.password = undefined;
       if (user.role.name === role) {
         return user;
@@ -68,5 +74,12 @@ export class AuthService {
 
   async signUpAuthBusiness(data: BusinessSignUpDto): Promise<Business> {
     return await this.businessService.signUpBusiness(data);
+  }
+
+  async getMe(user: User): Promise<User> {
+    if (user.role.name === Role.CUSTOMER) {
+      return await this.userService.getMeCustomer(user);
+    }
+    return null;
   }
 }

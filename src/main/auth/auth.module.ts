@@ -9,6 +9,7 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { CustomerModule } from '../customer/customer.module';
 import { BusinessModule } from '../business/business.module';
+import { SharedModule } from 'src/shared/shared/shared.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BusinessModule } from '../business/business.module';
     }),
     CustomerModule,
     BusinessModule,
+    SharedModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],

@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import Customer from '../customer/customer.entity';
 import Role from '../role/role.entity';
 import { UserCreateDto } from './dto/user.create.dto';
 import User from './user.entity';
@@ -17,5 +18,13 @@ export class UsersRepository extends Repository<User> {
     user.email = data.email;
     user.role = role;
     return await this.save(user);
+  }
+  async getMeCustomer(user: User): Promise<User> {
+    const customer = this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.customer', 'customer')
+      .where('user.id = :id', { id: user.id })
+      .getOne();
+    return customer;
   }
 }

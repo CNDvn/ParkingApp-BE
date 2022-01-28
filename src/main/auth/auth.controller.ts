@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import Business from '../business/business.entity';
@@ -36,6 +36,15 @@ export class AuthController {
     @Body() customerSignUpDto: CustomerSignUpDto,
   ): Promise<string> {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
+  }
+
+  @Get('/me')
+  @ApiResponse({
+    status: 200,
+    description: 'Get Profile',
+  })
+  async getMe(@GetUser() user: User): Promise<User> {
+    return this.authService.getMe(user);
   }
 
   @Public()

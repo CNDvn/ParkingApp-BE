@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseService } from '../base/base.service';
+import Customer from '../customer/customer.entity';
 import Role from '../role/role.entity';
 import { UserCreateDto } from './dto/user.create.dto';
 import User from './user.entity';
@@ -16,7 +17,12 @@ export class UserService extends BaseService<User> {
       { relations: ['role'] },
     );
   }
+
   async createUser(userCreateDTO: UserCreateDto, role: Role): Promise<User> {
     return await this.userRepository.createUser(userCreateDTO, role);
+  }
+
+  async getMeCustomer(user: User): Promise<User> {
+    return await this.userRepository.getMeCustomer(user);
   }
 }

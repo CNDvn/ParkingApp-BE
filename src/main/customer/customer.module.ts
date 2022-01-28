@@ -5,12 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerRepository } from './customer.repository';
 import { RoleModule } from '../role/role.module';
 import { UserModule } from '../user/user.module';
+import { SharedModule } from 'src/shared/shared/shared.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CustomerRepository]),
     RoleModule,
     UserModule,
+    SharedModule,
   ],
   controllers: [CustomerController],
   providers: [CustomerService],

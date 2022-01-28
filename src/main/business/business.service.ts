@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { BusinessRepository } from './business.repository';
 import { BusinessSignUpDto } from './dto/business.signup.dto';
 import { BaseService } from '../base/base.service';
+import User from '../user/user.entity';
 
 @Injectable()
 export class BusinessService extends BaseService<Business> {
