@@ -4,7 +4,7 @@ import { CustomerSignUpDto } from './dto/customer.signup';
 import { CustomerRepository } from './customer.repository';
 import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
-import { Role } from '../auth/role/role.enum';
+import { RoleEnum } from '../auth/role/role.enum';
 import { UserService } from '../user/user.service';
 import { Status } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
@@ -20,7 +20,9 @@ export class CustomerService extends BaseService<Customer> {
   }
 
   async signUpCustomer(data: CustomerSignUpDto): Promise<string> {
-    const roleCustomer = await this.roleService.findByNameRole(Role.CUSTOMER);
+    const roleCustomer = await this.roleService.findByNameRole(
+      RoleEnum.CUSTOMER,
+    );
     const hashPassword = await this.sharedService.hashPassword(data.password);
     const user = await this.userService.createUser(
       {

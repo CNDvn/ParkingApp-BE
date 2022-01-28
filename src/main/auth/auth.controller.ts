@@ -38,15 +38,6 @@ export class AuthController {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
   }
 
-  @Get('/me')
-  @ApiResponse({
-    status: 200,
-    description: 'Get Profile',
-  })
-  async getMe(@GetUser() user: User): Promise<User> {
-    return this.authService.getMe(user);
-  }
-
   @Public()
   @Post('/signUpBusiness')
   @ApiResponse({
@@ -56,7 +47,7 @@ export class AuthController {
   })
   async signUpBusiness(
     @Body() businessSignUpDto: BusinessSignUpDto,
-  ): Promise<Business> {
+  ): Promise<string> {
     return await this.authService.signUpAuthBusiness(businessSignUpDto);
   }
 }

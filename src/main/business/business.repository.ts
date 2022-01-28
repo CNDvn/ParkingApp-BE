@@ -1,20 +1,21 @@
+import { Status } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
+import User from '../user/user.entity';
 import Business from './business.entity';
 import { BusinessSignUpDto } from './dto/business.signup.dto';
 
 @EntityRepository(Business)
 export class BusinessRepository extends Repository<Business> {
-  async signUp(data: BusinessSignUpDto): Promise<Business> {
-    const business = new Business();
-    business.user.firstName = data.firstName;
-    business.user.lastName = data.lastName;
-    business.user.DOB = data.DOB;
-    business.user.status = data.status;
-    business.user.username = data.username;
-    business.user.password = data.password;
-    business.user.phoneNumber = data.phoneNumber;
-    business.user.email = data.email;
-    business.address = data.address;
-    return await this.save(business);
+  async signUp(data: BusinessSignUpDto, user: User): Promise<string> {
+    await this.createQueryBuilder()
+      .insert()
+      .into(Business)
+      .values({
+        address: data.address,
+        status: Status.ACTIVE,
+        user: user,
+      })
+      .execute();
+    return 'Create Successfully';
   }
 }

@@ -12,7 +12,7 @@ import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { Status } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
-import { Role } from './role/role.enum';
+import { RoleEnum } from './role/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -72,14 +72,7 @@ export class AuthService {
     return await this.customerService.signUpCustomer(data);
   }
 
-  async signUpAuthBusiness(data: BusinessSignUpDto): Promise<Business> {
+  async signUpAuthBusiness(data: BusinessSignUpDto): Promise<string> {
     return await this.businessService.signUpBusiness(data);
-  }
-
-  async getMe(user: User): Promise<User> {
-    if (user.role.name === Role.CUSTOMER) {
-      return await this.userService.getMeCustomer(user);
-    }
-    return null;
   }
 }

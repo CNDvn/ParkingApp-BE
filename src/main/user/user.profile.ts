@@ -12,10 +12,19 @@ export class UserProfile extends AutomapperProfile {
 
   mapProfile() {
     return (mapper: Mapper): void => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       mapper.createMap(User, UserDTO).forMember(
         (destination: UserDTO) => destination.fullName,
         mapFrom((source: User) => source.firstName + ' ' + source.lastName),
       );
+      // .forMember(
+      //   (destination: UserDTO) => destination.address,
+      //   mapFrom((source: User) => source.customer.address),
+      // )
+      // .forMember(
+      //   (destination: UserDTO) => destination.level,
+      //   mapFrom((source: User) => source.customer.level),
+      // );
     };
   }
 }

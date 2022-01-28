@@ -6,6 +6,7 @@ import { CustomerRepository } from './customer.repository';
 import { RoleModule } from '../role/role.module';
 import { UserModule } from '../user/user.module';
 import { SharedModule } from 'src/shared/shared/shared.module';
+import { CustomerProfile } from './customer.profile';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { SharedModule } from 'src/shared/shared/shared.module';
     SharedModule,
   ],
   controllers: [CustomerController],
-  providers: [CustomerService],
+  providers: [CustomerService, CustomerProfile],
   exports: [CustomerService],
 })
 export class CustomerModule {}

@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import Customer from '../customer/customer.entity';
+import { RoleEnum } from '../auth/role/role.enum';
 import Role from '../role/role.entity';
 import { UserCreateDto } from './dto/user.create.dto';
 import User from './user.entity';
@@ -20,11 +20,20 @@ export class UsersRepository extends Repository<User> {
     return await this.save(user);
   }
   async getMeCustomer(user: User): Promise<User> {
-    const customer = this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.role', 'role')
-      .leftJoinAndSelect('user.customer', 'customer')
-      .where('user.id = :id', { id: user.id })
-      .getOne();
-    return customer;
+    if (user.role.name === RoleEnum.CUSTOMER) {
+      const customer = this.createQueryBuilder('user')
+        .leftJoinAndSelect('user.role', 'role')
+        .leftJoinAndSelect('user.customer', 'customer')
+        .where('user.id = :id', { id: user.id })
+        .getOne();
+      return customer;
+    } else if (user.role.name === RoleEnum.BUSINESS) {
+      const business = this.createQueryBuilder('user')
+        .leftJoinAndSelect('user.role', 'role')
+        .leftJoinAndSelect('user.business', 'business')
+        .where('user.id = :id', { id: user.id })
+        .getOne();
+      return business;
+    }
   }
 }

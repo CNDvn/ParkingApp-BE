@@ -57,9 +57,11 @@ class User extends BaseEntity {
   @Column({ name: 'RefreshToken', nullable: true })
   public refreshToken: string;
 
+  @AutoMap({ typeFn: () => Customer })
   @OneToOne(() => Customer, (customer) => customer.user)
   public customer: Customer;
 
+  @AutoMap({ typeFn: () => Business })
   @OneToOne(() => Business, (business) => business.user)
   public business: Business;
 

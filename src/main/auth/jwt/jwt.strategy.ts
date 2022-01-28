@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
@@ -17,6 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: Payload): Promise<User> {
+    console.log(payload);
+
     return await this.userService.findByUsername(payload.username);
   }
 }
