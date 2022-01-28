@@ -29,6 +29,7 @@ import { TranferTypeModule } from './main/tranfer-type/tranfer-type.module';
 import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
 import { ImageModule } from './main/image/image.module';
 import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
+import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
         PORT: Joi.number(),
       }),
     }),
+    AutoMapperModuleModule,
     DatabaseModule,
     CustomerModule,
     CarModule,
@@ -62,6 +64,7 @@ import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
     TranferTypeModule,
     CashTransferModule,
     ImageModule,
+    AutoMapperModuleModule,
   ],
   controllers: [AppController],
   providers: [
