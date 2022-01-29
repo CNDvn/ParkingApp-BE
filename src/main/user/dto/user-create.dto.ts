@@ -18,8 +18,6 @@ export class UserCreateDto {
   })
   public DOB: Date;
 
-  public status: string;
-
   @IsNotEmpty()
   @ApiProperty({ type: String, description: 'userName' })
   public username: string;

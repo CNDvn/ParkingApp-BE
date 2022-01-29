@@ -4,6 +4,6 @@ import { TranferTypeController } from './tranfer-type.controller';
 
 @Module({
   controllers: [TranferTypeController],
-  providers: [TranferTypeService]
+  providers: [TranferTypeService],
 })
 export class TranferTypeModule {}

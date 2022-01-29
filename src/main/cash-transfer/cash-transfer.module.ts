@@ -4,6 +4,6 @@ import { CashTransferController } from './cash-transfer.controller';
 
 @Module({
   controllers: [CashTransferController],
-  providers: [CashTransferService]
+  providers: [CashTransferService],
 })
 export class CashTransferModule {}

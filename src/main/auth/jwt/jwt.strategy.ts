@@ -18,8 +18,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: Payload): Promise<User> {
-    console.log(payload);
-
     return await this.userService.findByUsername(payload.username);
   }
 }

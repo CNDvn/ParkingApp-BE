@@ -6,7 +6,6 @@ import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
 import { RoleEnum } from '../auth/role/role.enum';
 import { UserService } from '../user/user.service';
-import { Status } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
 @Injectable()
 export class CustomerService extends BaseService<Customer> {
@@ -37,7 +36,6 @@ export class CustomerService extends BaseService<Customer> {
         lastName: data.lastName,
         password: hashPassword,
         phoneNumber: data.phoneNumber,
-        status: Status.ACTIVE,
         username: data.username,
         address: data.address,
         avatar: data.avatar,

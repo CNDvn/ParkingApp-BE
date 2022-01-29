@@ -6,7 +6,7 @@ import { Payload } from './jwt/payload';
 import { jwtConstants } from './constants';
 import { CustomerSignUpDto } from '../customer/dto/customer.signup';
 import { CustomerService } from '../customer/customer.service';
-import { BusinessSignUpDto } from '../business/dto/business.signup.dto';
+import { BusinessSignUpDto } from '../business/dto/business-signup.dto';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { Status } from 'src/utils/status.enum';
@@ -28,6 +28,9 @@ export class AuthService {
     role: string,
   ): Promise<User | undefined> {
     const user = await this.userService.findByUsername(username);
+    if (!user) {
+      throw new HttpException('Not Find', HttpStatus.NOT_FOUND);
+    }
     const isMatch = await this.sharedService.comparePassword(
       password,
       user.password,

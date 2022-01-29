@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import Business from './business.entity';
 import { BusinessRepository } from './business.repository';
-import { BusinessSignUpDto } from './dto/business.signup.dto';
+import { BusinessSignUpDto } from './dto/business-signup.dto';
 import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
 import { UserService } from '../user/user.service';
 import { SharedService } from 'src/shared/shared/shared.service';
 import { RoleEnum } from '../auth/role/role.enum';
-import { Status } from 'src/utils/status.enum';
 
 @Injectable()
 export class BusinessService extends BaseService<Business> {
@@ -33,7 +32,6 @@ export class BusinessService extends BaseService<Business> {
         lastName: data.lastName,
         password: hashPassword,
         phoneNumber: data.phoneNumber,
-        status: Status.ACTIVE,
         username: data.username,
         address: data.address,
         avatar: data.avatar,

@@ -17,14 +17,6 @@ export class UserProfile extends AutomapperProfile {
         (destination: UserDTO) => destination.fullName,
         mapFrom((source: User) => source.firstName + ' ' + source.lastName),
       );
-      // .forMember(
-      //   (destination: UserDTO) => destination.address,
-      //   mapFrom((source: User) => source.customer.address),
-      // )
-      // .forMember(
-      //   (destination: UserDTO) => destination.level,
-      //   mapFrom((source: User) => source.customer.level),
-      // );
     };
   }
 }
