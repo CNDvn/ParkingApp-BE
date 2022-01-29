@@ -1,4 +1,3 @@
-import { Status } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import User from '../user/user.entity';
 import Customer from './customer.entity';
@@ -11,8 +10,6 @@ export class CustomerRepository extends Repository<Customer> {
       .insert()
       .into(Customer)
       .values({
-        address: data.address,
-        status: Status.ACTIVE,
         user: user,
         level: 0,
       })

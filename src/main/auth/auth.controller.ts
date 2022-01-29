@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
-import Business from '../business/business.entity';
 import { BusinessSignUpDto } from '../business/dto/business.signup.dto';
 import { CustomerSignUpDto } from '../customer/dto/customer.signup';
 import User from '../user/user.entity';

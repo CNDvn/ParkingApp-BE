@@ -26,11 +26,11 @@ class UserDTO {
   @AutoMap()
   public email: string;
 
-  // @AutoMap()
-  // public address: string;
+  @AutoMap()
+  public address: string;
 
-  // @AutoMap()
-  // public level: number;
+  @AutoMap()
+  public avatar: string;
 
   @AutoMap({ typeFn: () => CustomerDTO })
   public customer: CustomerDTO;

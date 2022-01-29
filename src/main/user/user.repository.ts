@@ -16,6 +16,8 @@ export class UsersRepository extends Repository<User> {
     user.password = data.password;
     user.phoneNumber = data.phoneNumber;
     user.email = data.email;
+    user.address = data.address;
+    user.avatar = data.avatar;
     user.role = role;
     return await this.save(user);
   }

@@ -18,7 +18,7 @@ class User extends BaseEntity {
 
   @AutoMap()
   @Column('date', { name: 'DOB', nullable: false })
-  public DOB: string;
+  public DOB: Date;
 
   @AutoMap()
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
@@ -53,6 +53,14 @@ class User extends BaseEntity {
     unique: true,
   })
   public email: string;
+
+  @AutoMap()
+  @Column('varchar', { name: 'Address', nullable: false })
+  public address: string;
+
+  @AutoMap()
+  @Column('varchar', { name: 'Avatar', nullable: false })
+  public avatar: string;
 
   @Column({ name: 'RefreshToken', nullable: true })
   public refreshToken: string;

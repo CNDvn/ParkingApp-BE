@@ -24,9 +24,14 @@ export class CustomerService extends BaseService<Customer> {
       RoleEnum.CUSTOMER,
     );
     const hashPassword = await this.sharedService.hashPassword(data.password);
+    const convertDOB = this.sharedService.stringToDate(
+      data.DOB.toString(),
+      'yyyy-mm-dd',
+      '-',
+    );
     const user = await this.userService.createUser(
       {
-        DOB: new Date(data.DOB).toISOString().slice(0, 10),
+        DOB: convertDOB,
         email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
@@ -34,6 +39,8 @@ export class CustomerService extends BaseService<Customer> {
         phoneNumber: data.phoneNumber,
         status: Status.ACTIVE,
         username: data.username,
+        address: data.address,
+        avatar: data.avatar,
       },
       roleCustomer,
     );

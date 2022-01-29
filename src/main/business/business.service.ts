@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import Business from './business.entity';
-import * as bcrypt from 'bcrypt';
 import { BusinessRepository } from './business.repository';
 import { BusinessSignUpDto } from './dto/business.signup.dto';
 import { BaseService } from '../base/base.service';
@@ -29,7 +27,7 @@ export class BusinessService extends BaseService<Business> {
     const hashPassword = await this.sharedService.hashPassword(data.password);
     const user = await this.userService.createUser(
       {
-        DOB: new Date(data.DOB).toISOString().slice(0, 10),
+        DOB: data.DOB,
         email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
@@ -37,6 +35,8 @@ export class BusinessService extends BaseService<Business> {
         phoneNumber: data.phoneNumber,
         status: Status.ACTIVE,
         username: data.username,
+        address: data.address,
+        avatar: data.avatar,
       },
       roleBusiness,
     );

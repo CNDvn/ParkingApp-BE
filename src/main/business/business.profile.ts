@@ -12,7 +12,6 @@ export class BusinessProfile extends AutomapperProfile {
 
   mapProfile() {
     return (mapper: Mapper): void => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       mapper.createMap(Business, BusinessDTO);
     };
   }

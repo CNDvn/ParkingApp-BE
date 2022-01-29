@@ -12,9 +12,7 @@ export class CustomerProfile extends AutomapperProfile {
 
   mapProfile() {
     return (mapper: Mapper): void => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       mapper.createMap(Customer, CustomerDTO);
-      console.log('dasdas');
     };
   }
 }

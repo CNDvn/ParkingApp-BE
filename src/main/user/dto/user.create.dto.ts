@@ -11,11 +11,13 @@ export class UserCreateDto {
   public lastName: string;
 
   @IsNotEmpty()
-  @ApiProperty({ type: Date, description: 'dateOfBirth' })
-  public DOB: string;
+  @ApiProperty({
+    type: Date,
+    description: 'dateOfBirth',
+    default: new Date().toISOString().slice(0, 10),
+  })
+  public DOB: Date;
 
-  // @IsNotEmpty()
-  // @ApiProperty({ type: String, description: 'status', default: 'active' })
   public status: string;
 
   @IsNotEmpty()
@@ -33,4 +35,12 @@ export class UserCreateDto {
   @IsNotEmpty()
   @ApiProperty({ type: String, description: 'email' })
   public email: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ type: String, description: 'address' })
+  public address: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ type: String, description: 'avatar' })
+  public avatar: string;
 }
