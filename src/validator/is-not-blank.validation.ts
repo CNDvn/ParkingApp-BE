@@ -4,8 +4,8 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'isBlank', async: false })
-export class IsBlank implements ValidatorConstraintInterface {
+@ValidatorConstraint({ name: 'isNotBlank', async: false })
+export class IsNotBlank implements ValidatorConstraintInterface {
   validate(
     value: string,
     validationArguments?: ValidationArguments,
