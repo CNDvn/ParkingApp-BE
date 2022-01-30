@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -21,6 +22,7 @@ async function bootstrap(): Promise<void> {
   SwaggerModule.setup(pathOpenApi, app, document);
   // end setup open api
 
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`Server running port: ${port}`);
