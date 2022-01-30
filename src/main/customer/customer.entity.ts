@@ -1,3 +1,4 @@
+import { AutoMap } from '@automapper/classes';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Car from '../car/car.entity';
@@ -6,12 +7,7 @@ import User from '../user/user.entity';
 
 @Entity()
 class Customer extends BaseEntity {
-  @Column('varchar', { name: 'Address', nullable: false })
-  public address: string;
-
-  @Column('varchar', { name: 'Status', length: 20, nullable: false })
-  public status: string;
-
+  @AutoMap()
   @Column('int', { name: 'Level', nullable: false, default: 0 })
   public level: number;
 

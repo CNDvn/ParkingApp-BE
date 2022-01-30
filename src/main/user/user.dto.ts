@@ -1,4 +1,6 @@
 import { AutoMap } from '@automapper/classes';
+import BusinessDTO from '../business/business.dto';
+import CustomerDTO from '../customer/customer.dto';
 
 class UserDTO {
   @AutoMap()
@@ -23,5 +25,17 @@ class UserDTO {
 
   @AutoMap()
   public email: string;
+
+  @AutoMap()
+  public address: string;
+
+  @AutoMap()
+  public avatar: string;
+
+  @AutoMap({ typeFn: () => CustomerDTO })
+  public customer: CustomerDTO;
+
+  @AutoMap({ typeFn: () => BusinessDTO })
+  public business: BusinessDTO;
 }
 export default UserDTO;

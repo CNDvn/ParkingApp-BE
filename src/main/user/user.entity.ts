@@ -54,12 +54,22 @@ class User extends BaseEntity {
   })
   public email: string;
 
+  @AutoMap()
+  @Column('varchar', { name: 'Address', nullable: false })
+  public address: string;
+
+  @AutoMap()
+  @Column('varchar', { name: 'Avatar', nullable: false })
+  public avatar: string;
+
   @Column({ name: 'RefreshToken', nullable: true })
   public refreshToken: string;
 
+  @AutoMap({ typeFn: () => Customer })
   @OneToOne(() => Customer, (customer) => customer.user)
   public customer: Customer;
 
+  @AutoMap({ typeFn: () => Business })
   @OneToOne(() => Business, (business) => business.user)
   public business: Business;
 

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import { Request } from 'express';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
+import { BusinessSignUpDto } from '../business/dto/business-signup.dto';
+import { CustomerSignUpDto } from '../customer/dto/customer.signup';
 import User from '../user/user.entity';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/loginAuthDto';
@@ -11,6 +12,7 @@ import { Public } from './public';
 
 @ApiBearerAuth()
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -20,5 +22,31 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@GetUser() user: User): Promise<LoginAuthDto> {
     return await this.authService.login(user);
+  }
+
+  @Public()
+  @Post('/signUpCustomer')
+  @ApiResponse({
+    status: 201,
+    description: 'SignUp Customer Successfully',
+    type: CustomerSignUpDto,
+  })
+  async signUpCustomer(
+    @Body() customerSignUpDto: CustomerSignUpDto,
+  ): Promise<string> {
+    return await this.authService.signUpAuthCustomer(customerSignUpDto);
+  }
+
+  @Public()
+  @Post('/signUpBusiness')
+  @ApiResponse({
+    status: 201,
+    description: 'SignUp Business Successfully',
+    type: BusinessSignUpDto,
+  })
+  async signUpBusiness(
+    @Body() businessSignUpDto: BusinessSignUpDto,
+  ): Promise<string> {
+    return await this.authService.signUpAuthBusiness(businessSignUpDto);
   }
 }
