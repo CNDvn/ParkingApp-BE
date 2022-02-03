@@ -8,7 +8,7 @@ import TypeCar from '../type-car/type-car.entity';
 @Entity()
 class Car extends BaseEntity {
   @Column('varchar', { name: 'NPlates', length: 15, nullable: false })
-  nPlates: string;
+  public nPlates: string;
 
   @Column('varchar', { name: 'Brand', length: 50, nullable: false })
   public brand: string;
