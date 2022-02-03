@@ -1,20 +1,18 @@
 import {
   Controller,
-  Get,
   Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ImageService } from './image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Public } from '../auth/public';
+import { Observable, Subscription } from 'rxjs';
+import { AxiosResponse } from 'axios';
+import Image from './image.entity';
+import { GetUser } from '../../decorator/getUser.decorator';
+import User from '../user/user.entity';
 
 @Controller('image')
 @ApiBearerAuth()
@@ -23,7 +21,6 @@ export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   @Post()
-  @Public()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -38,8 +35,9 @@ export class ImageController {
   })
   @UseInterceptors(FileInterceptor('image'))
   async createImage(
+    @GetUser() user: User,
     @UploadedFile() image: Express.Multer.File,
-  ): Promise<string> {
-    return await this.imageService.createImage(image);
+  ): Promise<Image> {
+    return await this.imageService.createImage(user, image);
   }
 }
