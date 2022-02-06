@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Payload } from '../jwt/payload';
 import { RoleEnum } from './role.enum';
 import { ROLES_KEY } from './roles.decorator';
+import User from '../../user/user.entity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -19,8 +20,8 @@ export class RolesGuard implements CanActivate {
     );
     if (!requiredRoles) return true;
     const req = context.switchToHttp().getRequest() as Request;
-    const user: Payload = req.user as Payload;
+    const user: User = req.user as User;
 
-    return requiredRoles.some((role) => user.roles?.includes(role));
+    return requiredRoles.some((role) => user.role.name === role);
   }
 }

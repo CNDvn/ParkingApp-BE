@@ -1,12 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Car from '../car/car.entity';
 import Parking from '../parking/parking.entity';
+import { AutoMap } from '@automapper/classes';
 
 @Entity()
 class Image extends BaseEntity {
+  @PrimaryColumn({ type: 'varchar', name: 'Id' })
+  public id: string;
   @Column('varchar', { name: 'Title' })
   public title: string;
+  @AutoMap()
   @Column('varchar', { name: 'UrlViewer', nullable: false })
   public urlViewer: string;
   @Column('varchar', { name: 'Url' })

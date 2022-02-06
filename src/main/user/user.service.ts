@@ -14,7 +14,7 @@ export class UserService extends BaseService<User> {
   async findByUsername(username: string): Promise<User> {
     return await this.userRepository.findOne(
       { username },
-      { relations: ['role'] },
+      { relations: ['role', 'customer', 'business'] },
     );
   }
 

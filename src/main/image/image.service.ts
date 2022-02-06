@@ -7,7 +7,6 @@ import * as FormData from 'form-data';
 import { lastValueFrom, map } from 'rxjs';
 import { ImgbbDto } from './dto/imgbb.dto';
 import User from '../user/user.entity';
-import { isInstance } from 'class-validator';
 import { AxiosResponse } from 'axios';
 
 @Injectable()
@@ -40,6 +39,7 @@ export class ImageService extends BaseService<Image> {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     const imageEntity = this.imageRepository.create({
+      id: data.id,
       title: data.title,
       url: data.url,
       urlViewer: data.url_viewer,

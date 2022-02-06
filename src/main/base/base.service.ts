@@ -13,7 +13,7 @@ export class BaseService<T extends BaseEntity> {
     return await this.repository.findOne({ where: { id: id } });
   }
 
-  async findByIds(ids: [EntityId]): Promise<T[]> {
+  async findByIds(ids: EntityId[]): Promise<T[]> {
     return await this.repository.findByIds(ids);
   }
 
