@@ -40,4 +40,7 @@ export class BusinessService extends BaseService<Business> {
     );
     return await this.businessRepository.signUp(data, user);
   }
+  async findByIdUser(id: string): Promise<Business> {
+    return await this.businessRepository.getBusinessByUserId(id);
+  }
 }

@@ -1,29 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsMilitaryTime,
   IsNotEmpty,
   Max,
   Min,
   Validate,
   ValidateNested,
 } from 'class-validator';
+import { IsBeforeConstraint } from 'src/validator/isBefore.validation';
 import { IsPhoneNumberVN } from 'src/validator/isPhoneNumber.validation';
 class Coordinate {
   @Min(-90)
   @Max(90)
   @ApiProperty({
     type: String,
-    description: 'longitude of location',
+    description: 'latitude of location',
+    default: 70,
   })
-  public longitude: number;
+  public latitude: number;
 
   @Min(-180)
   @Max(180)
   @ApiProperty({
     type: String,
-    description: 'latitude of location',
+    description: 'longitude of location',
+    default: 150,
   })
-  public latitude: number;
+  public longitude: number;
 }
 export class ParkingCreateDTO {
   @IsNotEmpty()
@@ -34,19 +38,22 @@ export class ParkingCreateDTO {
   @ApiProperty({ type: String, description: 'address' })
   public address: string;
 
+  @Validate(IsBeforeConstraint, ['closeTime'])
+  @IsMilitaryTime({ message: 'OpenTime time in the format HH:MM' })
   @IsNotEmpty()
   @ApiProperty({
     type: Date,
-    description: 'openTime 09:00:00',
-    default: '09:00:00',
+    description: 'OpenTime 09:00',
+    default: '09:00',
   })
   public openTime: Date;
 
+  @IsMilitaryTime({ message: 'CloseTime time in the format HH:MM' })
   @IsNotEmpty()
   @ApiProperty({
     type: Date,
-    description: 'openTime 12:00PM',
-    default: '12:00:00',
+    description: 'CloseTime 12:00PM',
+    default: '12:00',
   })
   public closeTime: Date;
 

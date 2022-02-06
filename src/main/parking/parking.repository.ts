@@ -11,7 +11,6 @@ export class ParkingRepository extends Repository<Parking> {
   ): Promise<string> {
     const { address, name, closeTime, coordinate, openTime, phoneNumber } =
       parkingCreateDTO;
-    const data = [coordinate.latitude, coordinate.longitude];
     await this.createQueryBuilder()
       .insert()
       .into(Parking)
@@ -23,14 +22,19 @@ export class ParkingRepository extends Repository<Parking> {
         phoneNumber,
         status: Status.ACTIVE,
         business: businessOwner,
-        coordinate: () =>
-          `ST_GeomFromGeoJSON( '{ "type": "Point", "coordinates": [${data}] }' )`,
-        // coordinate: {
-        //   type: 'Point',
-        //   coordinates: data,
-        // },
+        coordinate: {
+          type: 'Point',
+          coordinates: [coordinate.latitude, coordinate.longitude],
+        },
       })
       .execute();
     return 'create parking succesfully';
+  }
+
+  async getAllParking(): Promise<Parking[]> {
+    return await this.createQueryBuilder('parking')
+      .leftJoinAndSelect('parking.business', 'business')
+      .leftJoinAndSelect('business.user', 'user')
+      .getMany();
   }
 }

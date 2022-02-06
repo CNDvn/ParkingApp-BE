@@ -19,18 +19,23 @@ export class ParkingService extends BaseService<Parking> {
     user: User,
     parkingCreateDTO: ParkingCreateDTO,
   ): Promise<string> {
-    // const parking = await this.parkingRepository.findOne({
-    //   name: parkingCreateDTO.name,
-    // });
-    // if (parking) {
-    //   throw new BadRequestException(
-    //     `${parkingCreateDTO.name} is duplicate name parking`,
-    //   );
-    // }
-    const businessOwner = await this.businessService.findById(user.id);
+    const parking = await this.parkingRepository.findOne({
+      name: parkingCreateDTO.name,
+    });
+    if (parking) {
+      throw new BadRequestException(
+        `${parkingCreateDTO.name} is duplicate name parking`,
+      );
+    }
+    const businessOwner = await this.businessService.findByIdUser(user.id);
+    console.log(businessOwner);
     return await this.parkingRepository.createParking(
       businessOwner,
       parkingCreateDTO,
     );
+  }
+
+  async getAllParking(): Promise<Parking[]> {
+    return await this.parkingRepository.getAllParking();
   }
 }
