@@ -47,4 +47,13 @@ export class ParkingRepository extends Repository<Parking> {
       .leftJoinAndSelect('user.role', 'role')
       .getOne();
   }
+
+  async getAllOwnerParkings(idBusiness: string): Promise<Parking[]> {
+    return await this.createQueryBuilder('parking')
+      .leftJoinAndSelect('parking.business', 'business')
+      .leftJoinAndSelect('business.user', 'user')
+      .where('business.id = :id', { id: idBusiness })
+      .leftJoinAndSelect('user.role', 'role')
+      .getMany();
+  }
 }

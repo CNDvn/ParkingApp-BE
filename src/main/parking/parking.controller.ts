@@ -3,6 +3,8 @@ import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import { Public } from '../auth/public';
+import { RoleEnum } from '../auth/role/role.enum';
+import { Roles } from '../auth/role/roles.decorator';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingDTO from './parking.dto';
@@ -35,5 +37,16 @@ export class ParkingController {
   })
   async getAllParking(): Promise<Parking[]> {
     return await this.parkingService.getAllParking();
+  }
+
+  @Roles(RoleEnum.BUSINESS)
+  @Get('OwnerParking')
+  @UseInterceptors(MapInterceptor(ParkingDTO, Parking, { isArray: true }))
+  @ApiResponse({
+    status: 201,
+    description: 'Get All Owner Parking Success',
+  })
+  async getAllOwnerParking(@GetUser() user: User): Promise<Parking[]> {
+    return await this.parkingService.getAllOwnerParking(user);
   }
 }
