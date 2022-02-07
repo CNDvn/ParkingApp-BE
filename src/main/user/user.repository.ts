@@ -1,4 +1,4 @@
-import { Status } from 'src/utils/status.enum';
+import { StatusEnum } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import { RoleEnum } from '../auth/role/role.enum';
 import Role from '../role/role.entity';
@@ -12,7 +12,7 @@ export class UsersRepository extends Repository<User> {
     user.firstName = data.firstName;
     user.lastName = data.lastName;
     user.DOB = data.DOB;
-    user.status = Status.IN_ACTIVE;
+    user.status = StatusEnum.IN_ACTIVE;
     user.username = data.username;
     user.password = data.password;
     user.phoneNumber = data.phoneNumber;

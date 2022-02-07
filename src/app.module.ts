@@ -21,7 +21,7 @@ import { CustomerPromotionModule } from './main/customer-promotion/customer-prom
 import { PriceListModule } from './main/price-list/price-list.module';
 import { PriceListDetailModule } from './main/price-list-detail/price-list-detail.module';
 import { AuthModule } from './main/auth/auth.module';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
 import { RoleModule } from './main/role/role.module';
@@ -30,6 +30,8 @@ import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
 import { ImageModule } from './main/image/image.module';
 import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
 import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.module';
+import { TransformInterceptor } from './interceptor/transform.interceptor';
+import { LoggingInterceptor } from './interceptor/logging.interceptor';
 
 @Module({
   imports: [
@@ -72,6 +74,8 @@ import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
   ],
 })
 export class AppModule {}
