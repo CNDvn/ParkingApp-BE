@@ -11,7 +11,6 @@ import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { StatusEnum } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
-import { StatusEnum } from 'src/utils/status.enum';
 
 @Injectable()
 export class AuthService {
