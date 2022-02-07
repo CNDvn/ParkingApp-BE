@@ -9,8 +9,9 @@ import { CustomerService } from '../customer/customer.service';
 import { BusinessSignUpDto } from '../business/dto/business-signup.dto';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
-import { Status } from 'src/utils/status.enum';
+
 import { SharedService } from 'src/shared/shared/shared.service';
+import { StatusEnum } from 'src/utils/status.enum';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +36,7 @@ export class AuthService {
       password,
       user.password,
     );
-    if (user && isMatch && user.status === Status.ACTIVE) {
+    if (user && isMatch && user.status === StatusEnum.ACTIVE) {
       user.password = undefined;
       if (user.role.name === role) {
         return user;
