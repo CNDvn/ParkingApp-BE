@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { BaseService } from '../base/base.service';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
@@ -15,27 +15,33 @@ export class ParkingService extends BaseService<Parking> {
     super(parkingRepository);
   }
 
-  async creatParking(
+  async createParking(
     user: User,
     parkingCreateDTO: ParkingCreateDTO,
   ): Promise<string> {
     const parking = await this.parkingRepository.findOne({
       name: parkingCreateDTO.name,
     });
+
     if (parking) {
+      const parkingExsit = await this.parkingRepository.getParking(parking.id);
+      if (parkingExsit.business.id === user.business.id) {
+        return await this.parkingRepository.createParking(
+          user.business,
+          parkingCreateDTO,
+        );
+      }
       throw new BadRequestException(
-        `${parkingCreateDTO.name} is duplicate name parking`,
+        `name parking ${parkingCreateDTO.name} is duplicate`,
       );
     }
-    const businessOwner = await this.businessService.findByIdUser(user.id);
-    console.log(businessOwner);
     return await this.parkingRepository.createParking(
-      businessOwner,
+      user.business,
       parkingCreateDTO,
     );
   }
 
   async getAllParking(): Promise<Parking[]> {
-    return await this.parkingRepository.getAllParking();
+    return await this.parkingRepository.getAllParkings();
   }
 }

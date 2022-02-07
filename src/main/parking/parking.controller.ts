@@ -23,7 +23,7 @@ export class ParkingController {
     @GetUser() user: User,
     @Body() parkingCreateDTO: ParkingCreateDTO,
   ): Promise<string> {
-    return await this.parkingService.creatParking(user, parkingCreateDTO);
+    return await this.parkingService.createParking(user, parkingCreateDTO);
   }
 
   @Public()

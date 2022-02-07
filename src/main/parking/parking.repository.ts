@@ -1,4 +1,4 @@
-import { Status } from 'src/utils/status.enum';
+import { StatusEnum } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import Business from '../business/business.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
@@ -20,7 +20,7 @@ export class ParkingRepository extends Repository<Parking> {
         closeTime,
         openTime,
         phoneNumber,
-        status: Status.ACTIVE,
+        status: StatusEnum.ACTIVE,
         business: businessOwner,
         coordinate: {
           type: 'Point',
@@ -31,10 +31,19 @@ export class ParkingRepository extends Repository<Parking> {
     return 'create parking succesfully';
   }
 
-  async getAllParking(): Promise<Parking[]> {
+  async getAllParkings(): Promise<Parking[]> {
     return await this.createQueryBuilder('parking')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('business.user', 'user')
       .getMany();
+  }
+
+  async getParking(id: string): Promise<Parking> {
+    return await this.createQueryBuilder('parking')
+      .where('parking.id = :id', { id: id })
+      .leftJoinAndSelect('parking.business', 'business')
+      .leftJoinAndSelect('business.user', 'user')
+      .leftJoinAndSelect('user.role', 'role')
+      .getOne();
   }
 }
