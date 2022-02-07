@@ -9,6 +9,7 @@ import { CustomerService } from '../customer/customer.service';
 import { BusinessSignUpDto } from '../business/dto/business-signup.dto';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
+import { StatusEnum } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
 import { StatusEnum } from 'src/utils/status.enum';
 
