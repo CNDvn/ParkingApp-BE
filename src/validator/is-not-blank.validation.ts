@@ -8,7 +8,7 @@ import {
 export class IsNotBlank implements ValidatorConstraintInterface {
   validate(
     value: string,
-    validationArguments?: ValidationArguments,
+    validationArguments: ValidationArguments,
   ): boolean | Promise<boolean> {
     return value.trim().length > 0;
   }
