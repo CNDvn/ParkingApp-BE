@@ -26,6 +26,7 @@ export class ParkingRepository extends Repository<Parking> {
           type: 'Point',
           coordinates: [coordinate.latitude, coordinate.longitude],
         },
+        createdBy: businessOwner.id,
       })
       .execute();
     return 'create parking succesfully';
