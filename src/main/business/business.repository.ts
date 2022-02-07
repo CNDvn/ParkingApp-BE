@@ -15,4 +15,11 @@ export class BusinessRepository extends Repository<Business> {
       .execute();
     return 'Create Successfully';
   }
+  async getBusinessByUserId(id: string): Promise<Business> {
+    return await this.createQueryBuilder('business')
+      .where('business.UserId = :id', {
+        id: id,
+      })
+      .getOne();
+  }
 }
