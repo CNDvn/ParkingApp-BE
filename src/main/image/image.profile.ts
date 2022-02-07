@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { mapFrom, Mapper, MappingProfile } from '@automapper/core';
-import imageEntity from './image.entity';
+import { Mapper, MappingProfile } from '@automapper/core';
 import Image from './image.entity';
 import { ImageUrlViewDto } from './dto/image-url-view.dto';
 
@@ -12,7 +11,7 @@ export class ImageProfile extends AutomapperProfile {
   }
 
   mapProfile(): MappingProfile {
-    return (mapper: Mapper) => {
+    return (mapper: Mapper): void => {
       mapper.createMap(Image, ImageUrlViewDto);
     };
   }
