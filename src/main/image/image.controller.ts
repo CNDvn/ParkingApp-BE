@@ -7,16 +7,13 @@ import {
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ImageService } from './image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Public } from '../auth/public';
-import { Observable, Subscription } from 'rxjs';
-import { AxiosResponse } from 'axios';
 import Image from './image.entity';
 import { GetUser } from '../../decorator/getUser.decorator';
 import User from '../user/user.entity';
 
 @Controller('image')
 @ApiBearerAuth()
-@ApiTags('images')
+@ApiTags('Images')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 

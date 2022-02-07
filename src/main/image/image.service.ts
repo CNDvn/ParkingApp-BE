@@ -20,8 +20,10 @@ export class ImageService extends BaseService<Image> {
 
   async createImage(user: User, image: Express.Multer.File): Promise<Image> {
     const bodyFormData = new FormData();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     bodyFormData.append('image', image.buffer.toString('base64'));
     const data: ImgbbDto = await lastValueFrom(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       this.httpService
         .post(
           `https://api.imgbb.com/1/upload?key=a72def2770832c960edb9b243b7712b9`,
