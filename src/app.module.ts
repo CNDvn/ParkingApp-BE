@@ -30,6 +30,7 @@ import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
 import { ImageModule } from './main/image/image.module';
 import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
 import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.module';
+import SmsService from './utils/sms.service';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.
   controllers: [AppController],
   providers: [
     AppService,
+    SmsService,
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
