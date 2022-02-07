@@ -5,6 +5,8 @@ import { GetUser } from 'src/decorator/getUser.decorator';
 import UserDTO from './user.dto';
 import User from './user.entity';
 import { UserService } from './user.service';
+import { Roles } from '../auth/role/roles.decorator';
+import { RoleEnum } from '../auth/role/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('User')
