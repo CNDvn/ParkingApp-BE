@@ -1,6 +1,8 @@
+import { AutoMap } from '@automapper/classes';
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
 class BaseEntity {
+  @AutoMap()
   @PrimaryGeneratedColumn('uuid', { name: 'Id' })
   public id: string;
 
