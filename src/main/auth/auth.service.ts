@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAuthDto } from './dto/loginAuthDto';
@@ -11,6 +16,7 @@ import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { StatusEnum } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
+import { ChangePasswordDto } from './dto/changePasswordDto';
 
 @Injectable()
 export class AuthService {
@@ -67,6 +73,42 @@ export class AuthService {
       ),
       message: 'Success',
     };
+  }
+
+  async changePassword(
+    user: User,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<string> {
+    const hashPassword = await this.sharedService.hashPassword(
+      changePasswordDto.newPassword,
+    );
+    const isMatch = await this.sharedService.comparePassword(
+      changePasswordDto.password,
+      user.password,
+    );
+    if (!isMatch) {
+      throw new BadRequestException('Password is wrong.!');
+    }
+    if (changePasswordDto.newPassword !== changePasswordDto.confirmPassword) {
+      throw new BadRequestException('Password and confirm does not match.!');
+    }
+    await this.userService.update(user.id, {
+      password: hashPassword,
+    });
+    return 'change password success';
+  }
+
+  async resetPassword(username: string): Promise<string> {
+    const user: User = await this.userService.findByUsername(username);
+
+    if (!user) {
+      throw new BadRequestException('Not found phone.!');
+    }
+
+    const hashPassword = await this.sharedService.hashPassword('12345');
+
+    await this.userService.update(user.id, { password: hashPassword });
+    return 'reset password success';
   }
 
   async signUpAuthCustomer(data: CustomerSignUpDto): Promise<string> {

@@ -7,17 +7,19 @@ import User from '../user/user.entity';
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/loginAuthDto';
 import { LoginDto } from './dto/loginDto';
+import { ResetPasswordDto } from './dto/resetPasswordDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
+import { ChangePasswordDto } from './dto/changePasswordDto';
 
 @ApiBearerAuth()
-@Public()
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('/login')
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
@@ -25,6 +27,24 @@ export class AuthController {
     return await this.authService.login(user);
   }
 
+  @Post('/changePassword')
+  @ApiBody({ type: ChangePasswordDto })
+  async changePassword(
+    @GetUser() user: User,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<string> {
+    return await this.authService.changePassword(user, changePasswordDto);
+  }
+
+  @Post('/resetPassword')
+  @Public()
+  @ApiBody({ type: ResetPasswordDto })
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<string> {
+    return await this.authService.resetPassword(resetPasswordDto.username);
+  }
+  @Public()
   @Post('/signUpCustomer')
   @ApiResponse({
     status: 201,
@@ -36,7 +56,7 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
   }
-
+  @Public()
   @Post('/signUpBusiness')
   @ApiResponse({
     status: 201,
@@ -48,7 +68,7 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthBusiness(businessSignUpDto);
   }
-
+  @Public()
   @Post('/verifyPhoneNumber')
   async verifyPhoneNumber(
     @Body() verifyDto: VerifyPhoneNumberDto,
