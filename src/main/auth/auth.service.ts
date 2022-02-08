@@ -76,4 +76,27 @@ export class AuthService {
   async signUpAuthBusiness(data: BusinessSignUpDto): Promise<string> {
     return await this.businessService.signUpBusiness(data);
   }
+
+  async verifyPhoneNumber(
+    phoneNumber: string,
+    codeVerify: number,
+  ): Promise<string> {
+    const user = await this.userService.findByPhoneNumber(phoneNumber);
+    if (!user)
+      throw new HttpException('Phone number not exist', HttpStatus.BAD_REQUEST);
+
+    if (user.phoneNumberVerifyCodeExpire.getTime() < Date.now())
+      throw new HttpException('code verify invalid', HttpStatus.BAD_REQUEST);
+
+    if (user.phoneNumberVerifyCode !== codeVerify)
+      throw new HttpException('code verify invalid', HttpStatus.BAD_REQUEST);
+
+    await this.userService.update(user.id, {
+      phoneNumberVerifyCode: null,
+      phoneNumberConfirmed: true,
+      status: StatusEnum.ACTIVE,
+    });
+
+    return 'verify success';
+  }
 }

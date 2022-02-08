@@ -46,4 +46,8 @@ export class UserService extends BaseService<User> {
     data.password = hashPassword;
     return await this.userRepository.updateUser(id, data);
   }
+
+  async findByPhoneNumber(phoneNumber: string): Promise<User> {
+    return await this.userRepository.findOne({ phoneNumber });
+  }
 }
