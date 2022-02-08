@@ -45,6 +45,23 @@ class User extends BaseEntity {
   })
   public phoneNumber: string;
 
+  @Column('boolean', { name: 'PhoneNumberConfirmed', default: false })
+  public phoneNumberConfirmed: boolean;
+
+  @Column('integer', {
+    name: 'PhoneNumberVerifyCode',
+    default: false,
+    nullable: true,
+  })
+  public phoneNumberVerifyCode: number;
+
+  @Column('datetime', {
+    name: 'PhoneNumberVerifyCodeExpire',
+    default: false,
+    nullable: true,
+  })
+  public phoneNumberVerifyCodeExpire: Date;
+
   @AutoMap()
   @Column('varchar', {
     name: 'Email',
