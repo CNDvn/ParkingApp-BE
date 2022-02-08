@@ -14,7 +14,6 @@ import User from './user.entity';
 import { UserService } from './user.service';
 import { Roles } from '../auth/role/roles.decorator';
 import { RoleEnum } from '../auth/role/role.enum';
-import { Public } from '../auth/public';
 import { UserUpdateProfileDto } from './dto/user-update-profile.dto';
 
 @ApiBearerAuth()
@@ -33,8 +32,9 @@ export class UserController {
     return await this.userService.getMe(user);
   }
 
-  @Public()
+  @Roles(RoleEnum.ADMIN)
   @Get('/getAll')
+  @UseInterceptors(MapInterceptor(UserDTO, User, { isArray: true }))
   @ApiResponse({
     status: 200,
     description: 'Get all Users',
