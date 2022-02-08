@@ -1,0 +1,28 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.0
+  heroku: circleci/heroku@1.2.6
+
+jobs:
+  test:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '16.13'
+      - run: yarn install
+      - run: yarn run test
+
+workflows:
+  test-and-deploy:
+    jobs:
+      - test
+      - heroku/deploy-via-git:
+          filters:
+            branches:
+              only:
+                - dev
+          requires:
+            - test
