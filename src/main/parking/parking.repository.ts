@@ -34,14 +34,17 @@ export class ParkingRepository extends Repository<Parking> {
 
   async getAllParkings(): Promise<Parking[]> {
     return await this.createQueryBuilder('parking')
+      .leftJoinAndSelect('parking.parkingSlots', 'parking_slot')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('business.user', 'user')
+      .leftJoinAndSelect('user.role', 'role')
       .getMany();
   }
 
   async getParking(id: string): Promise<Parking> {
     return await this.createQueryBuilder('parking')
       .where('parking.id = :id', { id: id })
+      .leftJoinAndSelect('parking.parkingSlots', 'parking_slot')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('business.user', 'user')
       .leftJoinAndSelect('user.role', 'role')

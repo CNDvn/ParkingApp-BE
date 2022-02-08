@@ -58,10 +58,12 @@ class Parking extends BaseEntity {
   @OneToMany(() => Booking, (booking) => booking.parking)
   public bookings: Booking[];
 
+  @AutoMap({ typeFn: () => ParkingSlot })
   @OneToMany(() => ParkingSlot, (parkingSlot) => parkingSlot.parking)
   public parkingSlots: ParkingSlot[];
 
   @OneToMany(() => Image, (image) => image.parking)
   public images: Image[];
 }
+
 export default Parking;

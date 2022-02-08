@@ -48,4 +48,8 @@ export class ParkingService extends BaseService<Parking> {
   async getAllOwnerParking(user: User): Promise<Parking[]> {
     return await this.parkingRepository.getAllOwnerParkings(user.business.id);
   }
+
+  async getParking(id: string): Promise<Parking> {
+    return await this.parkingRepository.getParking(id);
+  }
 }
