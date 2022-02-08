@@ -1,5 +1,5 @@
 # Env files
-.env
+#.env
 
 # Compiled output
 /dist
