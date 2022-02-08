@@ -25,4 +25,8 @@ export class UserService extends BaseService<User> {
   async getMe(user: User): Promise<User> {
     return await this.userRepository.getMeCustomer(user);
   }
+
+  async findByPhoneNumber(phoneNumber: string): Promise<User> {
+    return await this.userRepository.findOne({ phoneNumber });
+  }
 }
