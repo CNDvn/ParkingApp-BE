@@ -6,7 +6,7 @@ import User from '../user/user.entity';
 
 @Entity()
 class Business extends BaseEntity {
-  @OneToOne(() => User, (user) => user.business)
+  @OneToOne(() => User, (user) => user.business, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'UserId' })
   public user: User;
 

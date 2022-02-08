@@ -1,8 +1,9 @@
-import { Status } from 'src/utils/status.enum';
-import { EntityRepository, Repository } from 'typeorm';
+import { StatusEnum } from 'src/utils/status.enum';
+import { EntityRepository, getConnection, Repository } from 'typeorm';
 import { RoleEnum } from '../auth/role/role.enum';
 import Role from '../role/role.entity';
 import { UserCreateDto } from './dto/user-create.dto';
+import { UserUpdateProfileDto } from './dto/user-update-profile.dto';
 import User from './user.entity';
 
 @EntityRepository(User)
@@ -12,7 +13,7 @@ export class UsersRepository extends Repository<User> {
     user.firstName = data.firstName;
     user.lastName = data.lastName;
     user.DOB = data.DOB;
-    user.status = Status.IN_ACTIVE;
+    user.status = StatusEnum.IN_ACTIVE;
     user.username = data.username;
     user.password = data.password;
     user.phoneNumber = data.phoneNumber;
@@ -38,5 +39,34 @@ export class UsersRepository extends Repository<User> {
         .getOne();
       return business;
     }
+  }
+
+  async deleteUser(id: string): Promise<string> {
+    await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({ status: StatusEnum.IN_ACTIVE })
+      .where('id = :id', { id: id })
+      .execute();
+    return `Delete Successfull ${id}`;
+  }
+
+  async updateUser(id: string, data: UserUpdateProfileDto): Promise<string> {
+    await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        DOB: data.DOB,
+        address: data.address,
+        avatar: data.avatar,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+      })
+      .where('id = :id', { id: id })
+      .execute();
+    return `Update Profile Successful`;
   }
 }

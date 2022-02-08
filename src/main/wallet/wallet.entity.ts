@@ -14,7 +14,7 @@ class Wallet extends BaseEntity {
   @Column('datetime', { name: 'CreatedTime', default: () => 'now()' })
   public createdTime: Date;
 
-  @OneToOne(() => User, (user) => user.wallet)
+  @OneToOne(() => User, (user) => user.wallet, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'UserId' })
   public user: User;
 
