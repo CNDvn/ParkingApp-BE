@@ -3,8 +3,8 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { RoleCreateDTO } from './dto/role.create.dto';
 import { RoleService } from './role.service';
 import Role from './role.entity';
-@ApiTags('Role')
-@Controller('role')
+@ApiTags('Roles')
+@Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
   @Post('/')
