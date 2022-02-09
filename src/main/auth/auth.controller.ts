@@ -10,6 +10,7 @@ import { LoginDto } from './dto/loginDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
+import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
 @Public()
@@ -53,9 +54,16 @@ export class AuthController {
   async verifyPhoneNumber(
     @Body() verifyDto: VerifyPhoneNumberDto,
   ): Promise<string> {
-    return this.authService.verifyPhoneNumber(
+    return await this.authService.verifyPhoneNumber(
       verifyDto.phoneNumber,
       verifyDto.verifyCode,
     );
+  }
+
+  @Post('/refreshToken')
+  async refreshToken(
+    @Body() refreshToken: RefreshTokenDto,
+  ): Promise<{ access_token: string }> {
+    return await this.authService.refreshToken(refreshToken.token);
   }
 }
