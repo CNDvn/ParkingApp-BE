@@ -2,9 +2,10 @@ import { MapInterceptor } from '@automapper/nestjs';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
-  Patch,
+  Put,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -43,7 +44,7 @@ export class UserController {
     return await this.userService.getAll();
   }
 
-  @Patch('updateProfile')
+  @Put('updateProfile')
   @ApiResponse({
     status: 200,
     description: 'Update Profile',
@@ -56,7 +57,7 @@ export class UserController {
   }
 
   @Roles(RoleEnum.ADMIN)
-  @Patch('updateUser/:id')
+  @Put('updateUser/:id')
   @ApiResponse({
     status: 200,
     description: 'Update User',
@@ -69,7 +70,7 @@ export class UserController {
   }
 
   @Roles(RoleEnum.ADMIN)
-  @Patch('delete/:id')
+  @Delete('delete/:id')
   @ApiResponse({
     status: 200,
     description: 'Delete User',
