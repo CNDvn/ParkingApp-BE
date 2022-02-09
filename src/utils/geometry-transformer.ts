@@ -7,7 +7,7 @@ export class GeometryTransformer implements ValueTransformer {
     return wkx.Geometry.parseGeoJSON(geojson).toWkt();
   }
 
-  from(wkb: string): Record<string, any> | undefined {
+  from(wkb: string): Record<string, string> | undefined {
     if (!wkb) return;
 
     return wkx.Geometry.parse(wkb).toGeoJSON();

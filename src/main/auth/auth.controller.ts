@@ -1,3 +1,4 @@
+import { ChangePasswordDto } from './dto/changePasswordDto';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
@@ -11,11 +12,12 @@ import { ResetPasswordDto } from './dto/resetPasswordDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
-import { ChangePasswordDto } from './dto/changePasswordDto';
+import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
-@Controller('auth')
-@ApiTags('auth')
+@Public()
+@Controller('auths')
+@ApiTags('Auths')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -73,9 +75,16 @@ export class AuthController {
   async verifyPhoneNumber(
     @Body() verifyDto: VerifyPhoneNumberDto,
   ): Promise<string> {
-    return this.authService.verifyPhoneNumber(
+    return await this.authService.verifyPhoneNumber(
       verifyDto.phoneNumber,
       verifyDto.verifyCode,
     );
+  }
+
+  @Post('/refreshToken')
+  async refreshToken(
+    @Body() refreshToken: RefreshTokenDto,
+  ): Promise<{ access_token: string }> {
+    return await this.authService.refreshToken(refreshToken.token);
   }
 }
