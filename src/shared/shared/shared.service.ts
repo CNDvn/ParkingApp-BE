@@ -32,4 +32,8 @@ export class SharedService {
     );
     return formateDate;
   }
+
+  public generateOtp(): number {
+    return Math.floor(Math.random() * 1000000);
+  }
 }
