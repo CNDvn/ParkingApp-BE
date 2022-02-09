@@ -53,18 +53,21 @@ export class AuthService {
       username: user.username,
       roles: [user.role.name],
     };
+    const accessToken = this.jwtService.sign(payload, {
+      secret: jwtConstants.accessTokenSecret,
+      expiresIn: '3d',
+    });
+    const refreshToken = this.jwtService.sign(
+      { id: payload.id },
+      {
+        secret: jwtConstants.refreshTokenSecret,
+        expiresIn: '60days',
+      },
+    );
+    this.userService.update(user.id, { refreshToken });
     return {
-      access_token: this.jwtService.sign(payload, {
-        secret: jwtConstants.accessTokenSecret,
-        expiresIn: '3d',
-      }),
-      refresh_token: this.jwtService.sign(
-        { id: payload.id },
-        {
-          secret: jwtConstants.refreshTokenSecret,
-          expiresIn: '365d',
-        },
-      ),
+      access_token: accessToken,
+      refresh_token: refreshToken,
       message: 'Success',
     };
   }
@@ -98,5 +101,30 @@ export class AuthService {
     });
 
     return 'verify success';
+  }
+
+  async refreshToken(refreshToken: string): Promise<{ access_token: string }> {
+    const { id }: { id: string } = await this.jwtService.verify(refreshToken, {
+      secret: jwtConstants.refreshTokenSecret,
+      ignoreExpiration: false,
+    });
+    const user: User = await this.userService.findByIdWithRelations(id, [
+      'role',
+    ]);
+
+    if (!user || user.refreshToken !== refreshToken)
+      throw new HttpException('Token invalid', HttpStatus.BAD_REQUEST);
+
+    const payload: Payload = {
+      id: user.id,
+      username: user.username,
+      roles: [user.role.name],
+    };
+    return {
+      access_token: this.jwtService.sign(payload, {
+        secret: jwtConstants.accessTokenSecret,
+        expiresIn: '3d',
+      }),
+    };
   }
 }
