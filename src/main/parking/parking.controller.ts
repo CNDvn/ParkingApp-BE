@@ -11,8 +11,8 @@ import ParkingDTO from './parking.dto';
 import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 @ApiBearerAuth()
-@ApiTags('Parking')
-@Controller('parking')
+@ApiTags('Parkings')
+@Controller('parkings')
 export class ParkingController {
   constructor(private readonly parkingService: ParkingService) {}
 

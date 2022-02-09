@@ -14,8 +14,8 @@ import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
 @Public()
-@Controller('auth')
-@ApiTags('auth')
+@Controller('auths')
+@ApiTags('Auths')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

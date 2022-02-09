@@ -7,8 +7,8 @@ import User from './user.entity';
 import { UserService } from './user.service';
 
 @ApiBearerAuth()
-@ApiTags('User')
-@Controller('user')
+@ApiTags('Users')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
