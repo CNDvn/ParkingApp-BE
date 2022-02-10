@@ -19,10 +19,21 @@ import ParkingDTO from './parking.dto';
 import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 @ApiBearerAuth()
-@ApiTags('Parking')
+@ApiTags('Parkings')
 @Controller('parking')
 export class ParkingController {
   constructor(private readonly parkingService: ParkingService) {}
+
+  @Roles(RoleEnum.BUSINESS)
+  @Get('OwnerParking')
+  @UseInterceptors(MapInterceptor(ParkingDTO, Parking, { isArray: true }))
+  @ApiResponse({
+    status: 201,
+    description: 'Get All Owner Parking Success',
+  })
+  async getAllOwnerParking(@GetUser() user: User): Promise<Parking[]> {
+    return await this.parkingService.getAllOwnerParking(user);
+  }
 
   @Post()
   @ApiResponse({
@@ -56,16 +67,5 @@ export class ParkingController {
   })
   async getParking(@Param('id') id: string): Promise<Parking> {
     return await this.parkingService.getParking(id);
-  }
-
-  @Roles(RoleEnum.BUSINESS)
-  @Get('OwnerParking')
-  @UseInterceptors(MapInterceptor(ParkingDTO, Parking, { isArray: true }))
-  @ApiResponse({
-    status: 201,
-    description: 'Get All Owner Parking Success',
-  })
-  async getAllOwnerParking(@GetUser() user: User): Promise<Parking[]> {
-    return await this.parkingService.getAllOwnerParking(user);
   }
 }

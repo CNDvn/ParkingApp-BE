@@ -17,9 +17,6 @@ export class ParkingProfile extends AutomapperProfile {
         .forMember(
           (destination: ParkingDTO) => destination.coordinates.latitude,
           mapFrom((source: Parking) => {
-            console.log('ParkingProfile');
-            console.log(source);
-
             return source.coordinate.coordinates[0];
           }),
         )

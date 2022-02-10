@@ -34,7 +34,6 @@ export class ParkingRepository extends Repository<Parking> {
 
   async getAllParkings(): Promise<Parking[]> {
     return await this.createQueryBuilder('parking')
-      .leftJoinAndSelect('parking.parkingSlots', 'parking_slot')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('business.user', 'user')
       .leftJoinAndSelect('user.role', 'role')
@@ -52,6 +51,17 @@ export class ParkingRepository extends Repository<Parking> {
   }
 
   async getAllOwnerParkings(idBusiness: string): Promise<Parking[]> {
+    console.log(idBusiness);
+
+    console.log(
+      await this.createQueryBuilder('parking')
+        .leftJoinAndSelect('parking.business', 'business')
+        .leftJoinAndSelect('business.user', 'user')
+        .where('business.id = :id', { id: idBusiness })
+        .leftJoinAndSelect('user.role', 'role')
+        .getMany(),
+    );
+
     return await this.createQueryBuilder('parking')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('business.user', 'user')

@@ -46,7 +46,7 @@ export class ParkingCreateDTO {
     description: 'OpenTime 09:00',
     default: '09:00',
   })
-  public openTime: Date;
+  public openTime: string;
 
   @IsMilitaryTime({ message: 'CloseTime time in the format HH:MM' })
   @IsNotEmpty()
@@ -55,7 +55,7 @@ export class ParkingCreateDTO {
     description: 'CloseTime 12:00PM',
     default: '12:00',
   })
-  public closeTime: Date;
+  public closeTime: string;
 
   @IsNotEmpty()
   @Validate(IsPhoneNumberVN)

@@ -1,5 +1,5 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { mapFrom, Mapper } from '@automapper/core';
+import { Mapper } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import Parking from './parking.entity';
 import ParkingDTO from './parking.dto';
@@ -13,29 +13,9 @@ export class ParkingDetailProfile extends AutomapperProfile {
 
   mapProfile() {
     return (mapper: Mapper): void => {
-      mapper
-        .createMap(
-          Parking,
-          ParkingDetailDTO,
-          //   {
-          //   extends: [mapper.getMapping(Parking, ParkingDTO)],
-          // }
-        )
-        .forMember(
-          (destination: ParkingDetailDTO) => destination.coordinates.latitude,
-          mapFrom((source: Parking) => {
-            console.log('abc');
-            console.log(source);
-
-            return source.coordinate.coordinates[0];
-          }),
-        )
-        .forMember(
-          (destination: ParkingDetailDTO) => destination.coordinates.longitude,
-          mapFrom((source: Parking) => {
-            return source.coordinate.coordinates[1];
-          }),
-        );
+      mapper.createMap(Parking, ParkingDetailDTO, {
+        extends: [mapper.getMapping(Parking, ParkingDTO)],
+      });
     };
   }
 }

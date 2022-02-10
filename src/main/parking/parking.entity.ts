@@ -30,11 +30,11 @@ class Parking extends BaseEntity {
 
   @AutoMap()
   @Column('time', { name: 'OpenTime' })
-  public openTime: Date;
+  public openTime: string;
 
   @AutoMap()
   @Column('time', { name: 'CloseTime' })
-  public closeTime: Date;
+  public closeTime: string;
 
   @AutoMap()
   @Column('varchar', { name: 'Status', length: 20, nullable: false })

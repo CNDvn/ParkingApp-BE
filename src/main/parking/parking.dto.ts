@@ -19,10 +19,10 @@ export default class ParkingDTO {
   public coordinates: Coordinate;
 
   @AutoMap()
-  public openTime: Date;
+  public openTime: string;
 
   @AutoMap()
-  public closeTime: Date;
+  public closeTime: string;
 
   @AutoMap()
   public status: string;
@@ -32,7 +32,4 @@ export default class ParkingDTO {
 
   @AutoMap({ typeFn: () => BusinessDTO })
   public business: BusinessDTO;
-
-  // @AutoMap({ typeFn: () => ParkingSlotDTO })
-  // public parkingSlots: ParkingSlotDTO[];
 }
