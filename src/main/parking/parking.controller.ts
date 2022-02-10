@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -12,8 +13,13 @@ import { GetUser } from 'src/decorator/getUser.decorator';
 import { Public } from '../auth/public';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
+import {
+  IPaginateResponse,
+  paginateResponse,
+} from '../base/filter.pagnigation';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
+import ParkingFilterPagination from './dto/parking-pagination.filter';
 import ParkingDetailDTO from './parking.detail.dto';
 import ParkingDTO from './parking.dto';
 import Parking from './parking.entity';
@@ -31,8 +37,14 @@ export class ParkingController {
     status: 201,
     description: 'Get All Owner Parking Success',
   })
-  async getAllOwnerParking(@GetUser() user: User): Promise<Parking[]> {
-    return await this.parkingService.getAllOwnerParking(user);
+  async getAllOwnerParking(
+    @GetUser() user: User,
+  ): Promise<Parking[] | { message: string }> {
+    const data = await this.parkingService.getAllOwnerParking(user);
+    if (data.length === 0) {
+      return { message: 'No Data' };
+    }
+    return data;
   }
 
   @Post()
@@ -49,13 +61,27 @@ export class ParkingController {
 
   @Public()
   @Get()
-  @UseInterceptors(MapInterceptor(ParkingDTO, Parking, { isArray: true }))
+  // @UseInterceptors(
+  //   MapInterceptor(ParkingPagination, Parking, { isArray: true }),
+  // )
   @ApiResponse({
     status: 201,
     description: 'Get All Parking Success',
   })
-  async getAllParking(): Promise<Parking[]> {
-    return await this.parkingService.getAllParking();
+  async getAllParking(
+    @Query() parkingFilterPagination: ParkingFilterPagination,
+  ): Promise<IPaginateResponse<ParkingDTO> | { message: string }> {
+    const [list, count] = await this.parkingService.getAllParking(
+      parkingFilterPagination,
+    );
+    if (list.length === 0) {
+      return { message: 'No Data' };
+    }
+    return paginateResponse<ParkingDTO>(
+      [list, count],
+      parkingFilterPagination.currentPage as number,
+      parkingFilterPagination.sizePage as number,
+    );
   }
 
   @Public()
@@ -65,7 +91,13 @@ export class ParkingController {
     status: 201,
     description: 'Get Detail Parking Success',
   })
-  async getParking(@Param('id') id: string): Promise<Parking> {
-    return await this.parkingService.getParking(id);
+  async getParking(
+    @Param('id') id: string,
+  ): Promise<Parking | { message: string }> {
+    const data = await this.parkingService.getParking(id);
+    if (!data) {
+      return { message: 'No Data' };
+    }
+    return data;
   }
 }
