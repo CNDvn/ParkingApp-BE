@@ -35,7 +35,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof TypeORMError) {
       message = exception.message;
     } else {
-      message = 'Some thing wrong';
+      message = exception;
     }
 
     const responseBody: ResponseBody = {

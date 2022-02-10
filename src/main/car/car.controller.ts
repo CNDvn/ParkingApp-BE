@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -20,7 +21,7 @@ import { MapInterceptor } from '@automapper/nestjs';
 import { CarResponseDto } from './dto/car-response.dto';
 import { StatusEnum } from '../../utils/status.enum';
 
-@Controller('car')
+@Controller('cars')
 @Roles(RoleEnum.CUSTOMER)
 @ApiBearerAuth()
 @ApiTags('Cars')
@@ -59,7 +60,7 @@ export class CarController {
     return await this.carService.updateOwnCar(user, id, carDto);
   }
 
-  @Patch('/:id')
+  @Delete('/:id')
   async updateStatusCar(
     @GetUser() user: User,
     @Param('id') id: string,

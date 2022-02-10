@@ -8,12 +8,11 @@ import {
   ParkingSlotCreate,
   ParkingSlotCreateExtends,
 } from './dto/parking-slot-create.dto';
-
 import { ParkingSlotService } from './parking-slot.service';
 @ApiBearerAuth()
 @Roles(RoleEnum.BUSINESS)
 @ApiTags('ParkingSlot')
-@Controller('parking-slot')
+@Controller('parking-slots')
 export class ParkingSlotController {
   constructor(private readonly parkingSlotService: ParkingSlotService) {}
 
