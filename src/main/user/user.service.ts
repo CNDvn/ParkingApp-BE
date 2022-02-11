@@ -55,6 +55,7 @@ export class UserService extends BaseService<User> {
 
   async updateAvarta(id: string, body: BaseMultipleFile): Promise<string> {
     const bodyFormData = new FormData();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     bodyFormData.append('image', body.image[0].buffer.toString('base64'));
     const data: ImgbbDto = await lastValueFrom(
       this.httpService
