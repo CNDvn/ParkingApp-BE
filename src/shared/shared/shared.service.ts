@@ -34,6 +34,10 @@ export class SharedService {
   }
 
   public generateOtp(): number {
-    return Math.floor(Math.random() * 1000000);
+    let code = 0;
+    do {
+      code = Math.floor(Math.random() * 1000000);
+    } while (code < 100000);
+    return code;
   }
 }

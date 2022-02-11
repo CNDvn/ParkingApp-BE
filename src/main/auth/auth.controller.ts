@@ -1,6 +1,12 @@
 import { ChangePasswordDto } from './dto/changePasswordDto';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import { BusinessSignUpDto } from '../business/dto/business-signup.dto';
 import { CustomerSignUpDto } from '../customer/dto/customer.signup';
@@ -13,6 +19,7 @@ import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
 import { RefreshTokenDto } from './dto/refreshToken.dto';
+import { VerifyOTPDto } from './dto/verifyOTPDto';
 
 @ApiBearerAuth()
 @Public()
@@ -38,7 +45,8 @@ export class AuthController {
     return await this.authService.changePassword(user, changePasswordDto);
   }
 
-  @Post('/resetPassword')
+  @ApiOkResponse({ status: 201, description: 'Send OTP SMS success' })
+  @Post('/sendOTPSMS')
   @Public()
   @ApiBody({ type: ResetPasswordDto })
   async resetPassword(
@@ -46,6 +54,13 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.resetPassword(resetPasswordDto.username);
   }
+
+  @Post('/verifyOTP')
+  @ApiBody({ type: VerifyOTPDto })
+  async verifyOTP(@Body() verifyOTPDto: VerifyOTPDto): Promise<string> {
+    return await this.authService.verifyOTP(verifyOTPDto);
+  }
+
   @Public()
   @Post('/signUpCustomer')
   @ApiResponse({

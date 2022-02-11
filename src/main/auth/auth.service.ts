@@ -1,3 +1,4 @@
+import { VerifyOTPDto } from './dto/verifyOTPDto';
 import {
   BadRequestException,
   HttpException,
@@ -17,6 +18,7 @@ import User from '../user/user.entity';
 import { StatusEnum } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
 import { ChangePasswordDto } from './dto/changePasswordDto';
+import SmsService from 'src/utils/sms.service';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +28,7 @@ export class AuthService {
     private customerService: CustomerService,
     private businessService: BusinessService,
     private sharedService: SharedService,
+    private smsService: SmsService,
   ) {}
 
   async validateUser(
@@ -78,6 +81,39 @@ export class AuthService {
     };
   }
 
+  async verifyOTP(verifyOTPDto: VerifyOTPDto): Promise<string> {
+    const user: User = await this.userService.findByUsername(
+      verifyOTPDto.username,
+    );
+    if (!user) {
+      throw new BadRequestException('Not found username.!');
+    }
+    const diff = Math.abs(
+      Date.now() - user.phoneNumberVerifyCodeExpire.getTime(),
+    );
+    const minutes = Math.floor(diff / 1000 / 60);
+    if (minutes > 1) {
+      throw new BadRequestException('OTP time up.!');
+    } else {
+      if (verifyOTPDto.otp !== user.phoneNumberVerifyCode) {
+        throw new BadRequestException('OTP is wrong.!');
+      } else {
+        const sendPassword = await this.sharedService.generateOtp();
+        await this.smsService.sendSms(
+          user.phoneNumber,
+          sendPassword.toString(),
+        );
+        const hashPassword = await this.sharedService.hashPassword(
+          sendPassword.toString(),
+        );
+        await this.userService.update(user.id, {
+          password: hashPassword,
+        });
+      }
+    }
+    return 'reset password success';
+  }
+
   async changePassword(
     user: User,
     changePasswordDto: ChangePasswordDto,
@@ -92,9 +128,6 @@ export class AuthService {
     if (!isMatch) {
       throw new BadRequestException('Password is wrong.!');
     }
-    if (changePasswordDto.newPassword !== changePasswordDto.confirmPassword) {
-      throw new BadRequestException('Password and confirm does not match.!');
-    }
     await this.userService.update(user.id, {
       password: hashPassword,
     });
@@ -105,13 +138,15 @@ export class AuthService {
     const user: User = await this.userService.findByUsername(username);
 
     if (!user) {
-      throw new BadRequestException('Not found phone.!');
+      throw new BadRequestException('Not found username.!');
     }
-
-    const hashPassword = await this.sharedService.hashPassword('12345');
-
-    await this.userService.update(user.id, { password: hashPassword });
-    return 'reset password success';
+    const sendOTP = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, sendOTP.toString());
+    await this.userService.update(user.id, {
+      phoneNumberVerifyCode: sendOTP,
+      phoneNumberVerifyCodeExpire: new Date(),
+    });
+    return 'Send OTP SMS success';
   }
 
   async signUpAuthCustomer(data: CustomerSignUpDto): Promise<string> {
@@ -150,9 +185,9 @@ export class AuthService {
       secret: jwtConstants.refreshTokenSecret,
       ignoreExpiration: false,
     });
-    const user: User = await this.userService.findByIdWithRelations(id, [
+    const user: User = (await this.userService.findByIdWithRelations(id, [
       'role',
-    ]);
+    ])) as User;
 
     if (!user || user.refreshToken !== refreshToken)
       throw new HttpException('Token invalid', HttpStatus.BAD_REQUEST);
