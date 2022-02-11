@@ -1,4 +1,3 @@
-import { AutoMap } from '@automapper/classes';
 import { Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Parking from '../parking/parking.entity';
