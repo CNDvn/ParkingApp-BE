@@ -69,4 +69,16 @@ export class UsersRepository extends Repository<User> {
       .execute();
     return `Update Profile Successful`;
   }
+
+  async updateAvarta(id: string, img: string): Promise<string> {
+    await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        avatar: img,
+      })
+      .where('id = :id', { id: id })
+      .execute();
+    return `Update Avarta Successful`;
+  }
 }

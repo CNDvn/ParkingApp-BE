@@ -25,6 +25,9 @@ export class FileToBodyInterceptor implements NestInterceptor {
     if (req.body && Array.isArray(req.files) && req.files.length) {
       req.files.forEach((file: Express.Multer.File) => {
         const { fieldname } = file;
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+          throw new BadRequestException('Wrong path file');
+        }
         if (!req.body[fieldname]) {
           req.body[fieldname] = [file];
         } else {

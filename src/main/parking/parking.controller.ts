@@ -47,6 +47,10 @@ export class ParkingController {
   @Post('uploadParkings/:id')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('images'), new FileToBodyInterceptor())
+  @ApiResponse({
+    status: 201,
+    description: 'Upload Images Success',
+  })
   async uploadImagesParkings(
     @GetUser() user: User,
     @Body() baseMultipleFiles: BaseMultipleFiles,
@@ -61,13 +65,9 @@ export class ParkingController {
         'you can not upload images for parking ' + data.name,
       );
     }
-    for (const item of baseMultipleFiles.images) {
-      if (!item.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
-        throw new BadRequestException('Wrong path file');
-      }
-    }
     return this.imageService.createImagesParking(user, baseMultipleFiles, data);
   }
+
   @Roles(RoleEnum.BUSINESS)
   @Get('OwnerParking')
   @ApiResponse({
@@ -92,6 +92,7 @@ export class ParkingController {
     );
   }
 
+  @Roles(RoleEnum.BUSINESS)
   @Post()
   @ApiResponse({
     status: 201,

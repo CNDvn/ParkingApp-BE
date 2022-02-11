@@ -97,6 +97,7 @@ class User extends BaseEntity {
   @OneToOne(() => Wallet, (wallet) => wallet.user, { onDelete: 'CASCADE' })
   public wallet: Wallet;
 
+  @AutoMap({ typeFn: () => Role })
   @ManyToOne(() => Role, (role) => role.users, { onDelete: 'CASCADE' })
   public role: Role;
 }
