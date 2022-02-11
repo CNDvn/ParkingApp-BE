@@ -12,9 +12,14 @@ import { BusinessModule } from '../business/business.module';
 import { ParkingProfile } from './parking.profile';
 import { ParkingDetailProfile } from './parking.detail.profile';
 import { PagerMiddleware } from 'src/middleware/pagerMiddleware';
+import { ImageModule } from '../image/image.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ParkingRepository]), BusinessModule],
+  imports: [
+    TypeOrmModule.forFeature([ParkingRepository]),
+    BusinessModule,
+    ImageModule,
+  ],
   controllers: [ParkingController],
   providers: [ParkingService, ParkingProfile, ParkingDetailProfile],
   exports: [ParkingService],

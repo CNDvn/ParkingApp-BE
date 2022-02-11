@@ -59,8 +59,19 @@ export class ParkingService extends BaseService<Parking> {
     return [parkingDTO, count];
   }
 
-  async getAllOwnerParking(user: User): Promise<Parking[]> {
-    return await this.parkingRepository.getAllOwnerParkings(user.business.id);
+  async getAllOwnerParking(
+    user: User,
+    parkingFilterPagination: ParkingFilterPagination,
+  ): Promise<[ParkingDTO[], number]> {
+    const [list, count] = await this.parkingRepository.getAllOwnerParkings(
+      user.business.id,
+      parkingFilterPagination,
+    );
+    const parkingDTO: ParkingDTO[] = [];
+    for (const item of list) {
+      parkingDTO.push(this.mapper.map(item, ParkingDTO, Parking));
+    }
+    return [parkingDTO, count];
   }
 
   async getParking(id: string): Promise<Parking> {

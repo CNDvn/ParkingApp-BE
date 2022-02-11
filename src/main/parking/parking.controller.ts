@@ -1,5 +1,6 @@
 import { MapInterceptor } from '@automapper/nestjs';
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -8,15 +9,24 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
+import { FileToBodyInterceptor } from 'src/interceptor/file.interceptor';
 import { Public } from '../auth/public';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
+import { BaseMultipleFiles } from '../base/base.images.dto';
 import {
   IPaginateResponse,
   paginateResponse,
 } from '../base/filter.pagnigation';
+import { ImageService } from '../image/image.service';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingFilterPagination from './dto/parking-pagination.filter';
@@ -28,23 +38,58 @@ import { ParkingService } from './parking.service';
 @ApiTags('Parkings')
 @Controller('parkings')
 export class ParkingController {
-  constructor(private readonly parkingService: ParkingService) {}
+  constructor(
+    private readonly parkingService: ParkingService,
+    private imageService: ImageService,
+  ) {}
 
   @Roles(RoleEnum.BUSINESS)
+  @Post('uploadParkings/:id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FilesInterceptor('images'), new FileToBodyInterceptor())
+  async uploadImagesParkings(
+    @GetUser() user: User,
+    @Body() baseMultipleFiles: BaseMultipleFiles,
+    @Param('id') id: string,
+  ): Promise<string> {
+    const data = await this.parkingService.getParking(id);
+    if (!data) {
+      throw new BadRequestException('parking not found');
+    }
+    if (data.business.id !== user.business.id) {
+      throw new BadRequestException(
+        'you can not upload images for parking ' + data.name,
+      );
+    }
+    for (const item of baseMultipleFiles.images) {
+      if (!item.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+        throw new BadRequestException('Wrong path file');
+      }
+    }
+    return this.imageService.createImagesParking(user, baseMultipleFiles, data);
+  }
+  @Roles(RoleEnum.BUSINESS)
   @Get('OwnerParking')
-  @UseInterceptors(MapInterceptor(ParkingDTO, Parking, { isArray: true }))
   @ApiResponse({
     status: 201,
     description: 'Get All Owner Parking Success',
   })
   async getAllOwnerParking(
     @GetUser() user: User,
-  ): Promise<Parking[] | { message: string }> {
-    const data = await this.parkingService.getAllOwnerParking(user);
-    if (data.length === 0) {
+    @Query() parkingFilterPagination: ParkingFilterPagination,
+  ): Promise<IPaginateResponse<ParkingDTO> | { message: string }> {
+    const [list, count] = await this.parkingService.getAllOwnerParking(
+      user,
+      parkingFilterPagination,
+    );
+    if (list.length === 0) {
       return { message: 'No Data' };
     }
-    return data;
+    return paginateResponse<ParkingDTO>(
+      [list, count],
+      parkingFilterPagination.currentPage as number,
+      parkingFilterPagination.sizePage as number,
+    );
   }
 
   @Post()
@@ -61,9 +106,6 @@ export class ParkingController {
 
   @Public()
   @Get()
-  // @UseInterceptors(
-  //   MapInterceptor(ParkingPagination, Parking, { isArray: true }),
-  // )
   @ApiResponse({
     status: 201,
     description: 'Get All Parking Success',

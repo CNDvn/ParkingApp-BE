@@ -1,6 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 
 import BusinessDTO from '../business/business.dto';
+import { ImageUrlViewDto } from '../image/dto/image-url-view.dto';
 export class Coordinate {
   public latitude: number;
 
@@ -32,4 +33,7 @@ export default class ParkingDTO {
 
   @AutoMap({ typeFn: () => BusinessDTO })
   public business: BusinessDTO;
+
+  @AutoMap({ typeFn: () => ImageUrlViewDto })
+  public images: ImageUrlViewDto[];
 }
