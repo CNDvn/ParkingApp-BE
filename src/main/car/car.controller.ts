@@ -19,7 +19,6 @@ import { RoleEnum } from '../auth/role/role.enum';
 import { MapInterceptor } from '@automapper/nestjs';
 import { CarResponseDto } from './dto/car-response.dto';
 import { StatusEnum } from '../../utils/status.enum';
-import { Public } from '../auth/public';
 
 @Controller('cars')
 @ApiBearerAuth()
@@ -48,7 +47,7 @@ export class CarController {
     return await this.carService.getAllCarsOwner(user);
   }
 
-  @Public()
+  @Roles(RoleEnum.ADMIN)
   @ApiResponse({
     status: 200,
     description: 'Get List Car',

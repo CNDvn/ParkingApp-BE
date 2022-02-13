@@ -1,9 +1,10 @@
+import { BadRequestException } from '@nestjs/common';
 import { StatusEnum } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import Business from '../business/business.entity';
 import Parking from '../parking/parking.entity';
 import {
-  ParkingSlotCreate,
+  ParkingSlotCreateCustom,
   ParkingSlotCreateExtends,
 } from './dto/parking-slot-create.dto';
 import ParkingSlot from './parking-slot.entity';
@@ -40,20 +41,26 @@ export class ParkingSlotRepository extends Repository<ParkingSlot> {
 
   async createParkingSlot(
     business: Business,
-    parkingSlotCreate: ParkingSlotCreate,
+    parkingSlotCreate: ParkingSlotCreateCustom,
     idParking: string,
     parking: Parking,
   ): Promise<string> {
-    const { prefixName } = parkingSlotCreate;
-    const countSlot = await this.createQueryBuilder('parking_slot')
+    const { nameSlot } = parkingSlotCreate;
+
+    const checkExistSlot = await this.createQueryBuilder('parking_slot')
       .leftJoinAndSelect('parking_slot.parking', 'parking')
       .where('parking.id = :id', { id: idParking })
-      .getCount();
+      .andWhere('parking_slot.locationName = :name', { name: nameSlot })
+      .getOne();
+
+    if (checkExistSlot) {
+      throw new BadRequestException(`Sorry ${nameSlot} is exsit`);
+    }
     await this.createQueryBuilder('parking_slot')
       .insert()
       .into(ParkingSlot)
       .values({
-        locationName: prefixName.toUpperCase() + '-' + (countSlot + 1),
+        locationName: nameSlot.toUpperCase(),
         status: StatusEnum.ACTIVE,
         parking,
         createdBy: business.id,
@@ -61,5 +68,13 @@ export class ParkingSlotRepository extends Repository<ParkingSlot> {
       .execute();
 
     return 'create parking slot successfully';
+  }
+
+  async getParkingSlot(idParking: string): Promise<ParkingSlot[]> {
+    const data = await this.createQueryBuilder('parking_slot')
+      .leftJoinAndSelect('parking_slot.parking', 'parking')
+      .where('parking.id = :id', { id: idParking })
+      .getMany();
+    return data;
   }
 }

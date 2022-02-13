@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Length, Max, Min, Validate } from 'class-validator';
+import { Length, Matches, Max, Min, Validate } from 'class-validator';
 import { IsNotBlank } from 'src/validator/is-not-blank.validation';
 
 export class ParkingSlotCreate {
@@ -14,4 +14,11 @@ export class ParkingSlotCreateExtends extends ParkingSlotCreate {
   @Max(50)
   @ApiProperty({ type: Number, description: 'amount', default: 10 })
   public amount: number;
+}
+
+export class ParkingSlotCreateCustom {
+  @Length(1, 7)
+  @Matches(/[A-Za-z]$/, { message: 'name-slot must only character' })
+  @ApiProperty({ type: String, description: 'nameSlot' })
+  public nameSlot: string;
 }
