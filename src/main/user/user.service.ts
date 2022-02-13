@@ -54,4 +54,11 @@ export class UserService extends BaseService<User> {
   async findByIdWithRelations(id: string, relations: string[]): Promise<User> {
     return await this.userRepository.findOne({ id }, { relations });
   }
+
+  async findByEmailWithRelations(
+    email: string,
+    relations: string[],
+  ): Promise<User> {
+    return await this.userRepository.findOne({ email }, { relations });
+  }
 }

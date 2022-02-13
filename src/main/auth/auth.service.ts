@@ -11,6 +11,7 @@ import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { StatusEnum } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
+import * as adminFirebase from 'firebase-admin';
 
 @Injectable()
 export class AuthService {
@@ -126,5 +127,21 @@ export class AuthService {
         expiresIn: '3d',
       }),
     };
+  }
+
+  async verifyFirebaseToken(token: string): Promise<LoginAuthDto> {
+    const userFirebase = await adminFirebase.auth().verifyIdToken(token);
+    if (!userFirebase)
+      throw new HttpException('token invalid', HttpStatus.BAD_REQUEST);
+    const user = await this.userService.findByEmailWithRelations(
+      userFirebase.email,
+      ['role'],
+    );
+    if (!user)
+      throw new HttpException(
+        'This email be not signed up yet',
+        HttpStatus.FOUND,
+      );
+    return this.login(user);
   }
 }

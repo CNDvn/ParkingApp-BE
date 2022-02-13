@@ -10,7 +10,7 @@ import { LoginDto } from './dto/loginDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
-import { RefreshTokenDto } from './dto/refreshToken.dto';
+import { TokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
 @Public()
@@ -62,8 +62,12 @@ export class AuthController {
 
   @Post('/refreshToken')
   async refreshToken(
-    @Body() refreshToken: RefreshTokenDto,
+    @Body() refreshToken: TokenDto,
   ): Promise<{ access_token: string }> {
     return await this.authService.refreshToken(refreshToken.token);
+  }
+  @Post('/loginGoogle')
+  async loginGoogle(@Body() firebaseToken: TokenDto): Promise<LoginAuthDto> {
+    return await this.authService.verifyFirebaseToken(firebaseToken.token);
   }
 }
