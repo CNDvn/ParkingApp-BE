@@ -7,13 +7,19 @@ import * as firebaseAdmin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
   const port: number = configService.get('PORT');
   // setup open api - swagger
   const pathOpenApi: string = configService.get('PATH_OPEN_API');
   app.setGlobalPrefix(pathOpenApi);
+  const whitelist = [
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'https://parking-app-project.herokuapp.com',
+    'https://parking-app-theta.vercel.app/',
+  ];
   const config = new DocumentBuilder()
     .setTitle('Parking App')
     .setDescription('The solution to find the perfect parking spot')
@@ -42,10 +48,19 @@ async function bootstrap(): Promise<void> {
   });
   // end setup firebase
   app.enableCors({
-    origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+    credentials: true,
+    origin: function (origin, callback) {
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        // eslint-disable-next-line no-console
+        console.log('allowed cors for:', origin);
+        callback(null, true);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('blocked cors for:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    exposedHeaders: ['Set-Cookie'],
   });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port, () => {
