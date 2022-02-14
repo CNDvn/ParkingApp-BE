@@ -41,11 +41,7 @@ async function bootstrap(): Promise<void> {
     // databaseURL:"",
   });
   // end setup firebase
-  app.enableCors({
-    origin: '*',
-    methods: 'GET, PUT, POST, DELETE, PATCH',
-    allowedHeaders: 'Content-Type, Authorization',
-  });
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port, () => {
     // eslint-disable-next-line no-console
