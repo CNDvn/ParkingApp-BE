@@ -82,25 +82,6 @@ export class AuthService {
   }
 
   async verifyOTP(verifyOTPDto: VerifyOTPDto): Promise<string> {
-    // const user: User = await this.userService.findByUsername(
-    //   verifyOTPDto.username,
-    // );
-    // if (!user) {
-    //   throw new BadRequestException('Not found username.!');
-    // }
-    // const diff = Math.abs(
-    //   Date.now() - user.phoneNumberVerifyCodeExpire.getTime(),
-    // );
-    // const minutes = Math.floor(diff / 1000 / 60);
-    // if (minutes > 1) {
-    //   throw new BadRequestException('OTP time up.!');
-    // } else {
-    //   if (verifyOTPDto.otp !== user.phoneNumberVerifyCode) {
-    //     throw new BadRequestException('OTP is wrong.!');
-    //   } else {
-    //   }
-    // }
-    //check otp
     const user: User = await this.userService.findByUsername(
       verifyOTPDto.username,
     );

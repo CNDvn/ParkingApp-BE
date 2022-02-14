@@ -48,7 +48,6 @@ export class AuthController {
 
   @ApiOkResponse({ status: 201, description: 'Send OTP SMS success' })
   @Post('/sendOTPSMS')
-  @Public()
   @ApiBody({ type: ResetPasswordDto })
   async resetPassword(
     @Body() resetPasswordDto: ResetPasswordDto,
@@ -62,7 +61,6 @@ export class AuthController {
     return await this.authService.verifyOTP(verifyOTPDto);
   }
 
-  @Public()
   @Post('/signUpCustomer')
   @ApiResponse({
     status: 201,
@@ -74,7 +72,6 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
   }
-  @Public()
   @Post('/signUpBusiness')
   @ApiResponse({
     status: 201,
@@ -86,7 +83,6 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthBusiness(businessSignUpDto);
   }
-  @Public()
   @Post('/verifyPhoneNumber')
   async verifyPhoneNumber(
     @Body() verifyDto: VerifyPhoneNumberDto,
