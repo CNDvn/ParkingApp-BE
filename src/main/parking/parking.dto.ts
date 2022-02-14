@@ -1,5 +1,7 @@
 import { AutoMap } from '@automapper/classes';
+
 import BusinessDTO from '../business/business.dto';
+import { ImageUrlViewDto } from '../image/dto/image-url-view.dto';
 export class Coordinate {
   public latitude: number;
 
@@ -18,10 +20,10 @@ export default class ParkingDTO {
   public coordinates: Coordinate;
 
   @AutoMap()
-  public openTime: Date;
+  public openTime: string;
 
   @AutoMap()
-  public closeTime: Date;
+  public closeTime: string;
 
   @AutoMap()
   public status: string;
@@ -31,4 +33,7 @@ export default class ParkingDTO {
 
   @AutoMap({ typeFn: () => BusinessDTO })
   public business: BusinessDTO;
+
+  @AutoMap({ typeFn: () => ImageUrlViewDto })
+  public images: ImageUrlViewDto[];
 }
