@@ -1,6 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 
-export class ImageUrlViewDto {
+export class RoleDTO {
   @AutoMap()
-  url: string;
+  public name: string;
 }

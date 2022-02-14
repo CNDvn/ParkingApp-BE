@@ -30,11 +30,11 @@ class Parking extends BaseEntity {
 
   @AutoMap()
   @Column('time', { name: 'OpenTime' })
-  public openTime: Date;
+  public openTime: string;
 
   @AutoMap()
   @Column('time', { name: 'CloseTime' })
-  public closeTime: Date;
+  public closeTime: string;
 
   @AutoMap()
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
@@ -58,10 +58,13 @@ class Parking extends BaseEntity {
   @OneToMany(() => Booking, (booking) => booking.parking)
   public bookings: Booking[];
 
+  @AutoMap({ typeFn: () => ParkingSlot })
   @OneToMany(() => ParkingSlot, (parkingSlot) => parkingSlot.parking)
   public parkingSlots: ParkingSlot[];
 
+  @AutoMap({ typeFn: () => Image })
   @OneToMany(() => Image, (image) => image.parking)
   public images: Image[];
 }
+
 export default Parking;

@@ -10,9 +10,9 @@ class Image extends BaseEntity {
   public id: string;
   @Column('varchar', { name: 'Title' })
   public title: string;
-  @AutoMap()
   @Column('varchar', { name: 'UrlViewer', nullable: false })
   public urlViewer: string;
+  @AutoMap()
   @Column('varchar', { name: 'Url' })
   public url: string;
   @Column('varchar', { name: 'DisplayUrl' })

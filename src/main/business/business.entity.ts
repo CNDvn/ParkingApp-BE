@@ -6,6 +6,7 @@ import User from '../user/user.entity';
 
 @Entity()
 class Business extends BaseEntity {
+  @AutoMap({ typeFn: () => User })
   @OneToOne(() => User, (user) => user.business, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'UserId' })
   public user: User;

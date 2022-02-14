@@ -8,6 +8,7 @@ import {
 export class IsNotBlank implements ValidatorConstraintInterface {
   validate(
     value: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validationArguments: ValidationArguments,
   ): boolean | Promise<boolean> {
     return value.trim().length > 0;

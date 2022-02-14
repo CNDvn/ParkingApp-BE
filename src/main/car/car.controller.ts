@@ -13,7 +13,7 @@ import User from '../user/user.entity';
 import { CarService } from './car.service';
 import { CarCreateDto } from './dto/car-create.dto';
 import Car from './car.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/role/roles.decorator';
 import { RoleEnum } from '../auth/role/role.enum';
 import { MapInterceptor } from '@automapper/nestjs';
@@ -21,12 +21,12 @@ import { CarResponseDto } from './dto/car-response.dto';
 import { StatusEnum } from '../../utils/status.enum';
 
 @Controller('cars')
-@Roles(RoleEnum.CUSTOMER)
 @ApiBearerAuth()
 @ApiTags('Cars')
 export class CarController {
   constructor(private readonly carService: CarService) {}
 
+  @Roles(RoleEnum.CUSTOMER)
   @Post()
   @UseInterceptors(MapInterceptor(CarResponseDto, Car))
   async addCar(
@@ -36,12 +36,29 @@ export class CarController {
     return await this.carService.addCar(user, carDto);
   }
 
-  @Get()
+  @Roles(RoleEnum.CUSTOMER)
+  @ApiResponse({
+    status: 200,
+    description: 'Get List Car Of Owner',
+  })
+  @Get('me')
   @UseInterceptors(MapInterceptor(CarResponseDto, Car, { isArray: true }))
-  async getAll(@GetUser() user: User): Promise<Car[]> {
-    return await this.carService.getAllCars(user);
+  async getAllCarMe(@GetUser() user: User): Promise<Car[]> {
+    return await this.carService.getAllCarsOwner(user);
   }
 
+  @Roles(RoleEnum.ADMIN)
+  @ApiResponse({
+    status: 200,
+    description: 'Get List Car',
+  })
+  @Get()
+  @UseInterceptors(MapInterceptor(CarResponseDto, Car, { isArray: true }))
+  async getAll(): Promise<Car[]> {
+    return await this.carService.getAllCars();
+  }
+
+  @Roles(RoleEnum.CUSTOMER)
   @Get('/:id')
   @UseInterceptors(MapInterceptor(CarResponseDto, Car))
   async getCar(@GetUser() user: User, @Param('id') id: string): Promise<Car> {
@@ -49,6 +66,7 @@ export class CarController {
     return result;
   }
 
+  @Roles(RoleEnum.CUSTOMER)
   @Put('/:id')
   @UseInterceptors(MapInterceptor(CarResponseDto, Car))
   async updateCar(
@@ -59,6 +77,7 @@ export class CarController {
     return await this.carService.updateOwnCar(user, id, carDto);
   }
 
+  @Roles(RoleEnum.CUSTOMER)
   @Delete('/:id')
   async updateStatusCar(
     @GetUser() user: User,
