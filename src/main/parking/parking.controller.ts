@@ -12,11 +12,12 @@ import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 @ApiBearerAuth()
 @ApiTags('Parking')
-@Controller('parking')
+@Controller('Parkings')
 export class ParkingController {
   constructor(private readonly parkingService: ParkingService) {}
 
   @Post()
+  @Roles(RoleEnum.BUSINESS)
   @ApiResponse({
     status: 201,
     description: 'Create Parking Success',
