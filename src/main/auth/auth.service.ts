@@ -87,10 +87,10 @@ export class AuthService {
       verifyOTPDto.username,
     );
     await this.sharedService.verifyOTP(verifyOTPDto);
-    const sendPassword = await this.sharedService.generateOtp();
-    await this.smsService.sendSms(user.phoneNumber, sendPassword.toString());
+    const password = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, password.toString());
     const hashPassword = await this.sharedService.hashPassword(
-      sendPassword.toString(),
+      password.toString(),
     );
     await this.userService.update(user.id, {
       password: hashPassword,
@@ -124,10 +124,10 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Not found username.!');
     }
-    const sendOTP = await this.sharedService.generateOtp();
-    await this.smsService.sendSms(user.phoneNumber, sendOTP.toString());
+    const otp = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, otp.toString());
     await this.userService.update(user.id, {
-      phoneNumberVerifyCode: sendOTP,
+      phoneNumberVerifyCode: otp,
       phoneNumberVerifyCodeExpire: new Date(),
     });
     return 'Send OTP SMS success';

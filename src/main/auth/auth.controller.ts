@@ -28,7 +28,6 @@ import { TokenDto } from './dto/refreshToken.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
   @Post('/login')
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
