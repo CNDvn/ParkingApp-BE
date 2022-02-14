@@ -7,7 +7,7 @@ import * as firebaseAdmin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   const configService = app.get(ConfigService);
   const port: number = configService.get('PORT');
