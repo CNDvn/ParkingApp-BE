@@ -36,6 +36,7 @@ export class AuthController {
     return await this.authService.login(user);
   }
 
+  @ApiOkResponse({ status: 200, description: 'Change password success' })
   @Post('/changePassword')
   @ApiBody({ type: ChangePasswordDto })
   async changePassword(
@@ -55,7 +56,7 @@ export class AuthController {
     return await this.authService.resetPassword(resetPasswordDto.username);
   }
 
-  @Post('/verifyOTP')
+  @Post('/resetPassword')
   @ApiBody({ type: VerifyOTPDto })
   async verifyOTP(@Body() verifyOTPDto: VerifyOTPDto): Promise<string> {
     return await this.authService.verifyOTP(verifyOTPDto);

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UsersRepository } from './user.repository';
@@ -7,7 +7,10 @@ import { UserProfile } from './user.profile';
 import { SharedModule } from 'src/shared/shared/shared.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersRepository]), SharedModule],
+  imports: [
+    TypeOrmModule.forFeature([UsersRepository]),
+    forwardRef(() => SharedModule),
+  ],
   controllers: [UserController],
   providers: [UserService, UserProfile],
   exports: [UserService],

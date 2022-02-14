@@ -82,35 +82,37 @@ export class AuthService {
   }
 
   async verifyOTP(verifyOTPDto: VerifyOTPDto): Promise<string> {
+    // const user: User = await this.userService.findByUsername(
+    //   verifyOTPDto.username,
+    // );
+    // if (!user) {
+    //   throw new BadRequestException('Not found username.!');
+    // }
+    // const diff = Math.abs(
+    //   Date.now() - user.phoneNumberVerifyCodeExpire.getTime(),
+    // );
+    // const minutes = Math.floor(diff / 1000 / 60);
+    // if (minutes > 1) {
+    //   throw new BadRequestException('OTP time up.!');
+    // } else {
+    //   if (verifyOTPDto.otp !== user.phoneNumberVerifyCode) {
+    //     throw new BadRequestException('OTP is wrong.!');
+    //   } else {
+    //   }
+    // }
+    //check otp
     const user: User = await this.userService.findByUsername(
       verifyOTPDto.username,
     );
-    if (!user) {
-      throw new BadRequestException('Not found username.!');
-    }
-    const diff = Math.abs(
-      Date.now() - user.phoneNumberVerifyCodeExpire.getTime(),
+    await this.sharedService.verifyOTP(verifyOTPDto);
+    const sendPassword = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, sendPassword.toString());
+    const hashPassword = await this.sharedService.hashPassword(
+      sendPassword.toString(),
     );
-    const minutes = Math.floor(diff / 1000 / 60);
-    if (minutes > 1) {
-      throw new BadRequestException('OTP time up.!');
-    } else {
-      if (verifyOTPDto.otp !== user.phoneNumberVerifyCode) {
-        throw new BadRequestException('OTP is wrong.!');
-      } else {
-        const sendPassword = await this.sharedService.generateOtp();
-        await this.smsService.sendSms(
-          user.phoneNumber,
-          sendPassword.toString(),
-        );
-        const hashPassword = await this.sharedService.hashPassword(
-          sendPassword.toString(),
-        );
-        await this.userService.update(user.id, {
-          password: hashPassword,
-        });
-      }
-    }
+    await this.userService.update(user.id, {
+      password: hashPassword,
+    });
     return 'reset password success';
   }
 
