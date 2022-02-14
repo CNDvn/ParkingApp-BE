@@ -1,3 +1,4 @@
+import { AutoMap } from '@automapper/classes';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Booking from '../booking/booking.entity';
@@ -5,9 +6,11 @@ import Parking from '../parking/parking.entity';
 
 @Entity()
 class ParkingSlot extends BaseEntity {
+  @AutoMap()
   @Column('varchar', { name: 'LocationName', length: 10, nullable: false })
   public locationName: string;
 
+  @AutoMap()
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
 

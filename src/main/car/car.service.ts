@@ -27,8 +27,17 @@ export class CarService extends BaseService<Car> {
       throw new HttpException('cannot add new car', HttpStatus.BAD_REQUEST);
     return car;
   }
+  async getAllCars(): Promise<Car[]> {
+    const cars = await this.carRepository.find({
+      relations: ['typeCar', 'images'],
+    });
 
-  async getAllCars(user: User): Promise<Car[]> {
+    if (!cars || cars.length === 0)
+      throw new HttpException("User don't have car", HttpStatus.NOT_FOUND);
+    return cars;
+  }
+
+  async getAllCarsOwner(user: User): Promise<Car[]> {
     const cars = await this.carRepository.find({
       relations: ['typeCar', 'images'],
       where: {

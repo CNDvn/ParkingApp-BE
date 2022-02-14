@@ -45,6 +45,23 @@ class User extends BaseEntity {
   })
   public phoneNumber: string;
 
+  @Column('boolean', { name: 'PhoneNumberConfirmed', default: false })
+  public phoneNumberConfirmed: boolean;
+
+  @Column('integer', {
+    name: 'PhoneNumberVerifyCode',
+    default: false,
+    nullable: true,
+  })
+  public phoneNumberVerifyCode: number;
+
+  @Column('datetime', {
+    name: 'PhoneNumberVerifyCodeExpire',
+    default: false,
+    nullable: true,
+  })
+  public phoneNumberVerifyCodeExpire: Date;
+
   @AutoMap()
   @Column('varchar', {
     name: 'Email',
@@ -66,17 +83,22 @@ class User extends BaseEntity {
   public refreshToken: string;
 
   @AutoMap({ typeFn: () => Customer })
-  @OneToOne(() => Customer, (customer) => customer.user)
+  @OneToOne(() => Customer, (customer) => customer.user, {
+    onDelete: 'CASCADE',
+  })
   public customer: Customer;
 
   @AutoMap({ typeFn: () => Business })
-  @OneToOne(() => Business, (business) => business.user)
+  @OneToOne(() => Business, (business) => business.user, {
+    onDelete: 'CASCADE',
+  })
   public business: Business;
 
-  @OneToOne(() => Wallet, (wallet) => wallet.user)
+  @OneToOne(() => Wallet, (wallet) => wallet.user, { onDelete: 'CASCADE' })
   public wallet: Wallet;
 
-  @ManyToOne(() => Role, (role) => role.users)
+  @AutoMap({ typeFn: () => Role })
+  @ManyToOne(() => Role, (role) => role.users, { onDelete: 'CASCADE' })
   public role: Role;
 }
 

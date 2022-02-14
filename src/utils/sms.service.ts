@@ -14,9 +14,6 @@ export default class SmsService {
   }
 
   async sendSms(phoneNumber: string, msg: string): Promise<MessageInstance> {
-    const serviceSid: string = this.configService.get(
-      'TWILIO_VERIFICATION_SERVICE_SID',
-    );
     return this.twilioClient.messages.create({
       body: msg,
       from: '+18608314706',

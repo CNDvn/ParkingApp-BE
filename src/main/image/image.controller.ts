@@ -11,9 +11,9 @@ import Image from './image.entity';
 import { GetUser } from '../../decorator/getUser.decorator';
 import User from '../user/user.entity';
 
-@Controller('image')
+@Controller('images')
 @ApiBearerAuth()
-@ApiTags('images')
+@ApiTags('Images')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
