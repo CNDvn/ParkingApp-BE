@@ -14,6 +14,8 @@ export class CustomerRepository extends Repository<Customer> {
         level: 0,
       })
       .execute();
+    // const otp = await this.sharedService.generateOtp();
+    // await this.smsService.sendSms(user.phoneNumber, otp.toString());
     return 'Create Successfully';
   }
 }

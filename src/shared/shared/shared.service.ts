@@ -60,14 +60,17 @@ export class SharedService {
     if (!user) {
       throw new BadRequestException('Not found username.!');
     }
+    this.verifyOTPSignUp(user.phoneNumberVerifyCode, user);
+  }
+  public verifyOTPSignUp(otp: number, user: User): void {
     const diff = Math.abs(
       Date.now() - user.phoneNumberVerifyCodeExpire.getTime(),
     );
     const minutes = Math.floor(diff / 1000 / 60);
-    if (verifyOTPDto.otp === user.phoneNumberVerifyCode && minutes > 5) {
+    if (otp === user.phoneNumberVerifyCode && minutes > 5) {
       throw new BadRequestException('OTP time up.!');
     }
-    if (verifyOTPDto.otp !== user.phoneNumberVerifyCode && minutes < 5) {
+    if (otp !== user.phoneNumberVerifyCode && minutes < 5) {
       throw new BadRequestException('OTP is wrong.!');
     }
   }

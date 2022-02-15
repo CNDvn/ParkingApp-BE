@@ -18,7 +18,7 @@ import { ResetPasswordDto } from './dto/resetPasswordDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
-import { VerifyOTPDto } from './dto/verifyOTPDto';
+import { VerifyOTPDto, VerifyBase } from './dto/verifyOTPDto';
 import { TokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
@@ -58,6 +58,13 @@ export class AuthController {
   @ApiBody({ type: VerifyOTPDto })
   async verifyOTP(@Body() verifyOTPDto: VerifyOTPDto): Promise<string> {
     return await this.authService.verifyOTP(verifyOTPDto);
+  }
+
+  @ApiOkResponse({ status: 201, description: 'Verify OTP Sign Up success' })
+  @Post('/verifyOTPSignUp')
+  @ApiBody({ type: VerifyBase })
+  async verifyOTPSignUp(@Body() verifyBase: VerifyBase): Promise<string> {
+    return await this.authService.verifyOTPSignUp(verifyBase);
   }
 
   @Post('/signUpCustomer')
