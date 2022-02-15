@@ -29,7 +29,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     let message;
     if (exception instanceof HttpException) {
-      message = exception.getResponse();
+      message = exception.getResponse()['message'] as string;
     } else if (exception instanceof TypeORMError) {
       message = exception.message;
     } else {
