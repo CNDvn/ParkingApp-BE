@@ -38,6 +38,9 @@ export class UserController {
     description: 'Get Profile',
   })
   async getMe(@GetUser() user: User): Promise<User> {
+    if (user.role.name === RoleEnum.ADMIN) {
+      return user;
+    }
     return await this.userService.getMe(user);
   }
 
