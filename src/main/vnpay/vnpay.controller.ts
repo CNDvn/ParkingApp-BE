@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { VnpayService } from './vnpay.service';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/public';
 import { VnpayDto } from './vnpay.dto';
@@ -32,12 +32,12 @@ export class VnpayController {
 
   @Get('/return')
   @Public()
-  vnpayReturn(@Query() vnpayDto: VnpayDto): any {
+  vnpayReturn(@Query() vnpayDto: VnpayDto): { message: string; code: string } {
     return this.vnpayService.vnpayReturn(vnpayDto);
   }
 
   @Get('/ipn')
-  vnpayIpn(@Query() vnpayDto: VnpayDto): any {
+  vnpayIpn(@Query() vnpayDto: VnpayDto): { RspCode: string; Message: string } {
     return this.vnpayService.vnpayIpn(vnpayDto);
   }
 }

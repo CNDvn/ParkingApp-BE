@@ -57,7 +57,7 @@ export class VnpayService {
     return vnpUrl;
   }
 
-  vnpayReturn(vnpayDto: VnpayDto): any {
+  vnpayReturn(vnpayDto: VnpayDto): { message: string; code: string } {
     const secureHash = vnpayDto.vnp_SecureHash;
 
     delete vnpayDto['vnp_SecureHash'];
@@ -65,7 +65,6 @@ export class VnpayService {
 
     const vnpayParams = this.sortObject(vnpayDto);
 
-    const tmnCode = this.configService.get<string>('VTRTF1MD');
     const secretKey = this.configService.get<string>('VNP_HASH_SECRET');
 
     const signData = querystring.stringify(vnpayParams, { encode: false });
@@ -80,7 +79,7 @@ export class VnpayService {
     }
   }
 
-  vnpayIpn(@Query() dto: VnpayDto): any {
+  vnpayIpn(@Query() dto: VnpayDto): { RspCode: string; Message: string } {
     const secureHash = dto.vnp_SecureHash;
 
     delete dto['vnp_SecureHash'];
@@ -95,8 +94,8 @@ export class VnpayService {
     const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
     if (secureHash === signed) {
-      const orderId = vnpayParams['vnp_TxnRef'];
-      const rspCode = vnpayParams['vnp_ResponseCode'];
+      // const orderId = vnpayParams['vnp_TxnRef'];
+      // const rspCode = vnpayParams['vnp_ResponseCode'];
       // kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
       return { RspCode: '00', Message: 'success' };
     } else {
@@ -115,6 +114,7 @@ export class VnpayService {
     }
     str.sort();
     for (key = 0; key < str.length; key++) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, '+');
     }
     return sorted;
