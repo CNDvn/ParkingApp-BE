@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 import { CustomerModule } from '../customer/customer.module';
 import { BusinessModule } from '../business/business.module';
 import { SharedModule } from 'src/shared/shared/shared.module';
+import SmsService from 'src/utils/sms.service';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { SharedModule } from 'src/shared/shared/shared.module';
     BusinessModule,
     SharedModule,
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, SmsService],
   controllers: [AuthController],
 })
 export class AuthModule {}

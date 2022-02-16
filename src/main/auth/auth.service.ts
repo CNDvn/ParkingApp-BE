@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { VerifyOTPDto } from './dto/verifyOTPDto';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAuthDto } from './dto/loginAuthDto';
@@ -11,6 +17,8 @@ import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { StatusEnum } from 'src/utils/status.enum';
 import { SharedService } from 'src/shared/shared/shared.service';
+import { ChangePasswordDto } from './dto/changePasswordDto';
+import SmsService from 'src/utils/sms.service';
 import * as adminFirebase from 'firebase-admin';
 
 @Injectable()
@@ -21,6 +29,7 @@ export class AuthService {
     private customerService: CustomerService,
     private businessService: BusinessService,
     private sharedService: SharedService,
+    private smsService: SmsService,
   ) {}
 
   async validateUser(
@@ -73,6 +82,57 @@ export class AuthService {
     };
   }
 
+  async verifyOTP(verifyOTPDto: VerifyOTPDto): Promise<string> {
+    const user: User = await this.userService.findByUsername(
+      verifyOTPDto.username,
+    );
+    await this.sharedService.verifyOTP(verifyOTPDto);
+    const password = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, password.toString());
+    const hashPassword = await this.sharedService.hashPassword(
+      password.toString(),
+    );
+    await this.userService.update(user.id, {
+      password: hashPassword,
+    });
+    return 'reset password success';
+  }
+
+  async changePassword(
+    user: User,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<string> {
+    const hashPassword = await this.sharedService.hashPassword(
+      changePasswordDto.newPassword,
+    );
+    const isMatch = await this.sharedService.comparePassword(
+      changePasswordDto.password,
+      user.password,
+    );
+    if (!isMatch) {
+      throw new BadRequestException('Password is wrong.!');
+    }
+    await this.userService.update(user.id, {
+      password: hashPassword,
+    });
+    return 'change password success';
+  }
+
+  async resetPassword(username: string): Promise<string> {
+    const user: User = await this.userService.findByUsername(username);
+
+    if (!user) {
+      throw new BadRequestException('Not found username.!');
+    }
+    const otp = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, otp.toString());
+    await this.userService.update(user.id, {
+      phoneNumberVerifyCode: otp,
+      phoneNumberVerifyCodeExpire: new Date(),
+    });
+    return 'Send OTP SMS success';
+  }
+
   async signUpAuthCustomer(data: CustomerSignUpDto): Promise<string> {
     return await this.customerService.signUpCustomer(data);
   }
@@ -109,9 +169,9 @@ export class AuthService {
       secret: jwtConstants.refreshTokenSecret,
       ignoreExpiration: false,
     });
-    const user: User = await this.userService.findByIdWithRelations(id, [
+    const user: User = (await this.userService.findByIdWithRelations(id, [
       'role',
-    ]);
+    ])) as User;
 
     if (!user || user.refreshToken !== refreshToken)
       throw new HttpException('Token invalid', HttpStatus.BAD_REQUEST);
