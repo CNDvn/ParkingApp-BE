@@ -10,7 +10,7 @@ export class PromotionRepository extends Repository<Promotion> {
         businessOwner: Business,
         promotionCreateDTO: PromotionCreateDTO,
     ): Promise<string> {
-        const { code, description, percent, status } = promotionCreateDTO;
+        const { code, description, percent} = promotionCreateDTO;
         await this.createQueryBuilder()
             .insert()
             .into(Promotion)
@@ -20,7 +20,6 @@ export class PromotionRepository extends Repository<Promotion> {
                 percent,
                 status: StatusEnum.ACTIVE,
                 business: businessOwner,
-
             }).execute();
         return 'create promotion successfull';
     }

@@ -12,7 +12,5 @@ class PromotionDTO {
 
     @AutoMap()
     public status: string;
-
-
 }
 export default PromotionDTO;

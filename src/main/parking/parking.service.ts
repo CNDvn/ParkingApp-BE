@@ -29,8 +29,8 @@ export class ParkingService extends BaseService<Parking> {
     });
 
     if (parking) {
-      const parkingExsit = await this.parkingRepository.getParking(parking.id);
-      if (parkingExsit.business.id === user.business.id) {
+      const parkingExist = await this.parkingRepository.getParking(parking.id);
+      if (parkingExist.business.id === user.business.id) {
         return await this.parkingRepository.createParking(
           user.business,
           parkingCreateDTO,

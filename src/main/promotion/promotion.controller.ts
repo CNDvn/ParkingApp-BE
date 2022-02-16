@@ -20,6 +20,7 @@ export class PromotionController {
   constructor(private readonly promotionService: PromotionService) {}
 
   @Post()
+  @Roles(RoleEnum.BUSINESS)
   @ApiResponse({
     status: 201,
     description: 'Create Promotion Success',
@@ -38,11 +39,9 @@ export class PromotionController {
   @ApiResponse({
     status: 200,
     description:'Get All Promotion Success',
-   
   })
   async getAllPromotion(): Promise<Promotion[]>{
     return await this.promotionService.getAllPromotion();
-
   }
 
 
@@ -83,9 +82,4 @@ export class PromotionController {
   async getAllOwnerPromotion(@GetUser() user: User): Promise<Promotion[]> {
     return await this.promotionService.getAllOwnerPromotion(user);
   }
-
-
- 
-
-
 }

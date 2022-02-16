@@ -35,7 +35,7 @@ import ParkingDTO from './parking.dto';
 import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 @ApiBearerAuth()
-@ApiTags('Parking')
+@ApiTags('Parkings')
 @Controller('Parkings')
 export class ParkingController {
   constructor(
@@ -94,7 +94,6 @@ export class ParkingController {
 
   @Roles(RoleEnum.BUSINESS)
   @Post()
-  @Roles(RoleEnum.BUSINESS)
   @ApiResponse({
     status: 201,
     description: 'Create Parking Success',
