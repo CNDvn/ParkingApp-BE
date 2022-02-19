@@ -33,6 +33,7 @@ import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.
 import SmsService from './utils/sms.service';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { VnpayModule } from './main/vnpay/vnpay.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { LoggingInterceptor } from './interceptor/logging.interceptor';
     CashTransferModule,
     ImageModule,
     AutoMapperModuleModule,
+    VnpayModule,
   ],
   controllers: [AppController],
   providers: [
