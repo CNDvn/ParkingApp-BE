@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.0
   heroku: circleci/heroku@1.2.6
-
+  slack: circleci/slack@4.0
 jobs:
   test:
     docker:
@@ -15,11 +15,8 @@ jobs:
       - run: yarn install
       - run: yarn run lint
       - run: yarn run test
-
-workflows:
-  test-and-deploy:
-    jobs:
-      - test
+  deploy:
+    steps:
       - heroku/deploy-via-git:
           filters:
             branches:
@@ -27,3 +24,45 @@ workflows:
                 - dev
           requires:
             - test
+      - slack/notify:
+          branch_pattern: dev
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Success*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+            event: pass
+      - slack/notify:
+          branch_pattern: dev
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Fail*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+            event: fail
+workflows:
+  test-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          context: slack-secrets
