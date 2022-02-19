@@ -34,9 +34,9 @@ workflows:
       - test
       - deploy:
           context: slack-secrets
-           filters:
+          filters:
              branches:
                only:
                  - dev
-           requires:
+          requires:
              - test
