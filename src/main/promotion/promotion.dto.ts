@@ -2,6 +2,10 @@ import { AutoMap } from "@automapper/classes";
 
 class PromotionDTO {
     @AutoMap()
+    public id: string;
+
+
+    @AutoMap()
     public code: string;
 
     @AutoMap()

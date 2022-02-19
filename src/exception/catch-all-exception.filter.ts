@@ -19,7 +19,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const { httpAdapter } = this.httpAdapterHost;
-
+    console.log(exception);
+    
     const ctx = host.switchToHttp();
 
     const httpStatus =

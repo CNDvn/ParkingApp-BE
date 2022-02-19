@@ -17,7 +17,7 @@ import { PromotionService } from './promotion.service';
 @ApiTags('Promotions')
 @Controller('promotions')
 export class PromotionController {
-  constructor(private readonly promotionService: PromotionService) {}
+  constructor(private readonly promotionService: PromotionService) { }
 
   @Post()
   @Roles(RoleEnum.BUSINESS)
@@ -38,9 +38,9 @@ export class PromotionController {
   @UseInterceptors(MapInterceptor(PromotionDTO, Promotion, { isArray: true }))
   @ApiResponse({
     status: 200,
-    description:'Get All Promotion Success',
+    description: 'Get All Promotion Success',
   })
-  async getAllPromotion(): Promise<Promotion[]>{
+  async getAllPromotion(): Promise<Promotion[]> {
     return await this.promotionService.getAllPromotion();
   }
 
@@ -52,26 +52,27 @@ export class PromotionController {
     description: 'Update Promotion',
   })
   async updatePromotion(
+    @GetUser() user: User,
     @Param('id') id: string,
     @Body() data: PromotionUpdateDTO,
-   ): Promise<string>{
-     return await this.promotionService.updatePromotion(id, data);
+  ): Promise<string> {
+    return await this.promotionService.updatePromotion(id, user, data);
   }
 
   @Roles(RoleEnum.BUSINESS)
   @Delete('delete/:id')
   @ApiResponse({
     status: 200,
-    description: 'Delete User',
+    description: 'Delete Promotion',
   })
-  async deleteUser(
-    @GetUser() promotion: Promotion,
+  async deletePromotion(
+    @GetUser() user: User,
     @Param('id') id: string,
   ): Promise<string> {
-    return await this.promotionService.deletePromotion(promotion, id);
+    return await this.promotionService.deletePromotion(user, id);
   }
 
-  
+
   @Roles(RoleEnum.BUSINESS)
   @UseInterceptors(MapInterceptor(PromotionDTO, Promotion, { isArray: true }))
   @Get('OwnerParking')

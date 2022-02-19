@@ -10,7 +10,7 @@ export class PromotionRepository extends Repository<Promotion> {
         businessOwner: Business,
         promotionCreateDTO: PromotionCreateDTO,
     ): Promise<string> {
-        const { code, description, percent} = promotionCreateDTO;
+        const { code, description, percent } = promotionCreateDTO;
         await this.createQueryBuilder()
             .insert()
             .into(Promotion)
@@ -45,6 +45,14 @@ export class PromotionRepository extends Repository<Promotion> {
             .leftJoinAndSelect('promotion.business', 'business')
             .where('business.id = :id', { id: idBusiness })
             .getMany();
+    }
+
+    async checkExistPromotion(idBusiness: string, codePromotion: string): Promise<Promotion> {
+        return await this.createQueryBuilder('promotion')
+            .where('promotion.code = :code', { code: codePromotion })
+            .leftJoinAndSelect('promotion.business', 'business')
+            .andWhere('business.id = :id', { id: idBusiness })
+            .getOne();
     }
 
     async updatePromotion(id: string, data: PromotionUpdateDTO): Promise<string> {

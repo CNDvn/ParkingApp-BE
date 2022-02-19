@@ -1,4 +1,4 @@
-import { number } from '@hapi/joi';
+import { number, string } from '@hapi/joi';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -6,6 +6,7 @@ import {
     IsNotEmpty,
     max,
     Max,
+    MaxLength,
     Min,
     Validate,
     ValidateNested,
@@ -16,7 +17,7 @@ import { OneToMany } from 'typeorm';
 export class PromotionCreateDTO {
 
     @IsNotEmpty()
-    @Max(15)
+    @MaxLength(15)
     @ApiProperty({
         type: String, description: 'Code'
     })
@@ -24,7 +25,7 @@ export class PromotionCreateDTO {
 
     @IsNotEmpty()
     @ApiProperty({
-        type: number, description: 'Percent'
+        type: Number, description: 'Percent'
     })
     public percent: number;
 

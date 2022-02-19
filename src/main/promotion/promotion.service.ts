@@ -20,18 +20,14 @@ export class PromotionService extends BaseService<Promotion> {
         user: User,
         promotionCreateDTO: PromotionCreateDTO,
     ): Promise<string> {
-        const promotion = await this.promotionRepository.findOne({
-            code: promotionCreateDTO.code,
-        });
+        const promotion = await this.promotionRepository.checkExistPromotion(
+            user.business.id, promotionCreateDTO.code
+        );
         if (promotion) {
-            const promotionExist = await this.promotionRepository.getPromotion(promotion.id);
-            if (promotionExist.business.id === user.business.id) {
-                return await this.promotionRepository.createPromotion(
-                    user.business,
-                    promotionCreateDTO,
-                );
-            } throw new BadRequestException(
-                `name promotion ${promotionCreateDTO.code} is duplicate`,
+
+
+            throw new BadRequestException(
+                `Name promotion ${promotionCreateDTO.code} is duplicate`,
             );
         }
         return await this.promotionRepository.createPromotion(
@@ -48,16 +44,30 @@ export class PromotionService extends BaseService<Promotion> {
         return await this.promotionRepository.getAllOwnerPromotions(user.business.id);
     }
 
-    async updatePromotion(id: string, data: PromotionUpdateDTO): Promise<string> {
+    async updatePromotion(id: string,
+        user: User, data: PromotionUpdateDTO): Promise<string> {
+        const promotion = await this.promotionRepository.findOne({
+            code: data.code,
+            business: user.business
+        });
+        if (!promotion) {
+            throw new BadRequestException(
+                `Promotion ${data.code} is not existed `,
+            );
+        }
         return await this.promotionRepository.updatePromotion(id, data);
     }
 
 
-    async deletePromotion(promotion: Promotion, id: string): Promise<string> {
-        if (promotion.id === id) {
-            throw new HttpException(
-                "Crazy!!! You can't delete",
-                HttpStatus.BAD_REQUEST,
+    async deletePromotion(
+        user: User, id: string): Promise<string> {
+        const pro = await this.promotionRepository.findOne({
+            business: user.business, 
+            id : id
+        })
+        if (!pro) {
+            throw new BadRequestException(
+                `Promotion ${id} is not existed `,
             );
         }
         return await this.promotionRepository.deletePromotion(id);

@@ -36,7 +36,7 @@ import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 @ApiBearerAuth()
 @ApiTags('Parkings')
-@Controller('Parkings')
+@Controller('parkings')
 export class ParkingController {
   constructor(
     private readonly parkingService: ParkingService,
