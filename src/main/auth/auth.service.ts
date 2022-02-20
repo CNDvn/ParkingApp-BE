@@ -39,7 +39,6 @@ export class AuthService {
   ): Promise<User | undefined> {
     const user = await this.userService.findByUsername(username);
     if (!user) {
-      // throw new HttpException({ message: 'Not Find' }, HttpStatus.NOT_FOUND);
       throw new HttpException('Not Find', HttpStatus.NOT_FOUND);
     }
     const isMatch = await this.sharedService.comparePassword(
