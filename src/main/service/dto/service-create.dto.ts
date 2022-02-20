@@ -11,7 +11,6 @@ export class ServiceCreateDto {
   public description: string;
 
   @ApiProperty({ type: Number, description: 'price' })
-  @Validate(IsNotBlank)
   @IsNumber({}, { message: 'price must number' })
   public price: number;
 
