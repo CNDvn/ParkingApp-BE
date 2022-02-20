@@ -52,7 +52,7 @@ export class AuthService {
       }
     }
     throw new HttpException(
-      'Username or password invalid',
+      { message: 'Username or password invalid' },
       HttpStatus.BAD_REQUEST,
     );
   }
