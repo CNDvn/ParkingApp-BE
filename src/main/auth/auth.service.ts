@@ -52,7 +52,8 @@ export class AuthService {
       }
     }
     throw new HttpException(
-      {message: 'Username or password invalid'}, HttpStatus.BAD_REQUEST
+      { message: 'Username or password invalid' },
+      HttpStatus.BAD_REQUEST,
     );
   }
 

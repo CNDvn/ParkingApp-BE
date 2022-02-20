@@ -1,6 +1,15 @@
 import { MapInterceptor } from '@automapper/nestjs';
-import { Body, Controller, Get, Param, Post, Put, UseInterceptors, Delete } from '@nestjs/common';
-import { ApiBasicAuth, ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
+  Delete,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import { Public } from '../auth/public';
 import { RoleEnum } from '../auth/role/role.enum';
@@ -12,12 +21,11 @@ import PromotionDTO from './promotion.dto';
 import Promotion from './promotion.entity';
 import { PromotionService } from './promotion.service';
 
-
 @ApiBearerAuth()
 @ApiTags('Promotions')
 @Controller('promotions')
 export class PromotionController {
-  constructor(private readonly promotionService: PromotionService) { }
+  constructor(private readonly promotionService: PromotionService) {}
 
   @Post()
   @Roles(RoleEnum.BUSINESS)
@@ -29,9 +37,11 @@ export class PromotionController {
     @GetUser() user: User,
     @Body() promotionCreateDTO: PromotionCreateDTO,
   ): Promise<string> {
-    return await this.promotionService.createPromotion(user, promotionCreateDTO);
+    return await this.promotionService.createPromotion(
+      user,
+      promotionCreateDTO,
+    );
   }
-
 
   @Public()
   @Get()
@@ -43,7 +53,6 @@ export class PromotionController {
   async getAllPromotion(): Promise<Promotion[]> {
     return await this.promotionService.getAllPromotion();
   }
-
 
   @Roles(RoleEnum.BUSINESS)
   @Put('updatePromotion/:id')
@@ -71,7 +80,6 @@ export class PromotionController {
   ): Promise<string> {
     return await this.promotionService.deletePromotion(user, id);
   }
-
 
   @Roles(RoleEnum.BUSINESS)
   @UseInterceptors(MapInterceptor(PromotionDTO, Promotion, { isArray: true }))

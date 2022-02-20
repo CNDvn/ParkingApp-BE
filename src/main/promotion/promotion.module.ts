@@ -7,7 +7,7 @@ import { PromotionRepository } from './promotion.repository';
 import { PromotionProfile } from './promotion.profile';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([PromotionRepository]), BusinessModule],
+  imports: [TypeOrmModule.forFeature([PromotionRepository]), BusinessModule],
   controllers: [PromotionController],
   providers: [PromotionService, PromotionProfile],
 })
