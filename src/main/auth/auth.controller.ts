@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ status: 200, description: 'Change password success' })
-  @Post('/changePassword')
+  @Post('/password')
   @ApiBody({ type: ChangePasswordDto })
   async changePassword(
     @GetUser() user: User,
@@ -46,7 +46,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ status: 201, description: 'Send OTP SMS success' })
-  @Post('/sendOTPSMS')
+  @Post('/OTPSMS')
   @ApiBody({ type: ResetPasswordDto })
   async resetPassword(
     @Body() resetPasswordDto: ResetPasswordDto,
@@ -60,7 +60,7 @@ export class AuthController {
     return await this.authService.verifyOTP(verifyOTPDto);
   }
 
-  @Post('/signUpCustomer')
+  @Post('/customer')
   @ApiResponse({
     status: 201,
     description: 'SignUp Customer Successfully',
@@ -71,7 +71,7 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
   }
-  @Post('/signUpBusiness')
+  @Post('/business')
   @ApiResponse({
     status: 201,
     description: 'SignUp Business Successfully',
