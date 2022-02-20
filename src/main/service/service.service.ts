@@ -21,18 +21,13 @@ export class ServiceService extends BaseService<Service> {
     user: User,
     serviceDto: ServiceCreateDto,
   ): Promise<Service> {
-    const parking = await this.parkingService.findById(serviceDto.parkingId);
+    const parking = await this.parkingService.getParking(serviceDto.parkingId);
     if (!parking) {
       throw new HttpException('parking invalid', HttpStatus.BAD_REQUEST);
     }
-    const parkingService = await this.serviceRepository.findOne(
-      serviceDto.parkingId,
-    );
-    if (!parkingService)
-      throw new HttpException(
-        'This parking service not existed',
-        HttpStatus.NOT_FOUND,
-      );
+    if (parking.business.id !== user.business.id) {
+      throw new HttpException('You not own parking', HttpStatus.BAD_REQUEST);
+    }
     const service = await this.serviceRepository.addService(
       user,
       serviceDto,
