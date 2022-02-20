@@ -1,3 +1,4 @@
+import { Public } from './../auth/public';
 import { UpdateParkingServiceDto } from './dto/service-update.dto';
 import { StatusEnum } from 'src/utils/status.enum';
 import { GetUser } from 'src/decorator/getUser.decorator';
@@ -37,7 +38,7 @@ export class ServiceController {
     return await this.serviceService.addParkingService(user, serviceDto);
   }
 
-  @Roles(RoleEnum.BUSINESS)
+  @Public()
   @Get('/:parkingId')
   @ApiResponse({
     status: 200,

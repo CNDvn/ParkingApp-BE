@@ -25,6 +25,14 @@ export class ServiceService extends BaseService<Service> {
     if (!parking) {
       throw new HttpException('parking invalid', HttpStatus.BAD_REQUEST);
     }
+    const parkingService = await this.serviceRepository.findOne(
+      serviceDto.parkingId,
+    );
+    if (!parkingService)
+      throw new HttpException(
+        'This parking service not existed',
+        HttpStatus.NOT_FOUND,
+      );
     const service = await this.serviceRepository.addService(
       user,
       serviceDto,
