@@ -7,6 +7,7 @@ import { RoleModule } from '../role/role.module';
 import { UserModule } from '../user/user.module';
 import { SharedModule } from 'src/shared/shared/shared.module';
 import { BusinessProfile } from './business.profile';
+import SmsService from 'src/utils/sms.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { BusinessProfile } from './business.profile';
     SharedModule,
   ],
   controllers: [BusinessController],
-  providers: [BusinessService, BusinessProfile],
+  providers: [BusinessService, BusinessProfile, SmsService],
   exports: [BusinessService],
 })
 export class BusinessModule {}

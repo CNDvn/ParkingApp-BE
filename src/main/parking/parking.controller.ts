@@ -45,7 +45,7 @@ export class ParkingController {
   ) {}
 
   @Roles(RoleEnum.BUSINESS)
-  @Post('uploadParkings/:id')
+  @Post('/:id')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('images'), new FileToBodyInterceptor())
   @ApiResponse({
@@ -80,6 +80,7 @@ export class ParkingController {
 
   @Roles(RoleEnum.BUSINESS)
   @Get('OwnerParking')
+  @Get('me')
   @ApiResponse({
     status: 201,
     description: 'Get All Owner Parking Success',
