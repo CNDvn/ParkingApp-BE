@@ -1,6 +1,7 @@
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { StatusEnum } from 'src/utils/status.enum';
 import { BaseService } from '../base/base.service';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
@@ -18,6 +19,15 @@ export class ParkingService extends BaseService<Parking> {
     private businessService: BusinessService,
   ) {
     super(parkingRepository);
+  }
+
+  async removeOwnerParking(parkingId: string, userId: string): Promise<string> {
+    const parking: Parking = await this.getParking(parkingId);
+    if (parking.business.id == userId) {
+      this.update(parkingId, { status: StatusEnum.IN_ACTIVE });
+      return 'Delete successfully';
+    }
+    return 'Delete failed';
   }
 
   async createParking(

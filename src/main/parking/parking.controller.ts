@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -69,6 +70,16 @@ export class ParkingController {
   }
 
   @Roles(RoleEnum.BUSINESS)
+  @Delete('/:id')
+  async remove(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<string> {
+    return await this.parkingService.removeOwnerParking(id, user.business.id);
+  }
+
+  @Roles(RoleEnum.BUSINESS)
+  @Get('OwnerParking')
   @Get('me')
   @ApiResponse({
     status: 201,

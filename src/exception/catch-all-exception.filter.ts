@@ -38,7 +38,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else {
       message = exception;
     }
-
     const responseBody: ResponseBody = {
       statusCode: httpStatus,
       message: message,
