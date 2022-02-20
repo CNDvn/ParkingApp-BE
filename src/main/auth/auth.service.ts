@@ -87,6 +87,7 @@ export class AuthService {
     await this.sharedService.verifyOTPSignUp(verifyBase.otp, user);
     await this.userService.update(user.id, {
       status: StatusEnum.ACTIVE,
+      phoneNumberConfirmed: true,
     });
     return 'verify otp sign up success';
   }
