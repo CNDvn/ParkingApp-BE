@@ -82,10 +82,6 @@ export class ServiceService extends BaseService<Service> {
         HttpStatus.NOT_FOUND,
       );
     }
-    // const parking = await this.parkingService.findById(serviceDto.parkingId);
-    // if (!parking) {
-    //   throw new HttpException('parking invalid', HttpStatus.BAD_REQUEST);
-    // }
     service.name = serviceDto.name;
     service.description = serviceDto.description;
     service.price = serviceDto.price;
