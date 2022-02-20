@@ -1,4 +1,4 @@
-import { VerifyOTPDto } from './dto/verifyOTPDto';
+import { VerifyOTPDto, VerifyBase } from './dto/verifyOTPDto';
 import {
   BadRequestException,
   HttpException,
@@ -80,6 +80,16 @@ export class AuthService {
       refresh_token: refreshToken,
       message: 'Success',
     };
+  }
+
+  async verifyOTPSignUp(verifyBase: VerifyBase): Promise<string> {
+    const user = await this.userService.findUserByOTP(verifyBase.otp);
+    await this.sharedService.verifyOTPSignUp(verifyBase.otp, user);
+    await this.userService.update(user.id, {
+      status: StatusEnum.ACTIVE,
+      phoneNumberConfirmed: true,
+    });
+    return 'verify otp sign up success';
   }
 
   async verifyOTP(verifyOTPDto: VerifyOTPDto): Promise<string> {

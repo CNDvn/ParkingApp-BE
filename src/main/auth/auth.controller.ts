@@ -1,5 +1,5 @@
 import { ChangePasswordDto } from './dto/changePasswordDto';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ status: 200, description: 'Change password success' })
-  @Post('/password')
+  @Put('/password')
   @ApiBody({ type: ChangePasswordDto })
   async changePassword(
     @GetUser() user: User,
@@ -54,7 +54,7 @@ export class AuthController {
     return await this.authService.resetPassword(resetPasswordDto.username);
   }
 
-  @Post('/resetPassword')
+  @Put('/resetPassword')
   @ApiBody({ type: VerifyOTPDto })
   async verifyOTP(@Body() verifyOTPDto: VerifyOTPDto): Promise<string> {
     return await this.authService.verifyOTP(verifyOTPDto);
