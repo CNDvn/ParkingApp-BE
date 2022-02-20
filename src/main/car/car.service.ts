@@ -42,6 +42,7 @@ export class CarService extends BaseService<Car> {
       relations: ['typeCar', 'images'],
       where: {
         customer: user.customer,
+        status: StatusEnum.ACTIVE,
       },
     });
 
@@ -54,6 +55,7 @@ export class CarService extends BaseService<Car> {
       {
         id: id,
         customer: user.customer,
+        status: StatusEnum.ACTIVE,
       },
       { relations: ['typeCar', 'images'] },
     );

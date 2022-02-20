@@ -1,4 +1,5 @@
 import { DeepPartial, DeleteResult, Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { EntityId } from 'typeorm/repository/EntityId';
 import BaseEntity from './base.entity';
 
@@ -21,7 +22,7 @@ export class BaseService<T extends BaseEntity> {
     return await this.repository.save(data);
   }
 
-  async update(id: EntityId, data: DeepPartial<T>): Promise<T> {
+  async update(id: EntityId, data: QueryDeepPartialEntity<T>): Promise<T> {
     await this.repository.update(id, data);
     return await this.findById(id);
   }
