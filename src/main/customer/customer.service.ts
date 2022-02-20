@@ -1,3 +1,4 @@
+import SmsService from 'src/utils/sms.service';
 import { Injectable } from '@nestjs/common';
 import Customer from './customer.entity';
 import { CustomerSignUpDto } from './dto/customer.signup';
@@ -14,6 +15,7 @@ export class CustomerService extends BaseService<Customer> {
     private roleService: RoleService,
     private userService: UserService,
     private sharedService: SharedService,
+    private smsService: SmsService,
   ) {
     super(customerRepository);
   }
@@ -42,6 +44,12 @@ export class CustomerService extends BaseService<Customer> {
       },
       roleCustomer,
     );
+    const otp = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, otp.toString());
+    await this.userService.update(user.id, {
+      phoneNumberVerifyCode: otp,
+      phoneNumberVerifyCodeExpire: new Date(),
+    });
     return await this.customerRepository.signUp(data, user);
   }
 }

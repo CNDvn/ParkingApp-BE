@@ -30,4 +30,8 @@ export class BaseService<T extends BaseEntity> {
   async deleteById(id: EntityId): Promise<DeleteResult> {
     return await this.repository.delete(id);
   }
+
+  async store(data: DeepPartial<T>): Promise<T> {
+    return await this.repository.save(data);
+  }
 }
