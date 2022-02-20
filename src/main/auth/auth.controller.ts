@@ -1,37 +1,105 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger';
-import { Request } from 'express';
+import { ChangePasswordDto } from './dto/changePasswordDto';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
+import { BusinessSignUpDto } from '../business/dto/business-signup.dto';
+import { CustomerSignUpDto } from '../customer/dto/customer.signup';
+import User from '../user/user.entity';
 import { AuthService } from './auth.service';
+import { LoginAuthDto } from './dto/loginAuthDto';
 import { LoginDto } from './dto/loginDto';
-import { Payload } from './jwt/payload';
+import { ResetPasswordDto } from './dto/resetPasswordDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
+import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
+import { VerifyOTPDto } from './dto/verifyOTPDto';
+import { TokenDto } from './dto/refreshToken.dto';
 
-@Controller('auth')
+@ApiBearerAuth()
+@Public()
+@Controller('auths')
+@ApiTags('Auths')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/login')
-  @Public()
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
-  async login(@GetUser() user: Payload, @Req() req: Request): Promise<string> {
-    const data = await this.authService.login(user);
-    req.res
-      .cookie('access_token', data.access_token, {
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'none',
-        httpOnly: false,
-        secure: true,
-      })
-      .cookie('refresh_token', data.refresh_token, {
-        maxAge: 365 * 24 * 60 * 60 * 1000,
-        path: '/api/v1/auth/refreshToken',
-        sameSite: 'none',
-        httpOnly: false,
-        secure: true,
-      });
-    return data.message;
+  async login(@GetUser() user: User): Promise<LoginAuthDto> {
+    return await this.authService.login(user);
+  }
+
+  @ApiOkResponse({ status: 200, description: 'Change password success' })
+  @Post('/changePassword')
+  @ApiBody({ type: ChangePasswordDto })
+  async changePassword(
+    @GetUser() user: User,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<string> {
+    return await this.authService.changePassword(user, changePasswordDto);
+  }
+
+  @ApiOkResponse({ status: 201, description: 'Send OTP SMS success' })
+  @Post('/sendOTPSMS')
+  @ApiBody({ type: ResetPasswordDto })
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<string> {
+    return await this.authService.resetPassword(resetPasswordDto.username);
+  }
+
+  @Post('/resetPassword')
+  @ApiBody({ type: VerifyOTPDto })
+  async verifyOTP(@Body() verifyOTPDto: VerifyOTPDto): Promise<string> {
+    return await this.authService.verifyOTP(verifyOTPDto);
+  }
+
+  @Post('/signUpCustomer')
+  @ApiResponse({
+    status: 201,
+    description: 'SignUp Customer Successfully',
+    type: CustomerSignUpDto,
+  })
+  async signUpCustomer(
+    @Body() customerSignUpDto: CustomerSignUpDto,
+  ): Promise<string> {
+    return await this.authService.signUpAuthCustomer(customerSignUpDto);
+  }
+  @Post('/signUpBusiness')
+  @ApiResponse({
+    status: 201,
+    description: 'SignUp Business Successfully',
+    type: BusinessSignUpDto,
+  })
+  async signUpBusiness(
+    @Body() businessSignUpDto: BusinessSignUpDto,
+  ): Promise<string> {
+    return await this.authService.signUpAuthBusiness(businessSignUpDto);
+  }
+  @Post('/verifyPhoneNumber')
+  async verifyPhoneNumber(
+    @Body() verifyDto: VerifyPhoneNumberDto,
+  ): Promise<string> {
+    return await this.authService.verifyPhoneNumber(
+      verifyDto.phoneNumber,
+      verifyDto.verifyCode,
+    );
+  }
+
+  @Post('/refreshToken')
+  async refreshToken(
+    @Body() refreshToken: TokenDto,
+  ): Promise<{ access_token: string }> {
+    return await this.authService.refreshToken(refreshToken.token);
+  }
+  @Post('/loginGoogle')
+  async loginGoogle(@Body() firebaseToken: TokenDto): Promise<LoginAuthDto> {
+    return await this.authService.verifyFirebaseToken(firebaseToken.token);
   }
 }

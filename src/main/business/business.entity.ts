@@ -1,28 +1,21 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { AutoMap } from '@automapper/classes';
+import { Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Parking from '../parking/parking.entity';
+import Promotion from '../promotion/promotion.entity';
 import User from '../user/user.entity';
 
 @Entity()
 class Business extends BaseEntity {
-  @Column({ name: 'FirstName' })
-  public firstName: string;
-  @Column({ name: 'LastName' })
-  public lastName: string;
-  @Column('date', { name: 'DOB' })
-  public DOB: Date;
-  @Column({ name: 'PhoneNumber' })
-  public phoneNumber: string;
-  @Column({ name: 'Address' })
-  public address: string;
-  @Column({ name: 'EmailAddress' })
-  public emailAddress: string;
-  @Column({ name: 'Status' })
-  public status: string;
-  @OneToOne(() => User, (user) => user.business)
+  @AutoMap({ typeFn: () => User })
+  @OneToOne(() => User, (user) => user.business, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'UserId' })
   public user: User;
+
   @OneToMany(() => Parking, (parking) => parking.business)
-  public parking: Parking[];
+  public parkings: Parking[];
+
+  @OneToMany(() => Promotion, (promotion) => promotion.business)
+  public promotions: Promotion[];
 }
 export default Business;

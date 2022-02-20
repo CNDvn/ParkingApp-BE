@@ -1,0 +1,42 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.0
+  heroku: circleci/heroku@1.2.6
+  slack: circleci/slack@4.8.2
+jobs:
+  test:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '16.13'
+      - run: yarn install
+      - run: yarn run lint
+      - run: yarn run test
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+          # mentions: '@EngineeringTeam'
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+workflows:
+  test-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          context: slack-secrets
+          filters:
+             branches:
+               only:
+                 - dev
+          requires:
+             - test

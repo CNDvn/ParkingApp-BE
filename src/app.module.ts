@@ -17,14 +17,23 @@ import { TransactionModule } from './main/transaction/transaction.module';
 import { ServiceModule } from './main/service/service.module';
 import { PromotionModule } from './main/promotion/promotion.module';
 import { BusinessModule } from './main/business/business.module';
-import { AdminModule } from './main/admin/admin.module';
 import { CustomerPromotionModule } from './main/customer-promotion/customer-promotion.module';
 import { PriceListModule } from './main/price-list/price-list.module';
 import { PriceListDetailModule } from './main/price-list-detail/price-list-detail.module';
 import { AuthModule } from './main/auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
+import { RoleModule } from './main/role/role.module';
+import { TranferTypeModule } from './main/tranfer-type/tranfer-type.module';
+import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
+import { ImageModule } from './main/image/image.module';
+import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
+import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.module';
+import SmsService from './utils/sms.service';
+import { TransformInterceptor } from './interceptor/transform.interceptor';
+import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { VnpayModule } from './main/vnpay/vnpay.module';
 
 @Module({
   imports: [
@@ -36,6 +45,7 @@ import { RolesGuard } from './main/auth/role/roles.guard';
         PORT: Joi.number(),
       }),
     }),
+    AutoMapperModuleModule,
     DatabaseModule,
     CustomerModule,
     CarModule,
@@ -50,17 +60,26 @@ import { RolesGuard } from './main/auth/role/roles.guard';
     ServiceModule,
     PromotionModule,
     BusinessModule,
-    AdminModule,
     CustomerPromotionModule,
     PriceListModule,
     PriceListDetailModule,
     AuthModule,
+    RoleModule,
+    TranferTypeModule,
+    CashTransferModule,
+    ImageModule,
+    AutoMapperModuleModule,
+    VnpayModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    SmsService,
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
   ],
 })
 export class AppModule {}

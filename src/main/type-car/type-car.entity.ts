@@ -5,15 +5,17 @@ import PriceListDetail from '../price-list-detail/price-list-detail.entity';
 
 @Entity()
 class TypeCar extends BaseEntity {
-  @Column({ name: 'Name' })
+  @Column('nvarchar', { name: 'Name', length: 100, nullable: false })
   public name: string;
+
   @OneToMany(() => Car, (car) => car.typeCar)
-  public car: Car[];
+  public cars: Car[];
+
   @OneToMany(
     () => PriceListDetail,
     (priceListDetail) => priceListDetail.typeCar,
   )
-  public priceListDetail: PriceListDetail[];
+  public priceListDetails: PriceListDetail[];
 }
 
 export default TypeCar;

@@ -1,19 +1,28 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import Customer from '../customer/customer.entity';
 import Transaction from '../transaction/transaction.entity';
+import User from '../user/user.entity';
 
 @Entity()
 class Wallet extends BaseEntity {
-  @Column({ name: 'TotalPrice' })
-  public totalPrice: number;
-  @Column({ name: 'Name' })
-  public name: string;
-  @ManyToOne(() => Customer, (customer) => customer.wallet)
-  @JoinColumn({ name: 'CustomerId' })
-  public customer: Customer;
-  @OneToMany(() => Transaction, (transaction) => transaction.wallet)
-  public transaction: Transaction[];
+  @Column('int', { name: 'CurrentBalance', default: 0, nullable: false })
+  public currentBalance: number;
+
+  @Column('datetime', { name: 'ExpiredTime' })
+  public expiredTime: Date;
+
+  @Column('datetime', { name: 'CreatedTime', default: () => 'now()' })
+  public createdTime: Date;
+
+  @OneToOne(() => User, (user) => user.wallet, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'UserId' })
+  public user: User;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.walletTo)
+  public transactionsTo: Transaction[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.walletForm)
+  public transactionsForm: Transaction[];
 }
 
 export default Wallet;

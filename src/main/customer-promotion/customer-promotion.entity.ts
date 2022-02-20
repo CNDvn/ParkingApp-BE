@@ -5,12 +5,14 @@ import Promotion from '../promotion/promotion.entity';
 
 @Entity()
 class CustomerPromotion extends BaseEntity {
-  @Column({ name: 'Status' })
+  @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
-  @ManyToOne(() => Customer, (customer) => customer.customerPromotion)
+
+  @ManyToOne(() => Customer, (customer) => customer.customerPromotions)
   @JoinColumn({ name: 'CustomerId' })
   public customer: Customer;
-  @ManyToOne(() => Promotion, (promotion) => promotion.customerPromotion)
+
+  @ManyToOne(() => Promotion, (promotion) => promotion.customerPromotions)
   @JoinColumn({ name: 'PromotionId' })
   public promotion: Promotion;
 }

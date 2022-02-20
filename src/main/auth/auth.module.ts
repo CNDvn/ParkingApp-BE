@@ -7,19 +7,24 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt/jwt.strategy';
-import { AdminModule } from '../admin/admin.module';
+import { CustomerModule } from '../customer/customer.module';
+import { BusinessModule } from '../business/business.module';
+import { SharedModule } from 'src/shared/shared/shared.module';
+import SmsService from 'src/utils/sms.service';
 
 @Module({
   imports: [
-    AdminModule,
     UserModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.accessTokenSecret,
-      signOptions: { expiresIn: '2d' },
+      signOptions: { expiresIn: '3d' },
     }),
+    CustomerModule,
+    BusinessModule,
+    SharedModule,
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, SmsService],
   controllers: [AuthController],
 })
 export class AuthModule {}
