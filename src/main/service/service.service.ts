@@ -1,3 +1,4 @@
+import { UpdateParkingServiceDto } from './dto/service-update.dto';
 import { ParkingService } from './../parking/parking.service';
 import { BaseService } from './../base/base.service';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
@@ -30,10 +31,7 @@ export class ServiceService extends BaseService<Service> {
       parking,
     );
     if (!service) {
-      throw new HttpException(
-        'canonot add new service',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('cannot add new service', HttpStatus.BAD_REQUEST);
     }
     return service;
   }
@@ -54,7 +52,6 @@ export class ServiceService extends BaseService<Service> {
   }
 
   async updateStatusOwnParkingService(
-    user: User,
     id: string,
     status: StatusEnum,
   ): Promise<Service> {
@@ -74,7 +71,7 @@ export class ServiceService extends BaseService<Service> {
   async updateOwnParkingService(
     user: User,
     id: string,
-    serviceDto: ServiceCreateDto,
+    serviceDto: UpdateParkingServiceDto,
   ): Promise<Service> {
     const service = await this.serviceRepository.findOne({
       id,
@@ -85,10 +82,10 @@ export class ServiceService extends BaseService<Service> {
         HttpStatus.NOT_FOUND,
       );
     }
-    const parking = await this.parkingService.findById(serviceDto.parkingId);
-    if (!parking) {
-      throw new HttpException('parking invalid', HttpStatus.BAD_REQUEST);
-    }
+    // const parking = await this.parkingService.findById(serviceDto.parkingId);
+    // if (!parking) {
+    //   throw new HttpException('parking invalid', HttpStatus.BAD_REQUEST);
+    // }
     service.name = serviceDto.name;
     service.description = serviceDto.description;
     service.price = serviceDto.price;

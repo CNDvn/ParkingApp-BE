@@ -1,3 +1,4 @@
+import { UpdateParkingServiceDto } from './dto/service-update.dto';
 import { StatusEnum } from 'src/utils/status.enum';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import { MapInterceptor } from '@automapper/nestjs';
@@ -56,7 +57,6 @@ export class ServiceController {
     @Param('id') id: string,
   ): Promise<string> {
     const result = await this.serviceService.updateStatusOwnParkingService(
-      user,
       id,
       StatusEnum.IN_ACTIVE,
     );
@@ -70,7 +70,8 @@ export class ServiceController {
   async updateService(
     @GetUser() user: User,
     @Param('id') id: string,
-    @Body() serviceDto: ServiceCreateDto,
+    @Body()
+    serviceDto: UpdateParkingServiceDto,
   ): Promise<Service> {
     return await this.serviceService.updateOwnParkingService(
       user,

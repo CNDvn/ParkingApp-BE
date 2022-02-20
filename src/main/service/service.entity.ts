@@ -1,3 +1,4 @@
+import { AutoMap } from '@automapper/classes';
 import { StatusEnum } from 'src/utils/status.enum';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
@@ -6,12 +7,15 @@ import Parking from '../parking/parking.entity';
 
 @Entity()
 class Service extends BaseEntity {
+  @AutoMap()
   @Column('nvarchar', { name: 'Name', length: 100, nullable: false })
   public name: string;
 
+  @AutoMap()
   @Column('text', { name: 'Description' })
   public description: string;
 
+  @AutoMap()
   @Column('int', { name: 'Price', nullable: false })
   public price: number;
 
