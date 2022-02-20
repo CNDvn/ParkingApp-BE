@@ -18,7 +18,7 @@ import { ResetPasswordDto } from './dto/resetPasswordDto';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Public } from './public';
 import { VerifyPhoneNumberDto } from './dto/verifyPhoneNumber.dto';
-import { VerifyOTPDto, VerifyBase } from './dto/verifyOTPDto';
+import { VerifyOTPDto } from './dto/verifyOTPDto';
 import { TokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ status: 200, description: 'Change password success' })
-  @Put('/changePassword')
+  @Put('/password')
   @ApiBody({ type: ChangePasswordDto })
   async changePassword(
     @GetUser() user: User,
@@ -46,7 +46,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ status: 201, description: 'Send OTP SMS success' })
-  @Post('/sendOTPSMS')
+  @Post('/OTPSMS')
   @ApiBody({ type: ResetPasswordDto })
   async resetPassword(
     @Body() resetPasswordDto: ResetPasswordDto,
@@ -60,14 +60,7 @@ export class AuthController {
     return await this.authService.verifyOTP(verifyOTPDto);
   }
 
-  @ApiOkResponse({ status: 201, description: 'Verify OTP Sign Up success' })
-  @Post('/verifyOTPSignUp')
-  @ApiBody({ type: VerifyBase })
-  async verifyOTPSignUp(@Body() verifyBase: VerifyBase): Promise<string> {
-    return await this.authService.verifyOTPSignUp(verifyBase);
-  }
-
-  @Post('/signUpCustomer')
+  @Post('/customer')
   @ApiResponse({
     status: 201,
     description: 'SignUp Customer Successfully',
@@ -78,7 +71,7 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
   }
-  @Post('/signUpBusiness')
+  @Post('/business')
   @ApiResponse({
     status: 201,
     description: 'SignUp Business Successfully',
