@@ -107,6 +107,7 @@ export class AuthController {
     return await this.authService.refreshToken(refreshToken.token);
   }
   @Post('/loginGoogle')
+  @Public()
   async loginGoogle(@Body() firebaseToken: TokenDto): Promise<LoginAuthDto> {
     return await this.authService.verifyFirebaseToken(firebaseToken.token);
   }
