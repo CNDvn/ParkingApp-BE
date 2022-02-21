@@ -55,7 +55,7 @@ export class PromotionController {
   }
 
   @Roles(RoleEnum.BUSINESS)
-  @Put('updatePromotion/:id')
+  @Put('/:id')
   @ApiResponse({
     status: 200,
     description: 'Update Promotion',
@@ -69,7 +69,7 @@ export class PromotionController {
   }
 
   @Roles(RoleEnum.BUSINESS)
-  @Delete('delete/:id')
+  @Delete('/:id')
   @ApiResponse({
     status: 200,
     description: 'Delete Promotion',
