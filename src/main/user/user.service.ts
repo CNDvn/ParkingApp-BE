@@ -85,7 +85,7 @@ export class UserService extends BaseService<User> {
         'some thing wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
-    return this.userRepository.updateAvarta(id, data.url);
+    return this.userRepository.updateAvatar(id, data.url);
   }
 
   async findByPhoneNumber(phoneNumber: string): Promise<User> {
@@ -105,14 +105,14 @@ export class UserService extends BaseService<User> {
 
   async findAllUserPagination(
     payable: FilterPaginationBase,
-    roles: string,
+    role: string,
     status: string,
     field: string,
-  ): Promise<[User[], number]> {
+  ): Promise<[UserDTO[], number]> {
     const [result, count] = await this.userRepository.getAllUserPagination(
       payable.currentPage as number,
       payable.sizePage as number,
-      roles,
+      role,
       status,
       field,
       payable.sort,
@@ -121,6 +121,6 @@ export class UserService extends BaseService<User> {
     for (const item of result) {
       userDto.push(this.mapper.map(item, UserDTO, User));
     }
-    return [result, count];
+    return [userDto, count];
   }
 }

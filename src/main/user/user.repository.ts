@@ -71,7 +71,7 @@ export class UsersRepository extends Repository<User> {
     return `Update Profile Successful`;
   }
 
-  async updateAvarta(id: string, img: string): Promise<string> {
+  async updateAvatar(id: string, img: string): Promise<string> {
     await getConnection()
       .createQueryBuilder()
       .update(User)
@@ -80,7 +80,7 @@ export class UsersRepository extends Repository<User> {
       })
       .where('id = :id', { id: id })
       .execute();
-    return `Update Avarta Successful`;
+    return `Update Avatar Successful`;
   }
 
   public async getAllUserPagination(
@@ -91,36 +91,23 @@ export class UsersRepository extends Repository<User> {
     field: string,
     sort: string,
   ): Promise<[User[], number]> {
+    const query = this.createQueryBuilder('user')
+      .where('user.status LIKE :status', {
+        status: status === 'no' ? '%%' : `${status}`,
+      })
+      .leftJoinAndSelect('user.customer', 'customer')
+      .leftJoinAndSelect('user.business', 'business')
+      .leftJoinAndSelect('user.role', 'roles')
+      .andWhere('roles.name LIKE :role', {
+        role: roles === 'no' ? '%%' : `${roles}%`,
+      });
     const [list, count] = await Promise.all([
-      await this.createQueryBuilder('user')
-        .where('user.status LIKE :status', {
-          status: status === 'no' ? '%%' : `${status}`,
-        })
-        .leftJoinAndSelect('user.customer', 'customer')
-        .leftJoinAndSelect('user.business', 'business')
-        .leftJoinAndSelect('user.role', 'roles')
-        .andWhere('roles.name LIKE :role', {
-          role: roles === 'no' ? '%%' : `${roles}%`,
-        })
-
+      query
         .skip(sizePage * (currentPage - 1))
         .take(sizePage)
         .orderBy(`user.${field}`, sort as Sort)
         .getMany(),
-      await this.createQueryBuilder('user')
-        .where('user.status LIKE :status', {
-          status: status === 'no' ? '%%' : `${status}`,
-        })
-        .leftJoinAndSelect('user.customer', 'customer')
-        .leftJoinAndSelect('user.business', 'business')
-        .leftJoinAndSelect('user.role', 'roles')
-        .andWhere('roles.name LIKE :role', {
-          role: roles === 'no' ? '%%' : `${roles}%`,
-        })
-
-        .skip(sizePage * (currentPage - 1))
-        .take(sizePage)
-        .getCount(),
+      query.getCount(),
     ]);
     return [list, count];
   }

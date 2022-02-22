@@ -8,10 +8,15 @@ import {
 } from './dto/parking-slot-create.dto';
 import ParkingSlot from './parking-slot.entity';
 import { ParkingSlotRepository } from './parking-slot.repository';
+import ParkingSlotDTO from './parking-slot.dto';
+import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 
 @Injectable()
 export class ParkingSlotService extends BaseService<ParkingSlot> {
   constructor(
+    @InjectMapper() private readonly mapper: Mapper,
     private parkingSlotRepository: ParkingSlotRepository,
     private parkingService: ParkingService,
   ) {
@@ -58,5 +63,21 @@ export class ParkingSlotService extends BaseService<ParkingSlot> {
       throw new BadRequestException('Not found parking');
     }
     return await this.parkingSlotRepository.getParkingSlot(idParking);
+  }
+
+  async getAllSlotOfParking(
+    idParking: string,
+    parkingSlotPaginationFilter: ParkingSlotPaginationFilter,
+  ): Promise<[ParkingSlotDTO[], number]> {
+    const [list, count] = await this.parkingSlotRepository.getSlotOfParking(
+      idParking,
+      parkingSlotPaginationFilter,
+    );
+    const parkingSlotDto: ParkingSlotDTO[] = [];
+    for (const item of list) {
+      parkingSlotDto.push(this.mapper.map(item, ParkingSlotDTO, ParkingSlot));
+    }
+
+    return [parkingSlotDto, count];
   }
 }

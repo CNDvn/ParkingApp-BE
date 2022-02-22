@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -20,6 +21,11 @@ import {
 import ParkingSlotDTO from './parking-slot.dto';
 import ParkingSlot from './parking-slot.entity';
 import { ParkingSlotService } from './parking-slot.service';
+import {
+  IPaginateResponse,
+  paginateResponse,
+} from '../base/filter.pagnigation';
+import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
 @ApiBearerAuth()
 @ApiTags('ParkingSlots')
 @Controller('parking-slots')
@@ -54,14 +60,34 @@ export class ParkingSlotController {
     );
   }
 
-  @Public()
-  @Get('/:idParking')
-  @UseInterceptors(
-    MapInterceptor(ParkingSlotDTO, ParkingSlot, { isArray: true }),
-  )
-  async getSlots(
-    @Param('idParking') idParking: string,
-  ): Promise<ParkingSlot[]> {
-    return await this.parkingSlotService.getAllSlotIdParking(idParking);
+  // @Public()
+  // @Get('/:idParking')
+  // @UseInterceptors(
+  //   MapInterceptor(ParkingSlotDTO, ParkingSlot, { isArray: true }),
+  // )
+  // async getSlots(
+  //   @Param('idParking') idParking: string,
+  // ): Promise<ParkingSlot[]> {
+  //   return await this.parkingSlotService.getAllSlotIdParking(idParking);
+  // }
+
+  @Get('/parking/:id')
+  async getSlotPaging(
+    @Param('id') id: string,
+    @Query() parkingSlotPaginationFilter: ParkingSlotPaginationFilter,
+  ): Promise<IPaginateResponse<ParkingSlotDTO> | { message: string }> {
+    const [list, count] = await this.parkingSlotService.getAllSlotOfParking(
+      id,
+      parkingSlotPaginationFilter,
+    );
+    if (list.length === 0) {
+      return { message: 'No Data' };
+    }
+
+    return paginateResponse<ParkingSlotDTO>(
+      [list, count],
+      parkingSlotPaginationFilter.currentPage as number,
+      parkingSlotPaginationFilter.sizePage as number,
+    );
   }
 }

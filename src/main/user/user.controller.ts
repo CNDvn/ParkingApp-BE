@@ -55,16 +55,16 @@ export class UserController {
     return await this.userService.getMe(user);
   }
 
-  @Roles(RoleEnum.ADMIN)
-  @Get()
-  @UseInterceptors(MapInterceptor(UserDTO, User, { isArray: true }))
-  @ApiResponse({
-    status: 200,
-    description: 'Get all Users',
-  })
-  async getAllUsers(): Promise<User[]> {
-    return await this.userService.getAll();
-  }
+  // @Roles(RoleEnum.ADMIN)
+  // @Get()
+  // @UseInterceptors(MapInterceptor(UserDTO, User, { isArray: true }))
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'Get all Users',
+  // })
+  // async getAllUsers(): Promise<User[]> {
+  //   return await this.userService.getAll();
+  // }
 
   @Put('profile')
   @ApiResponse({
@@ -118,30 +118,27 @@ export class UserController {
     return await this.userService.deleteUser(user, id);
   }
 
-  // @Roles(RoleEnum.ADMIN)
-  @Public()
-  @Get('/pagination')
+  @Roles(RoleEnum.ADMIN)
+  @Get()
   @ApiQuery({ name: 'role', enum: RoleSortEnum })
   @ApiQuery({ name: 'status', enum: StatusSortEnum })
   @ApiQuery({ name: 'field', enum: UserSortEnum })
   @ApiListResponse(UserDTO)
   async findAllUserPagination(
     @Query() payable: FilterPaginationBase,
-    @Query() roles: string,
-    @Query() status: string,
-    @Query() field: string,
-  ): Promise<IPaginateResponse<User> | { message: string }> {
+    @Query() query: { role: string; field: string; status: string },
+  ): Promise<IPaginateResponse<UserDTO> | { message: string }> {
     const [result, count] = await this.userService.findAllUserPagination(
       payable,
-      roles,
-      status,
-      field,
+      query.role,
+      query.status,
+      query.field,
       // sort,
     );
     if (count == 0) {
       return { message: 'No Data User' };
     }
-    return paginateResponse<User>(
+    return paginateResponse<UserDTO>(
       [result, count],
       payable.currentPage as number,
       payable.sizePage as number,
