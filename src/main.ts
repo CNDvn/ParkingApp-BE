@@ -49,6 +49,7 @@ async function bootstrap(): Promise<void> {
   // end setup firebase
   app.enableCors({
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     origin: function (origin, callback) {
       if (!origin || whitelist.indexOf(origin) !== -1) {
         // eslint-disable-next-line no-console
