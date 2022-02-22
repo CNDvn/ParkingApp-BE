@@ -2,15 +2,13 @@ import { AutoMap } from '@automapper/classes';
 
 import BusinessDTO from '../business/business.dto';
 import { ImageUrlViewDto } from '../image/dto/image-url-view.dto';
+import { BaseDto } from '../base/base.dto';
 export class Coordinate {
   public latitude: number;
 
   public longitude: number;
 }
-export default class ParkingDTO {
-  @AutoMap()
-  public id: string;
-
+export default class ParkingDTO extends BaseDto {
   @AutoMap()
   public name: string;
 

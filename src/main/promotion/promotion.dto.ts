@@ -1,9 +1,7 @@
 import { AutoMap } from '@automapper/classes';
+import { BaseDto } from '../base/base.dto';
 
-class PromotionDTO {
-  @AutoMap()
-  public id: string;
-
+class PromotionDTO extends BaseDto {
   @AutoMap()
   public code: string;
 

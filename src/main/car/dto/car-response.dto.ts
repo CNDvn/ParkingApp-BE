@@ -1,7 +1,8 @@
 import { AutoMap } from '@automapper/classes';
 import { ImageUrlViewDto } from '../../image/dto/image-url-view.dto';
+import { BaseDto } from '../../base/base.dto';
 
-export class CarResponseDto {
+export class CarResponseDto extends BaseDto {
   @AutoMap()
   public nPlates: string;
   @AutoMap()
