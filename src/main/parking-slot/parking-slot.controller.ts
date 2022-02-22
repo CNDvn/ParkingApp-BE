@@ -27,7 +27,7 @@ export class ParkingSlotController {
   constructor(private readonly parkingSlotService: ParkingSlotService) {}
 
   @Roles(RoleEnum.BUSINESS)
-  @Post('/createParkings/:idParking')
+  @Post('/parkings/:idParking')
   async createParkingSlots(
     @Param('idParking') idParking: string,
     @GetUser() user: User,
@@ -41,7 +41,7 @@ export class ParkingSlotController {
   }
 
   @Roles(RoleEnum.BUSINESS)
-  @Post('/createParkingCustom/:idParking')
+  @Post('/parkingsCustom/:idParking')
   async createParkingSlot(
     @Param('idParking') idParking: string,
     @GetUser() user: User,
@@ -55,7 +55,7 @@ export class ParkingSlotController {
   }
 
   @Public()
-  @Get('/getSlot/:idParking')
+  @Get('/:idParking')
   @UseInterceptors(
     MapInterceptor(ParkingSlotDTO, ParkingSlot, { isArray: true }),
   )

@@ -30,12 +30,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let message;
     if (exception instanceof HttpException) {
       message = exception.getResponse()['message'] as string;
+      if (!message) {
+        message = exception.getResponse();
+      }
     } else if (exception instanceof TypeORMError) {
       message = exception.message;
     } else {
       message = exception;
     }
-
     const responseBody: ResponseBody = {
       statusCode: httpStatus,
       message: message,

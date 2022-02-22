@@ -34,6 +34,13 @@ export class UserService extends BaseService<User> {
     );
   }
 
+  async findUserByOTP(otp: number): Promise<User> {
+    return await this.userRepository.findOne(
+      { phoneNumberVerifyCode: otp },
+      { relations: ['role', 'customer', 'business'] },
+    );
+  }
+
   async createUser(userCreateDTO: UserCreateDto, role: Role): Promise<User> {
     return await this.userRepository.createUser(userCreateDTO, role);
   }

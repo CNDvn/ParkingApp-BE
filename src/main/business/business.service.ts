@@ -1,3 +1,4 @@
+import SmsService from 'src/utils/sms.service';
 import { Injectable } from '@nestjs/common';
 import Business from './business.entity';
 import { BusinessRepository } from './business.repository';
@@ -15,6 +16,7 @@ export class BusinessService extends BaseService<Business> {
     private roleService: RoleService,
     private userService: UserService,
     private sharedService: SharedService,
+    private smsService: SmsService,
   ) {
     super(businessRepository);
   }
@@ -38,6 +40,12 @@ export class BusinessService extends BaseService<Business> {
       },
       roleBusiness,
     );
+    const otp = await this.sharedService.generateOtp();
+    await this.smsService.sendSms(user.phoneNumber, otp.toString());
+    await this.userService.update(user.id, {
+      phoneNumberVerifyCode: otp,
+      phoneNumberVerifyCodeExpire: new Date(),
+    });
     return await this.businessRepository.signUp(data, user);
   }
   async findByIdUser(id: string): Promise<Business> {

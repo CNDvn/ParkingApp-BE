@@ -56,7 +56,7 @@ export class UserController {
   }
 
   @Roles(RoleEnum.ADMIN)
-  @Get('/getAll')
+  @Get()
   @UseInterceptors(MapInterceptor(UserDTO, User, { isArray: true }))
   @ApiResponse({
     status: 200,
@@ -66,7 +66,7 @@ export class UserController {
     return await this.userService.getAll();
   }
 
-  @Put('updateProfile')
+  @Put('profile')
   @ApiResponse({
     status: 200,
     description: 'Update Profile',
@@ -78,7 +78,7 @@ export class UserController {
     return await this.userService.updateUser(user.id, data);
   }
 
-  @Put('updateAvarta')
+  @Put('avatar')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('image'), new FileToBodyInterceptor())
   @ApiResponse({
@@ -93,7 +93,7 @@ export class UserController {
   }
 
   @Roles(RoleEnum.ADMIN)
-  @Put('updateUser/:id')
+  @Put('/:id')
   @ApiResponse({
     status: 200,
     description: 'Update User',
@@ -106,7 +106,7 @@ export class UserController {
   }
 
   @Roles(RoleEnum.ADMIN)
-  @Delete('delete/:id')
+  @Delete('/:id')
   @ApiResponse({
     status: 200,
     description: 'Delete User',
