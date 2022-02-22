@@ -1,9 +1,7 @@
 import { AutoMap } from '@automapper/classes';
+import { BaseDto } from '../base/base.dto';
 
-export default class ParkingSlotDTO {
-  @AutoMap()
-  public id: string;
-
+export default class ParkingSlotDTO extends BaseDto {
   @AutoMap()
   public locationName: string;
 

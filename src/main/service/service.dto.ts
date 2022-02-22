@@ -1,9 +1,7 @@
 import { AutoMap } from '@automapper/classes';
+import { BaseDto } from '../base/base.dto';
 
-export default class ServiceDTO {
-  @AutoMap()
-  public id: string;
-
+export default class ServiceDTO extends BaseDto {
   @AutoMap()
   public name: string;
 
