@@ -6,11 +6,13 @@ import {
   Get,
   Param,
   Put,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConsumes,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -19,11 +21,20 @@ import UserDTO from './user.dto';
 import User from './user.entity';
 import { UserService } from './user.service';
 import { Roles } from '../auth/role/roles.decorator';
-import { RoleEnum } from '../auth/role/role.enum';
+import { RoleEnum, RoleSortEnum } from '../auth/role/role.enum';
 import { UserUpdateProfileDto } from './dto/user-update-profile.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FileToBodyInterceptor } from 'src/interceptor/file.interceptor';
 import { BaseMultipleFile } from '../base/base.images.dto';
+import {
+  FilterPaginationBase,
+  IPaginateResponse,
+  paginateResponse,
+} from '../base/filter.pagnigation';
+import { StatusSortEnum } from 'src/utils/status.enum';
+import { ApiListResponse } from 'src/decorator/apiPaginateResponse.decorator';
+import { UserSortEnum } from './user.enum';
+import { Public } from '../auth/public';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -105,5 +116,35 @@ export class UserController {
     @Param('id') id: string,
   ): Promise<string> {
     return await this.userService.deleteUser(user, id);
+  }
+
+  // @Roles(RoleEnum.ADMIN)
+  @Public()
+  @Get('/pagination')
+  @ApiQuery({ name: 'role', enum: RoleSortEnum })
+  @ApiQuery({ name: 'status', enum: StatusSortEnum })
+  @ApiQuery({ name: 'field', enum: UserSortEnum })
+  @ApiListResponse(UserDTO)
+  async findAllUserPagination(
+    @Query() payable: FilterPaginationBase,
+    @Query() roles: string,
+    @Query() status: string,
+    @Query() field: string,
+  ): Promise<IPaginateResponse<User> | { message: string }> {
+    const [result, count] = await this.userService.findAllUserPagination(
+      payable,
+      roles,
+      status,
+      field,
+      // sort,
+    );
+    if (count == 0) {
+      return { message: 'No Data User' };
+    }
+    return paginateResponse<User>(
+      [result, count],
+      payable.currentPage as number,
+      payable.sizePage as number,
+    );
   }
 }

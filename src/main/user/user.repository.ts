@@ -1,6 +1,7 @@
 import { StatusEnum } from 'src/utils/status.enum';
 import { EntityRepository, getConnection, Repository } from 'typeorm';
 import { RoleEnum } from '../auth/role/role.enum';
+import { Sort } from '../base/filter.pagnigation';
 import Role from '../role/role.entity';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserUpdateProfileDto } from './dto/user-update-profile.dto';
@@ -80,5 +81,47 @@ export class UsersRepository extends Repository<User> {
       .where('id = :id', { id: id })
       .execute();
     return `Update Avarta Successful`;
+  }
+
+  public async getAllUserPagination(
+    currentPage: number,
+    sizePage: number,
+    roles: string,
+    status: string,
+    field: string,
+    sort: string,
+  ): Promise<[User[], number]> {
+    const [list, count] = await Promise.all([
+      await this.createQueryBuilder('user')
+        .where('user.status LIKE :status', {
+          status: status === 'no' ? '%%' : `${status}`,
+        })
+        .leftJoinAndSelect('user.customer', 'customer')
+        .leftJoinAndSelect('user.business', 'business')
+        .leftJoinAndSelect('user.role', 'roles')
+        .andWhere('roles.name LIKE :role', {
+          role: roles === 'no' ? '%%' : `${roles}%`,
+        })
+
+        .skip(sizePage * (currentPage - 1))
+        .take(sizePage)
+        .orderBy(`user.${field}`, sort as Sort)
+        .getMany(),
+      await this.createQueryBuilder('user')
+        .where('user.status LIKE :status', {
+          status: status === 'no' ? '%%' : `${status}`,
+        })
+        .leftJoinAndSelect('user.customer', 'customer')
+        .leftJoinAndSelect('user.business', 'business')
+        .leftJoinAndSelect('user.role', 'roles')
+        .andWhere('roles.name LIKE :role', {
+          role: roles === 'no' ? '%%' : `${roles}%`,
+        })
+
+        .skip(sizePage * (currentPage - 1))
+        .take(sizePage)
+        .getCount(),
+    ]);
+    return [list, count];
   }
 }

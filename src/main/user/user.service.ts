@@ -12,9 +12,14 @@ import User from './user.entity';
 import { UsersRepository } from './user.repository';
 import { AxiosResponse } from 'axios';
 import * as FormData from 'form-data';
+import { FilterPaginationBase } from '../base/filter.pagnigation';
+import UserDTO from './user.dto';
+import type { Mapper } from '@automapper/types';
+import { InjectMapper } from '@automapper/nestjs';
 @Injectable()
 export class UserService extends BaseService<User> {
   constructor(
+    @InjectMapper() private readonly mapper: Mapper,
     private readonly userRepository: UsersRepository,
     private sharedService: SharedService,
     private httpService: HttpService,
@@ -89,5 +94,26 @@ export class UserService extends BaseService<User> {
     relations: string[],
   ): Promise<User> {
     return await this.userRepository.findOne({ email }, { relations });
+  }
+
+  async findAllUserPagination(
+    payable: FilterPaginationBase,
+    roles: string,
+    status: string,
+    field: string,
+  ): Promise<[User[], number]> {
+    const [result, count] = await this.userRepository.getAllUserPagination(
+      payable.currentPage as number,
+      payable.sizePage as number,
+      roles,
+      status,
+      field,
+      payable.sort,
+    );
+    const userDto: UserDTO[] = [];
+    for (const item of result) {
+      userDto.push(this.mapper.map(item, UserDTO, User));
+    }
+    return [result, count];
   }
 }
