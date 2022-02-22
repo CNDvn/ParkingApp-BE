@@ -12,9 +12,14 @@ import User from './user.entity';
 import { UsersRepository } from './user.repository';
 import { AxiosResponse } from 'axios';
 import * as FormData from 'form-data';
+import { FilterPaginationBase } from '../base/filter.pagnigation';
+import UserDTO from './user.dto';
+import type { Mapper } from '@automapper/types';
+import { InjectMapper } from '@automapper/nestjs';
 @Injectable()
 export class UserService extends BaseService<User> {
   constructor(
+    @InjectMapper() private readonly mapper: Mapper,
     private readonly userRepository: UsersRepository,
     private sharedService: SharedService,
     private httpService: HttpService,
@@ -80,7 +85,7 @@ export class UserService extends BaseService<User> {
         'some thing wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
-    return this.userRepository.updateAvarta(id, data.url);
+    return this.userRepository.updateAvatar(id, data.url);
   }
 
   async findByPhoneNumber(phoneNumber: string): Promise<User> {
@@ -96,5 +101,26 @@ export class UserService extends BaseService<User> {
     relations: string[],
   ): Promise<User> {
     return await this.userRepository.findOne({ email }, { relations });
+  }
+
+  async findAllUserPagination(
+    payable: FilterPaginationBase,
+    role: string,
+    status: string,
+    field: string,
+  ): Promise<[UserDTO[], number]> {
+    const [result, count] = await this.userRepository.getAllUserPagination(
+      payable.currentPage as number,
+      payable.sizePage as number,
+      role,
+      status,
+      field,
+      payable.sort,
+    );
+    const userDto: UserDTO[] = [];
+    for (const item of result) {
+      userDto.push(this.mapper.map(item, UserDTO, User));
+    }
+    return [userDto, count];
   }
 }

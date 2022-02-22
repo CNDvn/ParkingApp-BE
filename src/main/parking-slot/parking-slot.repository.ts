@@ -8,6 +8,7 @@ import {
   ParkingSlotCreateExtends,
 } from './dto/parking-slot-create.dto';
 import ParkingSlot from './parking-slot.entity';
+import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
 
 @EntityRepository(ParkingSlot)
 export class ParkingSlotRepository extends Repository<ParkingSlot> {
@@ -76,5 +77,27 @@ export class ParkingSlotRepository extends Repository<ParkingSlot> {
       .where('parking.id = :id', { id: idParking })
       .getMany();
     return data;
+  }
+
+  async getSlotOfParking(
+    idParking: string,
+    parkingSlotPaginationFilter: ParkingSlotPaginationFilter,
+  ): Promise<[ParkingSlot[], number]> {
+    const { currentPage, name, sizePage, sort } = parkingSlotPaginationFilter;
+    const query = this.createQueryBuilder('slot').where(
+      'slot.locationName like :name and slot.parking like :idParking',
+      {
+        name: name === undefined ? '%%' : `%${name}%`,
+        idParking: idParking,
+      },
+    );
+    return await Promise.all([
+      query
+        .skip((sizePage as number) * ((currentPage as number) - 1))
+        .take(sizePage as number)
+        .orderBy('slot.locationName', sort)
+        .getMany(),
+      query.getCount(),
+    ]);
   }
 }
