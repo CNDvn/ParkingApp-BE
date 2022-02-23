@@ -89,6 +89,7 @@ export class UsersRepository extends Repository<User> {
     status: string,
     field: string,
     sort: string,
+    search: string,
   ): Promise<[User[], number]> {
     const query = this.createQueryBuilder('user')
       .where('user.status LIKE :status', {
@@ -99,7 +100,13 @@ export class UsersRepository extends Repository<User> {
       .leftJoinAndSelect('user.role', 'roles')
       .andWhere('roles.name LIKE :role', {
         role: roles === 'no' ? '%%' : `${roles}%`,
-      });
+      })
+      .andWhere(
+        'user.firstName LIKE :search OR user.lastname LIKE :search OR user.username LIKE :search OR user.email LIKE :search OR user.phoneNumber LIKE :search',
+        {
+          search: search ? `%${search}%` : '%%',
+        },
+      );
     const [list, count] = await Promise.all([
       query
         .skip(sizePage * (currentPage - 1))

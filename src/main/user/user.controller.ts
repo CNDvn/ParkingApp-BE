@@ -118,15 +118,17 @@ export class UserController {
     return await this.userService.deleteUser(user, id);
   }
 
-  @Roles(RoleEnum.ADMIN)
+  // @Roles(RoleEnum.ADMIN)
   @Get()
   @ApiQuery({ name: 'role', enum: RoleSortEnum })
   @ApiQuery({ name: 'status', enum: StatusSortEnum })
   @ApiQuery({ name: 'field', enum: UserSortEnum })
+  @ApiQuery({ name: 'search', type: String, required: false })
   @ApiListResponse(UserDTO)
   async findAllUserPagination(
     @Query() payable: FilterPaginationBase,
-    @Query() query: { role: string; field: string; status: string },
+    @Query()
+    query: { role: string; field: string; status: string; search: string },
   ): Promise<IPaginateResponse<UserDTO> | { message: string }> {
     const [result, count] = await this.userService.findAllUserPagination(
       payable,
@@ -134,6 +136,7 @@ export class UserController {
       query.status,
       query.field,
       // sort,
+      query.search,
     );
     if (count == 0) {
       return { message: 'No Data User' };
