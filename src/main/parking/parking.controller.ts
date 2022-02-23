@@ -31,8 +31,8 @@ import { ImageService } from '../image/image.service';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingFilterPagination from './dto/parking-pagination.filter';
-import ParkingDetailDTO from './parking.detail.dto';
-import ParkingDTO from './parking.dto';
+import ParkingDetailDto from './dto/parking-detail.dto';
+import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 @ApiBearerAuth()
@@ -140,7 +140,7 @@ export class ParkingController {
 
   @Public()
   @Get('/:id')
-  @UseInterceptors(MapInterceptor(ParkingDetailDTO, Parking))
+  @UseInterceptors(MapInterceptor(ParkingDetailDto, Parking))
   @ApiResponse({
     status: 201,
     description: 'Get Detail Parking Success',

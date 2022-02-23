@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
-import { Public } from '../auth/public';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
 import User from '../user/user.entity';
@@ -19,13 +18,13 @@ import {
   ParkingSlotCreateExtends,
 } from './dto/parking-slot-create.dto';
 import ParkingSlotDTO from './parking-slot.dto';
-import ParkingSlot from './parking-slot.entity';
 import { ParkingSlotService } from './parking-slot.service';
 import {
   IPaginateResponse,
   paginateResponse,
 } from '../base/filter.pagnigation';
 import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
+
 @ApiBearerAuth()
 @ApiTags('ParkingSlots')
 @Controller('parking-slots')

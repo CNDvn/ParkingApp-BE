@@ -1,8 +1,8 @@
 import { AutoMap } from '@automapper/classes';
 
-import BusinessDTO from '../business/business.dto';
-import { ImageUrlViewDto } from '../image/dto/image-url-view.dto';
-import { BaseDto } from '../base/base.dto';
+import BusinessDTO from '../../business/business.dto';
+import { ImageUrlViewDto } from '../../image/dto/image-url-view.dto';
+import { BaseDto } from '../../base/base.dto';
 export class Coordinate {
   public latitude: number;
 

@@ -2,7 +2,7 @@ import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { mapFrom, Mapper } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import Parking from './parking.entity';
-import ParkingDTO from './parking.dto';
+import ParkingDTO from './dto/parking.dto';
 
 @Injectable()
 export class ParkingProfile extends AutomapperProfile {
