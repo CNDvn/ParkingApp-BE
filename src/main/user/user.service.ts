@@ -60,8 +60,6 @@ export class UserService extends BaseService<User> {
   }
 
   async updateUser(id: string, data: UserUpdateProfileDto): Promise<string> {
-    const hashPassword = await this.sharedService.hashPassword(data.password);
-    data.password = hashPassword;
     return await this.userRepository.updateUser(id, data);
   }
 
