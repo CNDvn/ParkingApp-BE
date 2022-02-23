@@ -19,6 +19,7 @@ async function bootstrap(): Promise<void> {
     'http://localhost:5000',
     'https://parking-app-project.herokuapp.com',
     'https://parking-app-theta.vercel.app/',
+    'https://parking-app-2fpv44rgx-cndvn.vercel.app/',
   ];
   const config = new DocumentBuilder()
     .setTitle('Parking App')
