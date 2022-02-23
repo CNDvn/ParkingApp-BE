@@ -48,8 +48,8 @@ export class SharedService {
   public generateOtp(): number {
     let code = 0;
     do {
-      code = Math.floor(Math.random() * 1000000);
-    } while (code < 100000);
+      code = Math.floor(Math.random() * 10000);
+    } while (code < 1000);
     return code;
   }
 
