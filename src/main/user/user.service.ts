@@ -106,6 +106,7 @@ export class UserService extends BaseService<User> {
     role: string,
     status: string,
     field: string,
+    search: string,
   ): Promise<[UserDTO[], number]> {
     const [result, count] = await this.userRepository.getAllUserPagination(
       payable.currentPage as number,
@@ -114,6 +115,7 @@ export class UserService extends BaseService<User> {
       status,
       field,
       payable.sort,
+      search,
     );
     const userDto: UserDTO[] = [];
     for (const item of result) {
