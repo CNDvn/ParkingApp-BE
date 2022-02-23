@@ -2,7 +2,7 @@ import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import Role from './role.entity';
-import { RoleDTO } from './role.dto';
+import { RoleDTO } from './dto/role.dto';
 
 @Injectable()
 export class RoleProfile extends AutomapperProfile {

@@ -12,4 +12,8 @@ export class RoleService extends BaseService<Role> {
   async findByNameRole(roleName: string): Promise<Role> {
     return this.roleRepository.findOne({ where: { name: roleName } });
   }
+
+  async getAllRoles(): Promise<Role[]> {
+    return this.roleRepository.find();
+  }
 }

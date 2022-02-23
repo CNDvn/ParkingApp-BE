@@ -1,7 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 import BusinessDTO from '../business/business.dto';
 import CustomerDTO from '../customer/customer.dto';
-import { RoleDTO } from '../role/role.dto';
+import { RoleDTO } from '../role/dto/role.dto';
 import { BaseDto } from '../base/base.dto';
 
 class UserDTO extends BaseDto {
