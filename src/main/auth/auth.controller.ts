@@ -22,13 +22,13 @@ import { VerifyOTPDto } from './dto/verifyOTPDto';
 import { TokenDto } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
-@Public()
 @Controller('auths')
 @ApiTags('Auths')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/login')
+  @Public()
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
   async login(@GetUser() user: User): Promise<LoginAuthDto> {
@@ -47,6 +47,7 @@ export class AuthController {
 
   @ApiOkResponse({ status: 201, description: 'Send OTP SMS success' })
   @Post('/OTPSMS')
+  @Public()
   @ApiBody({ type: ResetPasswordDto })
   async resetPassword(
     @Body() resetPasswordDto: ResetPasswordDto,
@@ -55,12 +56,14 @@ export class AuthController {
   }
 
   @Put('/resetPassword')
+  @Public()
   @ApiBody({ type: VerifyOTPDto })
   async verifyOTP(@Body() verifyOTPDto: VerifyOTPDto): Promise<string> {
     return await this.authService.verifyOTP(verifyOTPDto);
   }
 
   @Post('/customer')
+  @Public()
   @ApiResponse({
     status: 201,
     description: 'SignUp Customer Successfully',
@@ -71,7 +74,9 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthCustomer(customerSignUpDto);
   }
+
   @Post('/business')
+  @Public()
   @ApiResponse({
     status: 201,
     description: 'SignUp Business Successfully',
@@ -82,7 +87,9 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.signUpAuthBusiness(businessSignUpDto);
   }
+
   @Post('/verifyPhoneNumber')
+  @Public()
   async verifyPhoneNumber(
     @Body() verifyDto: VerifyPhoneNumberDto,
   ): Promise<string> {
@@ -93,12 +100,14 @@ export class AuthController {
   }
 
   @Post('/refreshToken')
+  @Public()
   async refreshToken(
     @Body() refreshToken: TokenDto,
   ): Promise<{ access_token: string }> {
     return await this.authService.refreshToken(refreshToken.token);
   }
   @Post('/loginGoogle')
+  @Public()
   async loginGoogle(@Body() firebaseToken: TokenDto): Promise<LoginAuthDto> {
     return await this.authService.verifyFirebaseToken(firebaseToken.token);
   }
