@@ -51,6 +51,7 @@ export function paginateResponse<T>(
   limit: number,
 ): IPaginateResponse<T> {
   const [result, total]: [T[], number] = data;
+  page = +page;
   const lastPage: number = Math.ceil(total / limit);
   const nextPage: number = page + 1 > lastPage ? null : page + 1;
   const prevPage: number = page - 1 < 1 ? null : page - 1;
