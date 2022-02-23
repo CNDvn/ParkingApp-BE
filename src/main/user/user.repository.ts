@@ -63,7 +63,6 @@ export class UsersRepository extends Repository<User> {
         email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
-        password: data.password,
         phoneNumber: data.phoneNumber,
       })
       .where('id = :id', { id: id })
