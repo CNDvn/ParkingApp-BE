@@ -102,7 +102,7 @@ export class UsersRepository extends Repository<User> {
         role: roles === 'no' ? '%%' : `${roles}%`,
       })
       .andWhere(
-        'user.firstName LIKE :search OR user.lastname LIKE :search OR user.username LIKE :search OR user.email LIKE :search OR user.phoneNumber LIKE :search',
+        '(user.firstName LIKE :search OR user.lastname LIKE :search OR user.username LIKE :search OR user.email LIKE :search OR user.phoneNumber LIKE :search)',
         {
           search: search ? `%${search}%` : '%%',
         },
