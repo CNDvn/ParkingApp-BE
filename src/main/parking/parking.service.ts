@@ -7,7 +7,7 @@ import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingFilterPagination from './dto/parking-pagination.filter';
-import ParkingDTO from './parking.dto';
+import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
 import { ParkingRepository } from './parking.repository';
 

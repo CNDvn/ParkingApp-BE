@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ParkingRepository } from './parking.repository';
 import { BusinessModule } from '../business/business.module';
 import { ParkingProfile } from './parking.profile';
-import { ParkingDetailProfile } from './parking.detail.profile';
+import { ParkingDetailProfile } from './parking-detail.profile';
 import { PagerMiddleware } from 'src/middleware/pagerMiddleware';
 import { ImageModule } from '../image/image.module';
 
