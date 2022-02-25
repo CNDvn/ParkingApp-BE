@@ -97,8 +97,11 @@ export class AuthService {
       verifyOTPDto.username,
     );
     await this.sharedService.verifyOTP(verifyOTPDto);
-    const password = await this.sharedService.generateOtp();
-    await this.smsService.sendSms(user.phoneNumber, password.toString());
+    const password = await this.sharedService.generatePassword();
+    await this.smsService.sendSms(
+      user.phoneNumber,
+      'New Password ' + password.toString(),
+    );
     const hashPassword = await this.sharedService.hashPassword(
       password.toString(),
     );
