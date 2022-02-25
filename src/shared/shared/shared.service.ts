@@ -53,6 +53,14 @@ export class SharedService {
     return code;
   }
 
+  public generatePassword(): number {
+    let code = 0;
+    do {
+      code = Math.floor(Math.random() * 100000000);
+    } while (code < 10000000);
+    return code;
+  }
+
   public async verifyOTP(verifyOTPDto: VerifyOTPDto): Promise<void> {
     const user: User = await this.userService.findByUsername(
       verifyOTPDto.username,
