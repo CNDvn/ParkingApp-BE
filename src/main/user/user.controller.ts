@@ -118,7 +118,7 @@ export class UserController {
     return await this.userService.deleteUser(user, id);
   }
 
-  // @Roles(RoleEnum.ADMIN)
+  @Roles(RoleEnum.ADMIN)
   @Get()
   @ApiQuery({ name: 'role', enum: RoleSortEnum })
   @ApiQuery({ name: 'status', enum: StatusSortEnum })

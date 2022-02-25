@@ -40,14 +40,16 @@ export class BusinessService extends BaseService<Business> {
       },
       roleBusiness,
     );
-    const otp = await this.sharedService.generateOtp();
+    const result = await this.businessRepository.signUp(data, user);
+    const otp = this.sharedService.generateOtp();
     await this.smsService.sendSms(user.phoneNumber, otp.toString());
     await this.userService.update(user.id, {
       phoneNumberVerifyCode: otp,
       phoneNumberVerifyCodeExpire: new Date(),
     });
-    return await this.businessRepository.signUp(data, user);
+    return result;
   }
+
   async findByIdUser(id: string): Promise<Business> {
     return await this.businessRepository.getBusinessByUserId(id);
   }

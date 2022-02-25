@@ -43,12 +43,15 @@ export class UsersRepository extends Repository<User> {
   }
 
   async deleteUser(id: string): Promise<string> {
-    await getConnection()
+    const result = await getConnection()
       .createQueryBuilder()
       .update(User)
       .set({ status: StatusEnum.IN_ACTIVE })
       .where('id = :id', { id: id })
       .execute();
+    if (result.affected === 0) {
+      return 'This user not exist';
+    }
     return `Delete Successfull ${id}`;
   }
 
