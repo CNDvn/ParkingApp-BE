@@ -36,7 +36,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof TypeORMError) {
       message = exception.message;
     } else {
-      message = exception;
+      message = exception['stack'] as string;
     }
     const responseBody: ResponseBody = {
       statusCode: httpStatus,
