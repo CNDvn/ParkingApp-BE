@@ -31,7 +31,7 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
-  async login(@GetUser() user: User): Promise<LoginAuthDto> {
+  login(@GetUser() user: User): LoginAuthDto {
     return this.authService.login(user);
   }
 

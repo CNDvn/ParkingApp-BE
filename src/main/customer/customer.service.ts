@@ -5,10 +5,8 @@ import { CustomerSignUpDto } from './dto/customer.signup';
 import { CustomerRepository } from './customer.repository';
 import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
-import { RoleEnum } from '../auth/role/role.enum';
 import { UserService } from '../user/user.service';
 import { SharedService } from 'src/shared/shared/shared.service';
-import Business from '../business/business.entity';
 @Injectable()
 export class CustomerService extends BaseService<Customer> {
   constructor(

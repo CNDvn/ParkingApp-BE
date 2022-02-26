@@ -7,7 +7,6 @@ import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
 import { UserService } from '../user/user.service';
 import { SharedService } from 'src/shared/shared/shared.service';
-import { RoleEnum } from '../auth/role/role.enum';
 
 @Injectable()
 export class BusinessService extends BaseService<Business> {
