@@ -20,6 +20,8 @@ import { SharedService } from 'src/shared/shared/shared.service';
 import { ChangePasswordDto } from './dto/changePasswordDto';
 import SmsService from 'src/utils/sms.service';
 import * as adminFirebase from 'firebase-admin';
+import Business from '../business/business.entity';
+import Customer from '../customer/customer.entity';
 
 @Injectable()
 export class AuthService {
@@ -97,7 +99,7 @@ export class AuthService {
       verifyOTPDto.username,
     );
     await this.sharedService.verifyOTP(verifyOTPDto);
-    const password = await this.sharedService.generatePassword();
+    const password = this.sharedService.generatePassword();
     await this.smsService.sendSms(
       user.phoneNumber,
       'New Password ' + password.toString(),
@@ -137,7 +139,7 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Not found username.!');
     }
-    const otp = await this.sharedService.generateOtp();
+    const otp = this.sharedService.generateOtp();
     await this.smsService.sendSms(user.phoneNumber, otp.toString());
     await this.userService.update(user.id, {
       phoneNumberVerifyCode: otp,
@@ -146,11 +148,11 @@ export class AuthService {
     return 'Send OTP SMS success';
   }
 
-  async signUpAuthCustomer(data: CustomerSignUpDto): Promise<string> {
+  async signUpAuthCustomer(data: CustomerSignUpDto): Promise<Customer> {
     return await this.customerService.signUpCustomer(data);
   }
 
-  async signUpAuthBusiness(data: BusinessSignUpDto): Promise<string> {
+  async signUpAuthBusiness(data: BusinessSignUpDto): Promise<Business> {
     return await this.businessService.signUpBusiness(data);
   }
 

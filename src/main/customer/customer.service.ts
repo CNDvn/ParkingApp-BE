@@ -5,7 +5,6 @@ import { CustomerSignUpDto } from './dto/customer.signup';
 import { CustomerRepository } from './customer.repository';
 import { BaseService } from '../base/base.service';
 import { RoleService } from '../role/role.service';
-import { RoleEnum } from '../auth/role/role.enum';
 import { UserService } from '../user/user.service';
 import { SharedService } from 'src/shared/shared/shared.service';
 @Injectable()
@@ -20,42 +19,23 @@ export class CustomerService extends BaseService<Customer> {
     super(customerRepository);
   }
 
-  async signUpCustomer(data: CustomerSignUpDto): Promise<string> {
-    const roleCustomer = await this.roleService.findByNameRole(
-      RoleEnum.CUSTOMER,
-    );
-    const hashPassword = await this.sharedService.hashPassword(data.password);
-    const convertDOB = this.sharedService.stringToDate(
+  async signUpCustomer(data: CustomerSignUpDto): Promise<Customer> {
+    data.password = await this.sharedService.hashPassword(data.password);
+    data.DOB = this.sharedService.stringToDate(
       data.DOB.toString(),
       'yyyy-mm-dd',
       '-',
     );
-    const user = await this.userService.createUser(
-      {
-        DOB: convertDOB,
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        password: hashPassword,
-        phoneNumber: data.phoneNumber,
-        username: data.username,
-        address: data.address,
-        avatar: data.avatar,
-      },
-      roleCustomer,
-    );
-    const result = await this.customerRepository.signUp(data, user);
 
-    const otp = this.sharedService.generateOtp();
-    await this.smsService.sendSms(
-      user.phoneNumber,
-      `Chào mừng bạn đến với Parking App.\nMã OTP của bạn là: ${otp.toString()}`,
-    );
-    await this.userService.update(user.id, {
-      phoneNumberVerifyCode: otp,
-      phoneNumberVerifyCodeExpire: new Date(),
-    });
+    const callback = async (customer: Customer): Promise<number> => {
+      const otp = this.sharedService.generateOtp();
+      await this.smsService.sendSms(
+        customer.user.phoneNumber,
+        `Chào mừng bạn đến với Parking App.\nMã OTP của bạn là: ${otp.toString()}`,
+      );
+      return otp;
+    };
 
-    return result;
+    return await this.customerRepository.signUp(data, callback);
   }
 }
