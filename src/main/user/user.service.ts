@@ -1,5 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
 import { SharedService } from 'src/shared/shared/shared.service';
 import { BaseMultipleFile } from '../base/base.images.dto';
@@ -60,10 +65,14 @@ export class UserService extends BaseService<User> {
   }
 
   async updateUser(id: string, data: UserUpdateProfileDto): Promise<string> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new BadRequestException(`${id} id not found`);
+    }
     return await this.userRepository.updateUser(id, data);
   }
 
-  async updateAvarta(id: string, body: BaseMultipleFile): Promise<string> {
+  async updateAvatar(id: string, body: BaseMultipleFile): Promise<string> {
     const bodyFormData = new FormData();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     bodyFormData.append('image', body.image[0].buffer.toString('base64'));

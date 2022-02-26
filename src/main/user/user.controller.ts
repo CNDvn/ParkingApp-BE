@@ -34,7 +34,6 @@ import {
 import { StatusSortEnum } from 'src/utils/status.enum';
 import { ApiListResponse } from 'src/decorator/apiPaginateResponse.decorator';
 import { UserSortEnum } from './user.enum';
-import { Public } from '../auth/public';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -83,13 +82,13 @@ export class UserController {
   @UseInterceptors(FilesInterceptor('image'), new FileToBodyInterceptor())
   @ApiResponse({
     status: 200,
-    description: 'Update avarta success',
+    description: 'Update avatar success',
   })
-  async updateAvarta(
+  async updateAvatar(
     @GetUser() user: User,
     @Body() image: BaseMultipleFile,
   ): Promise<string> {
-    return await this.userService.updateAvarta(user.id, image);
+    return await this.userService.updateAvatar(user.id, image);
   }
 
   @Roles(RoleEnum.ADMIN)
@@ -118,7 +117,7 @@ export class UserController {
     return await this.userService.deleteUser(user, id);
   }
 
-  // @Roles(RoleEnum.ADMIN)
+  @Roles(RoleEnum.ADMIN)
   @Get()
   @ApiQuery({ name: 'role', enum: RoleSortEnum })
   @ApiQuery({ name: 'status', enum: StatusSortEnum })

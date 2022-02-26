@@ -44,12 +44,18 @@ export class CustomerService extends BaseService<Customer> {
       },
       roleCustomer,
     );
-    const otp = await this.sharedService.generateOtp();
-    await this.smsService.sendSms(user.phoneNumber, otp.toString());
+    const result = await this.customerRepository.signUp(data, user);
+
+    const otp = this.sharedService.generateOtp();
+    await this.smsService.sendSms(
+      user.phoneNumber,
+      `Chào mừng bạn đến với Parking App.\nMã OTP của bạn là: ${otp.toString()}`,
+    );
     await this.userService.update(user.id, {
       phoneNumberVerifyCode: otp,
       phoneNumberVerifyCodeExpire: new Date(),
     });
-    return await this.customerRepository.signUp(data, user);
+
+    return result;
   }
 }
