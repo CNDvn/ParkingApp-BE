@@ -40,6 +40,8 @@ export class CarRepository extends Repository<Car> {
     } catch (error) {
       await queryRunner.rollbackTransaction();
       // eslint-disable-next-line no-console
+      console.log('error transaction in Car repository');
+      // eslint-disable-next-line no-console
       console.log(error);
       throw new HttpException(
         'something wrong',

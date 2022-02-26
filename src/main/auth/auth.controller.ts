@@ -32,7 +32,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginDto })
   async login(@GetUser() user: User): Promise<LoginAuthDto> {
-    return await this.authService.login(user);
+    return this.authService.login(user);
   }
 
   @ApiOkResponse({ status: 200, description: 'Change password success' })
@@ -72,7 +72,9 @@ export class AuthController {
   async signUpCustomer(
     @Body() customerSignUpDto: CustomerSignUpDto,
   ): Promise<string> {
-    return await this.authService.signUpAuthCustomer(customerSignUpDto);
+    const result = await this.authService.signUpAuthCustomer(customerSignUpDto);
+    if (result) return 'Sign up success';
+    return 'Sign up failed';
   }
 
   @Post('/business')
@@ -85,7 +87,9 @@ export class AuthController {
   async signUpBusiness(
     @Body() businessSignUpDto: BusinessSignUpDto,
   ): Promise<string> {
-    return await this.authService.signUpAuthBusiness(businessSignUpDto);
+    const result = await this.authService.signUpAuthBusiness(businessSignUpDto);
+    if (result) return 'Sign up success';
+    return 'Sign up failed';
   }
 
   @ApiOkResponse({ status: 201, description: 'Verify OTP Sign Up success' })

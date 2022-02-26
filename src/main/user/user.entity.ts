@@ -5,6 +5,7 @@ import Business from '../business/business.entity';
 import Customer from '../customer/customer.entity';
 import Role from '../role/role.entity';
 import Wallet from '../wallet/wallet.entity';
+import { StatusEnum } from '../../utils/status.enum';
 
 @Entity()
 class User extends BaseEntity {
@@ -21,7 +22,12 @@ class User extends BaseEntity {
   public DOB: Date;
 
   @AutoMap()
-  @Column('varchar', { name: 'Status', length: 20, nullable: false })
+  @Column('varchar', {
+    name: 'Status',
+    length: 20,
+    nullable: false,
+    default: StatusEnum.IN_ACTIVE,
+  })
   public status: string;
 
   @AutoMap()
