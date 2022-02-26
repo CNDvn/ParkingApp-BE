@@ -93,6 +93,7 @@ export class AuthController {
   }
 
   @ApiOkResponse({ status: 201, description: 'Verify OTP Sign Up success' })
+  @Public()
   @Post('/verifyOTPSignUp')
   @ApiBody({ type: VerifyBase })
   async verifyOTPSignUp(@Body() verifyBase: VerifyBase): Promise<string> {
