@@ -123,4 +123,9 @@ export class AuthController {
   async loginGoogle(@Body() firebaseToken: TokenDto): Promise<LoginAuthDto> {
     return await this.authService.verifyFirebaseToken(firebaseToken.token);
   }
+
+  @Post('/logout')
+  async logout(@GetUser() user: User): Promise<string> {
+    return await this.authService.logout(user);
+  }
 }

@@ -72,6 +72,10 @@ export class UserService extends BaseService<User> {
     return await this.userRepository.updateUser(id, data);
   }
 
+  async updateRefreshToken(user: User): Promise<User> {
+    return await this.userRepository.save(user);
+  }
+
   async updateAvatar(id: string, body: BaseMultipleFile): Promise<string> {
     const bodyFormData = new FormData();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
