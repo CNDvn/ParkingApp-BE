@@ -56,7 +56,7 @@ class User extends BaseEntity {
 
   @Column('integer', {
     name: 'PhoneNumberVerifyCode',
-    default: false,
+    default: null,
     nullable: true,
   })
   public phoneNumberVerifyCode: number;
