@@ -219,4 +219,11 @@ export class AuthService {
       );
     return this.login(user);
   }
+
+  async logout(user: User): Promise<string> {
+    user.refreshToken = null;
+    const result = await this.userService.updateRefreshToken(user);
+    if (!result) return 'logout failed';
+    return 'Logout success';
+  }
 }
