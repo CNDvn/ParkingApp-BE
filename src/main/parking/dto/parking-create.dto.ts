@@ -1,3 +1,4 @@
+import { number } from '@hapi/joi';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -14,7 +15,7 @@ class Coordinate {
   @Min(-90)
   @Max(90)
   @ApiProperty({
-    type: String,
+    type: number,
     description: 'latitude of location',
     default: 70,
   })
@@ -23,7 +24,7 @@ class Coordinate {
   @Min(-180)
   @Max(180)
   @ApiProperty({
-    type: String,
+    type: number,
     description: 'longitude of location',
     default: 150,
   })
