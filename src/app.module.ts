@@ -1,5 +1,5 @@
 import * as Joi from '@hapi/joi';
-import { CacheInterceptor, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -35,7 +35,6 @@ import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { VnpayModule } from './main/vnpay/vnpay.module';
 import { RedisModule } from './redis/redis.module';
-// import { HttpCacheInterceptor } from './interceptor/httpCache.interceptor';
 
 @Module({
   imports: [
@@ -45,8 +44,11 @@ import { RedisModule } from './redis/redis.module';
       validationSchema: Joi.object({
         MYSQL_PORT: Joi.number().required(),
         PORT: Joi.number(),
+        REDIS_PORT: Joi.number(),
+        REDIS_HOST: Joi.string().required(),
       }),
     }),
+    RedisModule,
     AutoMapperModuleModule,
     DatabaseModule,
     CustomerModule,
@@ -72,7 +74,6 @@ import { RedisModule } from './redis/redis.module';
     ImageModule,
     AutoMapperModuleModule,
     VnpayModule,
-    RedisModule,
   ],
   controllers: [AppController],
   providers: [
@@ -83,10 +84,6 @@ import { RedisModule } from './redis/redis.module';
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
   ],
 })
 export class AppModule {}
