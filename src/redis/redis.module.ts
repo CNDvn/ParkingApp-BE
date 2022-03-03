@@ -13,6 +13,7 @@ import * as redisStore from 'cache-manager-redis-store';
         store: redisStore,
         host: configService.get('REDIS_HOST') as string,
         port: +configService.get('REDIS_PORT'),
+        password: configService.get('REDIS_PASSWORD') as string,
         ttl: 60 * 60,
         max: 100,
       }),
