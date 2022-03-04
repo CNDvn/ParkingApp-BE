@@ -63,7 +63,7 @@ class User extends BaseEntity {
 
   @Column('datetime', {
     name: 'PhoneNumberVerifyCodeExpire',
-    default: false,
+    default: null,
     nullable: true,
   })
   public phoneNumberVerifyCodeExpire: Date;

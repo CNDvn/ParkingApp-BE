@@ -1,0 +1,36 @@
+version: '1.0'
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysql
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DB
+    ports:
+      - 3307:$MYSQL_PORT
+    volumes:
+      - db:/var/lib/mysql
+  be:
+    depends_on:
+      - mysqldb
+    build: .
+    container_name: back-end
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - $PORT:$PORT
+    # environment:
+    #   - DB_HOST=mysqldb
+    #   - DB_USER=$MYSQL_USER
+    #   - DB_PASSWORD=$MYSQL_PASSWORD
+    #   - DB_NAME=$MYSQL_DB
+    #   - DB_PORT=$MYSQL_PORT
+    stdin_open: true
+    tty: true
+volumes:
+  db:
