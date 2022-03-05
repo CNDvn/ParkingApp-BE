@@ -4,7 +4,7 @@ import {
   Controller,
   Get,
   Param,
-  Post,
+  // Post,
   Put,
   Query,
   UseInterceptors,
@@ -14,7 +14,7 @@ import { GetUser } from 'src/decorator/getUser.decorator';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
 import User from '../user/user.entity';
-import { WalletCreateDTO } from './dto/create-wallet.dto';
+// import { WalletCreateDTO } from './dto/create-wallet.dto';
 import { WalletUpdateDTO } from './dto/update-wallet.dto';
 import { WalletDTO } from './dto/wallet.dto';
 import { WalletEnum } from './dto/wallet.enum';

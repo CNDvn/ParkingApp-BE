@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { Min } from 'class-validator';
 
 export class WalletCreateDTO {
-  @IsNotEmpty()
+  @Min(0)
   @ApiProperty({ type: Number, description: 'currentBalance' })
   currentBalance: number;
 }
