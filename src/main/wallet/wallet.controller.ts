@@ -26,13 +26,13 @@ import { WalletService } from './wallet.service';
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  @Post()
-  async createWallet(
-    @GetUser() user: User,
-    @Body() walletCreateDTO: WalletCreateDTO,
-  ): Promise<Wallet> {
-    return await this.walletService.createWallet(user, walletCreateDTO);
-  }
+  // @Post()
+  // async createWallet(
+  //   @GetUser() user: User,
+  //   @Body() walletCreateDTO: WalletCreateDTO,
+  // ): Promise<Wallet> {
+  //   return await this.walletService.createWallet(user, walletCreateDTO);
+  // }
 
   @Get('/me')
   @UseInterceptors(MapInterceptor(WalletDTO, Wallet))
