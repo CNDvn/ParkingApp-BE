@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    container_name: mysql
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DB
+    ports:
+      - 3307:$MYSQL_PORT
+    volumes:
+      - db:/var/lib/mysql
+  redisdb:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - $REDIS_PORT:$REDIS_PORT
+  be:
+    container_name: back-end
+    depends_on:
+      - mysqldb
+      - redisdb
+    build: .
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - $PORT:$PORT
+    # environment:
+    #   - DB_HOST=mysqldb
+    #   - DB_USER=$MYSQL_USER
+    #   - DB_PASSWORD=$MYSQL_PASSWORD
+    #   - DB_NAME=$MYSQL_DB
+    #   - DB_PORT=$MYSQL_PORT
+    stdin_open: true
+    tty: true
+volumes:
+  db:
