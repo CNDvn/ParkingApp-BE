@@ -2,8 +2,8 @@ version: '1.0'
 
 services:
   mysqldb:
-    image: mysql:5.7
     container_name: mysql
+    image: mysql:5.7
     restart: unless-stopped
     env_file:
       - ./.env
@@ -14,11 +14,17 @@ services:
       - 3307:$MYSQL_PORT
     volumes:
       - db:/var/lib/mysql
+  redisdb:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - $REDIS_PORT:$REDIS_PORT
   be:
+    container_name: back-end
     depends_on:
       - mysqldb
+      - redisdb
     build: .
-    container_name: back-end
     restart: unless-stopped
     env_file:
       - ./.env
