@@ -1,73 +1,119 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { BaseService } from '../base/base.service';
-import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
-import { PromotionCreateDTO } from './dto/promotion-create.dto';
-import { PromotionUpdateDTO } from './dto/promotion-update.dto';
 import Promotion from './promotion.entity';
 import { PromotionRepository } from './promotion.repository';
+import { PromotionCreateDTO } from './dto/promotion-create.dto';
+import { ParkingService } from '../parking/parking.service';
+import { PromotionUpdateDTO } from './dto/promotion-update.dto';
+import { StatusEnum } from '../../utils/status.enum';
+import { CustomerPromotionService } from '../customer-promotion/customer-promotion.service';
 
 @Injectable()
 export class PromotionService extends BaseService<Promotion> {
   constructor(
     private promotionRepository: PromotionRepository,
-    private businessService: BusinessService,
+    private parkingService: ParkingService,
+    private customerPromotionService: CustomerPromotionService,
   ) {
     super(promotionRepository);
   }
 
-  async createPromotion(
+  async createParkingPromotion(
     user: User,
-    promotionCreateDTO: PromotionCreateDTO,
-  ): Promise<string> {
-    const promotion = await this.promotionRepository.checkExistPromotion(
-      user.business.id,
-      promotionCreateDTO.code,
-    );
-    if (promotion) {
-      throw new BadRequestException(
-        `Name promotion ${promotionCreateDTO.code} is duplicate`,
+    idParking: string,
+    promotionCreateDto: PromotionCreateDTO,
+  ): Promise<Promotion> {
+    const parking = await this.parkingService.getParking(idParking);
+
+    if (!parking || parking.business.id !== user.business.id)
+      throw new HttpException(
+        'You are not the owner of this parking',
+        HttpStatus.BAD_REQUEST,
       );
-    }
-    return await this.promotionRepository.createPromotion(
-      user.business,
-      promotionCreateDTO,
-    );
+
+    return await this.promotionRepository.save({
+      code: promotionCreateDto.code,
+      percent: promotionCreateDto.percent,
+      description: promotionCreateDto.description,
+      parking: parking,
+      status: StatusEnum.ACTIVE,
+    });
   }
 
-  async getAllPromotion(): Promise<Promotion[]> {
-    return await this.promotionRepository.getAllPromotions();
+  async getAllParkingPromotion(id: string): Promise<Promotion[]> {
+    const parking = await this.parkingService.getParking(id);
+    if (!parking)
+      throw new HttpException('Parking does not exist', HttpStatus.BAD_REQUEST);
+
+    return await this.promotionRepository.find({
+      where: { parking, status: StatusEnum.ACTIVE },
+    });
   }
 
-  async getAllOwnerPromotion(user: User): Promise<Promotion[]> {
-    return await this.promotionRepository.getAllOwnerPromotions(
-      user.business.id,
-    );
-  }
-
-  async updatePromotion(
-    id: string,
+  async updateParkingPromotion(
+    idPromotion: string,
     user: User,
-    data: PromotionUpdateDTO,
-  ): Promise<string> {
+    promotionUpdateDto: PromotionUpdateDTO,
+  ): Promise<Promotion> {
     const promotion = await this.promotionRepository.findOne({
-      code: data.code,
-      business: user.business,
+      where: { id: idPromotion },
+      relations: ['parking'],
     });
-    if (!promotion) {
-      throw new BadRequestException(`Promotion ${data.code} is not existed `);
-    }
-    return await this.promotionRepository.updatePromotion(id, data);
+
+    const parking = await this.parkingService.getParking(promotion.parking.id);
+
+    if (parking.business.id !== user.business.id)
+      throw new HttpException(
+        'You do not have permission to perform this operation',
+        HttpStatus.BAD_REQUEST,
+      );
+    const result = await this.promotionRepository.updatePromotion(
+      idPromotion,
+      promotionUpdateDto,
+    );
+
+    if (!result)
+      throw new HttpException(
+        'update promotion failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+
+    return await this.findById(idPromotion);
   }
 
-  async deletePromotion(user: User, id: string): Promise<string> {
-    const pro = await this.promotionRepository.findOne({
-      business: user.business,
-      id: id,
+  async setStatusInactivePromotion(
+    idPromotion: string,
+    user: User,
+  ): Promise<Promotion> {
+    const promotion = await this.promotionRepository.findOne({
+      where: { id: idPromotion },
+      relations: ['parking'],
     });
-    if (!pro) {
-      throw new BadRequestException(`Promotion ${id} is not existed `);
-    }
-    return await this.promotionRepository.deletePromotion(id);
+
+    const parking = await this.parkingService.getParking(promotion.parking.id);
+
+    if (parking.business.id !== user.business.id)
+      throw new HttpException(
+        'You do not have permission to perform this operation',
+        HttpStatus.BAD_REQUEST,
+      );
+    promotion.status = StatusEnum.IN_ACTIVE;
+
+    return await this.promotionRepository.save(promotion);
+  }
+
+  async applyPromotion(idPromotion: string, user: User): Promise<boolean> {
+    const promotion = await this.promotionRepository.findOne({
+      where: { id: idPromotion },
+    });
+
+    if (!promotion)
+      throw new HttpException('Promotion not exist', HttpStatus.BAD_REQUEST);
+
+    return await this.customerPromotionService.applyPromotion(
+      promotion,
+      user.customer,
+    );
   }
 }

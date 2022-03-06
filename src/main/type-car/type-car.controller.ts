@@ -18,7 +18,7 @@ import { Roles } from '../auth/role/roles.decorator';
 
 @Controller('type-cars')
 @ApiBearerAuth()
-@ApiTags('typeCars')
+@ApiTags('TypeCars')
 export class TypeCarController {
   constructor(private readonly typeCarService: TypeCarService) {}
 

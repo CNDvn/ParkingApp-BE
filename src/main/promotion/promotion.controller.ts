@@ -1,25 +1,22 @@
-import { MapInterceptor } from '@automapper/nestjs';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
   Put,
-  UseInterceptors,
-  Delete,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GetUser } from 'src/decorator/getUser.decorator';
-import { Public } from '../auth/public';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
-import User from '../user/user.entity';
-import { PromotionCreateDTO } from './dto/promotion-create.dto';
-import { PromotionUpdateDTO } from './dto/promotion-update.dto';
-import PromotionDTO from './promotion.dto';
 import Promotion from './promotion.entity';
 import { PromotionService } from './promotion.service';
+import { GetUser } from '../../decorator/getUser.decorator';
+import User from '../user/user.entity';
+import { PromotionCreateDTO } from './dto/promotion-create.dto';
+import { Public } from '../auth/public';
+import { PromotionUpdateDTO } from './dto/promotion-update.dto';
 
 @ApiBearerAuth()
 @ApiTags('Promotions')
@@ -27,68 +24,55 @@ import { PromotionService } from './promotion.service';
 export class PromotionController {
   constructor(private readonly promotionService: PromotionService) {}
 
-  @Post()
-  @Roles(RoleEnum.BUSINESS)
-  @ApiResponse({
-    status: 201,
-    description: 'Create Promotion Success',
-  })
-  async createPromotion(
+  @Post('/parking/:id')
+  // @Roles(RoleEnum.BUSINESS)
+  async createParkingPromotion(
+    @Param('id') id: string,
     @GetUser() user: User,
-    @Body() promotionCreateDTO: PromotionCreateDTO,
-  ): Promise<string> {
-    return await this.promotionService.createPromotion(
-      user,
-      promotionCreateDTO,
-    );
+    @Body() dto: PromotionCreateDTO,
+  ): Promise<Promotion> {
+    return await this.promotionService.createParkingPromotion(user, id, dto);
   }
 
-  @Public()
-  @Get()
-  @UseInterceptors(MapInterceptor(PromotionDTO, Promotion, { isArray: true }))
-  @ApiResponse({
-    status: 200,
-    description: 'Get All Promotion Success',
-  })
-  async getAllPromotion(): Promise<Promotion[]> {
-    return await this.promotionService.getAllPromotion();
+  @Get('/parking/:id')
+  async getAllParkingPromotion(@Param('id') id: string): Promise<Promotion[]> {
+    return await this.promotionService.getAllParkingPromotion(id);
   }
 
-  @Roles(RoleEnum.BUSINESS)
+  @Get('/:id')
+  async getPromotion(@Param('id') id: string): Promise<Promotion> {
+    return this.promotionService.findById(id);
+  }
+
   @Put('/:id')
-  @ApiResponse({
-    status: 200,
-    description: 'Update Promotion',
-  })
-  async updatePromotion(
-    @GetUser() user: User,
+  async updateParkingPromotion(
     @Param('id') id: string,
-    @Body() data: PromotionUpdateDTO,
-  ): Promise<string> {
-    return await this.promotionService.updatePromotion(id, user, data);
+    @GetUser() user: User,
+    @Body() dto: PromotionUpdateDTO,
+  ): Promise<Promotion> {
+    return await this.promotionService.updateParkingPromotion(id, user, dto);
   }
 
-  @Roles(RoleEnum.BUSINESS)
   @Delete('/:id')
-  @ApiResponse({
-    status: 200,
-    description: 'Delete Promotion',
-  })
-  async deletePromotion(
+  async setStatusInactivePromotion(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<string> {
+    const result = await this.promotionService.setStatusInactivePromotion(
+      id,
+      user,
+    );
+    if (result) return 'delete success';
+    return 'delete fail';
+  }
+
+  @Post('/:id/apply')
+  async applyPromotion(
     @GetUser() user: User,
     @Param('id') id: string,
   ): Promise<string> {
-    return await this.promotionService.deletePromotion(user, id);
-  }
-
-  @Roles(RoleEnum.BUSINESS)
-  @UseInterceptors(MapInterceptor(PromotionDTO, Promotion, { isArray: true }))
-  @Get('OwnerParking')
-  @ApiResponse({
-    status: 201,
-    description: 'Get All Owner Parking Success',
-  })
-  async getAllOwnerPromotion(@GetUser() user: User): Promise<Promotion[]> {
-    return await this.promotionService.getAllOwnerPromotion(user);
+    const result = await this.promotionService.applyPromotion(id, user);
+    if (result) return 'apply success';
+    return 'apply failed';
   }
 }

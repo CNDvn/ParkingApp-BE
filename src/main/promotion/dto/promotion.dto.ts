@@ -1,5 +1,5 @@
 import { AutoMap } from '@automapper/classes';
-import { BaseDto } from '../base/base.dto';
+import { BaseDto } from '../../base/base.dto';
 
 class PromotionDTO extends BaseDto {
   @AutoMap()

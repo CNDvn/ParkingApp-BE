@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Business from '../business/business.entity';
 import CustomerPromotion from '../customer-promotion/customer-promotion.entity';
+import Parking from '../parking/parking.entity';
 
 @Entity()
 class Promotion extends BaseEntity {
@@ -18,7 +19,6 @@ class Promotion extends BaseEntity {
   @Column('text', { name: 'Description' })
   public description: string;
 
-  @AutoMap()
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
   @OneToMany(
@@ -27,8 +27,8 @@ class Promotion extends BaseEntity {
   )
   public customerPromotions: CustomerPromotion[];
 
-  @ManyToOne(() => Business, (business) => business.promotions)
-  public business: Business;
+  @ManyToOne(() => Parking, (parking) => parking.promotions)
+  public parking: Parking;
 }
 
 export default Promotion;
