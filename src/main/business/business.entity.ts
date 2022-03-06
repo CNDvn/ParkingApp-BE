@@ -14,8 +14,5 @@ class Business extends BaseEntity {
 
   @OneToMany(() => Parking, (parking) => parking.business)
   public parkings: Parking[];
-
-  @OneToMany(() => Promotion, (promotion) => promotion.business)
-  public promotions: Promotion[];
 }
 export default Business;

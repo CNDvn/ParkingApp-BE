@@ -9,6 +9,7 @@ import ParkingSlot from '../parking-slot/parking-slot.entity';
 import PriceList from '../price-list/price-list.entity';
 import Service from '../service/service.entity';
 import { AutoMap } from '@automapper/classes';
+import Promotion from '../promotion/promotion.entity';
 
 @Entity()
 class Parking extends BaseEntity {
@@ -65,6 +66,9 @@ class Parking extends BaseEntity {
   @AutoMap({ typeFn: () => Image })
   @OneToMany(() => Image, (image) => image.parking)
   public images: Image[];
+
+  @OneToMany(() => Promotion, (promotion) => promotion.parking)
+  public promotions: Promotion[];
 }
 
 export default Parking;

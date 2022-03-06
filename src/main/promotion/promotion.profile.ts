@@ -1,7 +1,7 @@
 import { Mapper } from '@automapper/core';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
-import PromotionDTO from './promotion.dto';
+import PromotionDTO from './dto/promotion.dto';
 import Promotion from './promotion.entity';
 
 @Injectable()
