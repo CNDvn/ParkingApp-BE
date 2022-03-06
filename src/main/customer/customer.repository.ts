@@ -45,7 +45,9 @@ export class CustomerRepository extends Repository<Customer> {
         queryRunner.manager.create(Wallet, {
           user,
           currentBalance: 0,
-          expiredTime: new Date(),
+          expiredTime: new Date(
+            new Date().setFullYear(new Date().getFullYear() + 2),
+          ),
         }),
       );
 
