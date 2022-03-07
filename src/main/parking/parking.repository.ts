@@ -49,7 +49,8 @@ export class ParkingRepository extends Repository<Parking> {
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('parking.images', 'image')
       .leftJoinAndSelect('business.user', 'user')
-      .leftJoinAndSelect('user.role', 'role');
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('parking.parkingSlots', 'slot');
 
     const [list, count] = await Promise.all([
       query
@@ -90,6 +91,7 @@ export class ParkingRepository extends Repository<Parking> {
         .leftJoinAndSelect('parking.business', 'business')
         .leftJoinAndSelect('parking.images', 'image')
         .leftJoinAndSelect('business.user', 'user')
+        .leftJoinAndSelect('parking.parkingSlots', 'slot')
         .andWhere('business.id = :id', { id: idBusiness })
         .leftJoinAndSelect('user.role', 'role')
         .skip((sizePage as number) * ((currentPage as number) - 1))
@@ -106,6 +108,7 @@ export class ParkingRepository extends Repository<Parking> {
         .leftJoinAndSelect('parking.business', 'business')
         .leftJoinAndSelect('parking.images', 'image')
         .leftJoinAndSelect('business.user', 'user')
+        .leftJoinAndSelect('parking.parkingSlots', 'slot')
         .andWhere('business.id = :id', { id: idBusiness })
         .leftJoinAndSelect('user.role', 'role')
         .skip((sizePage as number) * ((currentPage as number) - 1))

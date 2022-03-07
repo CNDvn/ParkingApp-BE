@@ -34,4 +34,10 @@ export default class ParkingDTO extends BaseDto {
 
   @AutoMap({ typeFn: () => ImageUrlViewDto })
   public images: ImageUrlViewDto[];
+
+  @AutoMap()
+  public slotFull: number;
+
+  @AutoMap()
+  public slotEmpty: number;
 }
