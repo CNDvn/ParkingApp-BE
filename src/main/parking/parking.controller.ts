@@ -190,6 +190,4 @@ export class ParkingController {
   async confirmParking(@Param('id') id: string): Promise<Parking> {
     return await this.parkingService.confirmParking(id);
   }
-
-
 }
