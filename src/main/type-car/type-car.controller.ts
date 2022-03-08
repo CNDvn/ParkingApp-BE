@@ -15,6 +15,7 @@ import TypeCar from './type-car.entity';
 import { createTypeCarDto } from './dto/create-type-car.dto';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
+import { Public } from '../auth/public';
 
 @Controller('type-cars')
 @ApiBearerAuth()

@@ -1,6 +1,11 @@
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { StatusEnum } from 'src/utils/status.enum';
 import { BaseService } from '../base/base.service';
 import { BusinessService } from '../business/business.service';
@@ -36,20 +41,14 @@ export class ParkingService extends BaseService<Parking> {
   ): Promise<string> {
     const parking = await this.parkingRepository.findOne({
       name: parkingCreateDTO.name,
+      business: user.business,
     });
 
-    if (parking) {
-      const parkingExist = await this.parkingRepository.getParking(parking.id);
-      if (parkingExist.business.id === user.business.id) {
-        return await this.parkingRepository.createParking(
-          user.business,
-          parkingCreateDTO,
-        );
-      }
+    if (parking)
       throw new BadRequestException(
         `name parking ${parkingCreateDTO.name} is duplicate`,
       );
-    }
+
     return await this.parkingRepository.createParking(
       user.business,
       parkingCreateDTO,
@@ -61,6 +60,7 @@ export class ParkingService extends BaseService<Parking> {
   ): Promise<[ParkingDTO[], number]> {
     const [list, count] = await this.parkingRepository.getAllParkings(
       parkingFilterPagination,
+      StatusEnum.ACTIVE,
     );
     const parkingDTO: ParkingDTO[] = [];
     for (const item of list) {
@@ -96,5 +96,26 @@ export class ParkingService extends BaseService<Parking> {
       idParking,
       idBusiness,
     );
+  }
+
+  async confirmParking(idParking: string): Promise<Parking> {
+    const parking = await this.parkingRepository.getParking(idParking);
+    if (parking)
+      return await this.update(idParking, { status: StatusEnum.ACTIVE });
+    throw new HttpException('Parking not existed', HttpStatus.BAD_REQUEST);
+  }
+
+  async getParkingProcessing(
+    parkingFilterPagination: ParkingFilterPagination,
+  ): Promise<[ParkingDTO[], number]> {
+    const [list, count] = await this.parkingRepository.getAllParkings(
+      parkingFilterPagination,
+      StatusEnum.PROCESSING,
+    );
+    const parkingDTO: ParkingDTO[] = [];
+    for (const item of list) {
+      parkingDTO.push(this.mapper.map(item, ParkingDTO, Parking));
+    }
+    return [parkingDTO, count];
   }
 }

@@ -21,7 +21,7 @@ export class ParkingRepository extends Repository<Parking> {
         closeTime,
         openTime,
         phoneNumber,
-        status: StatusEnum.ACTIVE,
+        status: StatusEnum.PROCESSING,
         business: businessOwner,
         coordinate: {
           type: 'Point',
@@ -35,6 +35,7 @@ export class ParkingRepository extends Repository<Parking> {
 
   async getAllParkings(
     parkingFilterPagination: ParkingFilterPagination,
+    status: StatusEnum,
   ): Promise<[Parking[], number]> {
     const { address, currentPage, name, sizePage, sort } =
       parkingFilterPagination;
@@ -46,10 +47,12 @@ export class ParkingRepository extends Repository<Parking> {
       .andWhere('parking.address like :address', {
         address: address === undefined ? '%%' : `%${address}%`,
       })
+      .andWhere('parking.status like :status', { status: status })
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('parking.images', 'image')
       .leftJoinAndSelect('business.user', 'user')
-      .leftJoinAndSelect('user.role', 'role');
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('parking.parkingSlots', 'slot');
 
     const [list, count] = await Promise.all([
       query

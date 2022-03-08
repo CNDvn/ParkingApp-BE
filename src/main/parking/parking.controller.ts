@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
@@ -82,6 +83,25 @@ export class ParkingController {
   ): Promise<string> {
     await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.removeOwnerParking(id, user.business.id);
+  }
+
+  @Roles(RoleEnum.ADMIN)
+  @Get('/processing')
+  @UseInterceptors(HttpCacheInterceptor)
+  async getParkingProcessing(
+    @Query() parkingFilterPagination: ParkingFilterPagination,
+  ): Promise<IPaginateResponse<ParkingDTO> | { message: string }> {
+    const [list, count] = await this.parkingService.getParkingProcessing(
+      parkingFilterPagination,
+    );
+    if (list.length === 0) {
+      return { message: 'No Data' };
+    }
+    return paginateResponse<ParkingDTO>(
+      [list, count],
+      parkingFilterPagination.currentPage as number,
+      parkingFilterPagination.sizePage as number,
+    );
   }
 
   @Roles(RoleEnum.BUSINESS)
@@ -163,4 +183,13 @@ export class ParkingController {
     }
     return data;
   }
+
+  @Put('/:id/confirm')
+  @Roles(RoleEnum.ADMIN)
+  @UseInterceptors(MapInterceptor(ParkingDetailDto, Parking))
+  async confirmParking(@Param('id') id: string): Promise<Parking> {
+    return await this.parkingService.confirmParking(id);
+  }
+
+
 }

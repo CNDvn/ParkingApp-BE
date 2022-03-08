@@ -3,6 +3,7 @@ import { mapFrom, Mapper } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import Parking from './parking.entity';
 import ParkingDTO from './dto/parking.dto';
+import { StatusEnum } from '../../utils/status.enum';
 
 @Injectable()
 export class ParkingProfile extends AutomapperProfile {
@@ -24,6 +25,26 @@ export class ParkingProfile extends AutomapperProfile {
           (destination: ParkingDTO) => destination.coordinates.longitude,
           mapFrom((source: Parking) => {
             return source.coordinate.coordinates[1];
+          }),
+        )
+        .forMember(
+          (destination: ParkingDTO) => destination.slotEmpty,
+          mapFrom((source) => {
+            const slotEmpty = source.parkingSlots.filter((slot) => {
+              if (slot.status === StatusEnum.EMPTY) return true;
+              return false;
+            });
+            return slotEmpty.length;
+          }),
+        )
+        .forMember(
+          (destination: ParkingDTO) => destination.slotFull,
+          mapFrom((source) => {
+            const slotFull = source.parkingSlots.filter((slot) => {
+              if (slot.status === StatusEnum.Full) return true;
+              return false;
+            });
+            return slotFull.length;
           }),
         );
     };

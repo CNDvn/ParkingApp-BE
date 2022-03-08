@@ -38,4 +38,9 @@ export default class ParkingDTO extends BaseDto {
 
   @AutoMap({ typeFn: () => PriceListDTO })
   public priceLists: PriceListDTO[];
+  @AutoMap()
+  public slotFull: number;
+
+  @AutoMap()
+  public slotEmpty: number;
 }
