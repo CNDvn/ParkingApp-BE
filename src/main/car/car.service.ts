@@ -38,14 +38,13 @@ export class CarService extends BaseService<Car> {
   }
 
   async getAllCarsOwner(user: User): Promise<Car[]> {
-    const cars = await this.carRepository.find({
+    let cars = await this.carRepository.find({
       relations: ['typeCar', 'images'],
       where: {
         customer: user.customer,
-        status: StatusEnum.ACTIVE,
       },
     });
-
+    cars = cars.filter((car) => car.status !== StatusEnum.IN_ACTIVE);
     if (!cars || cars.length === 0)
       throw new HttpException("User don't have car", HttpStatus.NOT_FOUND);
     return cars;
@@ -56,6 +55,19 @@ export class CarService extends BaseService<Car> {
         id: id,
         customer: user.customer,
         status: StatusEnum.ACTIVE,
+      },
+      { relations: ['typeCar', 'images'] },
+    );
+    if (!car)
+      throw new HttpException('This car not existed', HttpStatus.NOT_FOUND);
+    return car;
+  }
+
+  async getAllOwnCar(user: User, id: string): Promise<Car> {
+    const car = await this.carRepository.findOne(
+      {
+        id: id,
+        customer: user.customer,
       },
       { relations: ['typeCar', 'images'] },
     );

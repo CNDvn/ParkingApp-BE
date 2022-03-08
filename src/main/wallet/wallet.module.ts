@@ -9,5 +9,6 @@ import { WalletProfile } from './wallet.profile';
   imports: [TypeOrmModule.forFeature([WalletRepository])],
   controllers: [WalletController],
   providers: [WalletService, WalletProfile],
+  exports: [WalletService],
 })
 export class WalletModule {}

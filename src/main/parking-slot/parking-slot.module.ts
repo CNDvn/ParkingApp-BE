@@ -10,5 +10,6 @@ import { ParkingSlotProfile } from './parking-slot.profile';
   imports: [TypeOrmModule.forFeature([ParkingSlotRepository]), ParkingModule],
   controllers: [ParkingSlotController],
   providers: [ParkingSlotService, ParkingSlotProfile],
+  exports: [ParkingSlotService],
 })
 export class ParkingSlotModule {}

@@ -16,4 +16,6 @@ export class CarResponseDto extends BaseDto {
   public images: ImageUrlViewDto[];
   @AutoMap({ typeFn: () => TypeCarDto })
   public typeCar: TypeCarDto;
+  @AutoMap()
+  public status: string;
 }

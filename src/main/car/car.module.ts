@@ -15,5 +15,6 @@ import { CarProfile } from './car.profile';
   ],
   controllers: [CarController],
   providers: [CarService, CarProfile],
+  exports: [CarService],
 })
 export class CarModule {}
