@@ -88,13 +88,14 @@ export class ParkingRepository extends Repository<Parking> {
   ): Promise<[Parking[], number]> {
     const { address, currentPage, name, sizePage, sort } =
       parkingFilterPagination;
-    const query = await this.createQueryBuilder('parking')
+    const query = this.createQueryBuilder('parking')
       .where('parking.name like :name', {
         name: name === undefined ? '%%' : `%${name}%`,
       })
       .andWhere('parking.address like :address', {
         address: address === undefined ? '%%' : `%${address}%`,
       })
+      .leftJoinAndSelect('parking.parkingSlots', 'parking_slot')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('parking.images', 'image')
       .leftJoinAndSelect('business.user', 'user')
