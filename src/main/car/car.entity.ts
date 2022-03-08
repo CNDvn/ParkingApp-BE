@@ -36,6 +36,7 @@ class Car extends BaseEntity {
   @JoinColumn({ name: 'CustomerId' })
   public customer: Customer;
 
+  @AutoMap({ typeFn: () => TypeCar })
   @ManyToOne(() => TypeCar, (typeCar) => typeCar.cars)
   @JoinColumn({ name: 'TypeCarId' })
   public typeCar: TypeCar;
