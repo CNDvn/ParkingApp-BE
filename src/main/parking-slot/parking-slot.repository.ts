@@ -30,7 +30,7 @@ export class ParkingSlotRepository extends Repository<ParkingSlot> {
         .into(ParkingSlot)
         .values({
           locationName: prefixName.toUpperCase() + '-' + (i + 1),
-          status: StatusEnum.ACTIVE,
+          status: StatusEnum.EMPTY,
           parking,
           createdBy: business.id,
         })
