@@ -40,6 +40,7 @@ export class TypeCarController {
     return await this.typeCarService.update(id, typeCar);
   }
 
+  @Public()
   @Get()
   @UseInterceptors(MapInterceptor(TypeCarDto, TypeCar, { isArray: true }))
   async getAll(): Promise<TypeCar[]> {
