@@ -64,6 +64,19 @@ export class CarService extends BaseService<Car> {
     return car;
   }
 
+  async getAllOwnCar(user: User, id: string): Promise<Car> {
+    const car = await this.carRepository.findOne(
+      {
+        id: id,
+        customer: user.customer,
+      },
+      { relations: ['typeCar', 'images'] },
+    );
+    if (!car)
+      throw new HttpException('This car not existed', HttpStatus.NOT_FOUND);
+    return car;
+  }
+
   async updateOwnCar(
     user: User,
     id: string,

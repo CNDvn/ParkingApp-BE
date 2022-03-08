@@ -19,4 +19,6 @@ export class BookingController {
   ): Promise<Booking> {
     return await this.bookingService.bookSlot(user, parkingId, carId);
   }
+
+  // @Post('/checkIn/')
 }

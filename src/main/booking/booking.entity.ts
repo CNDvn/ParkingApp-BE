@@ -17,6 +17,7 @@ class Booking extends BaseEntity {
 
   @Column('datetime', {
     name: 'CheckinTime',
+    nullable: true,
   })
   public checkinTime: Date;
 

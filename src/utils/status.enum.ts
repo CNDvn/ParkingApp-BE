@@ -5,8 +5,10 @@ export enum StatusEnum {
   EMPTY = 'empty',
   Full = 'full',
   BOOKED = 'booked',
-  INPARKING = 'inParking',
+  IN_PARKING = 'inParking',
+  CHECK_IN = 'checkIn',
   PAID = 'paid',
+  PENDING = 'pending',
 }
 
 export enum StatusSortEnum {

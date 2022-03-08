@@ -26,21 +26,23 @@ export class BookingService extends BaseService<Booking> {
     parkingId: string,
     carId: string,
   ): Promise<Booking> {
-    const car = await this.carService.getOwnCar(user, carId);
+    const car = await this.carService.getAllOwnCar(user, carId);
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
 
+    if (car.status !== StatusEnum.ACTIVE)
+      throw new BadRequestException('Your car is not ready to book');
+
     const priceAHour = parking.priceLists[0].priceListDetails.find(
-      (item) => item.typeCar === car.typeCar,
+      (item) => item.typeCar.id === car.typeCar.id,
     );
 
     if (wallet.currentBalance < priceAHour.price * 5) {
       throw new BadRequestException('Your wallet not enough price in 5 hours');
     }
 
-    wallet.currentBalance -= priceAHour.price * 5;
-    wallet.frozenMoney += priceAHour.price * 5;
-    this.walletService.update(wallet.id, wallet);
+    wallet.currentBalance = +wallet.currentBalance - priceAHour.price * 5;
+    wallet.frozenMoney = +wallet.frozenMoney + priceAHour.price * 5;
 
     const slotEmpty = (
       await this.parkingSlotService.getAllSlotIdParking(parkingId)
@@ -48,14 +50,27 @@ export class BookingService extends BaseService<Booking> {
     if (!slotEmpty)
       throw new BadRequestException('This parking not emty slot now');
 
-    await this.parkingSlotService.update(slotEmpty.id, {
-      status: StatusEnum.Full,
-    });
-    return await this.bookingRepository.save({
-      car: car,
-      parking: parking,
-      status: StatusEnum.BOOKED,
-      parkingSlot: slotEmpty,
-    });
+    const addToDB = async (): Promise<Booking> => {
+      await this.walletService.update(wallet.id, {
+        currentBalance: wallet.currentBalance,
+        frozenMoney: wallet.frozenMoney,
+      });
+      await this.parkingSlotService.update(slotEmpty.id, {
+        status: StatusEnum.Full,
+      });
+      await this.carService.update(car.id, {
+        status: StatusEnum.BOOKED,
+      });
+      return await this.bookingRepository.save({
+        car: car,
+        parking: parking,
+        status: StatusEnum.PENDING,
+        parkingSlot: slotEmpty,
+        checkinTime: null,
+      });
+    };
+    return this.bookingRepository.bookSlot(addToDB);
   }
+
+  
 }
