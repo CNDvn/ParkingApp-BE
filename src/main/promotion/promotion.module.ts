@@ -6,7 +6,6 @@ import { PromotionRepository } from './promotion.repository';
 import { PromotionProfile } from './promotion.profile';
 import { ParkingModule } from '../parking/parking.module';
 import { CustomerPromotionModule } from '../customer-promotion/customer-promotion.module';
-import { CustomerPromotionService } from '../customer-promotion/customer-promotion.service';
 
 @Module({
   imports: [

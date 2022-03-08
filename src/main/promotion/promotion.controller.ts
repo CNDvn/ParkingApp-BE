@@ -8,14 +8,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from '../auth/role/role.enum';
-import { Roles } from '../auth/role/roles.decorator';
 import Promotion from './promotion.entity';
 import { PromotionService } from './promotion.service';
 import { GetUser } from '../../decorator/getUser.decorator';
 import User from '../user/user.entity';
 import { PromotionCreateDTO } from './dto/promotion-create.dto';
-import { Public } from '../auth/public';
 import { PromotionUpdateDTO } from './dto/promotion-update.dto';
 
 @ApiBearerAuth()
