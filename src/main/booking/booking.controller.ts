@@ -20,5 +20,12 @@ export class BookingController {
     return await this.bookingService.bookSlot(user, parkingId, carId);
   }
 
-  // @Post('/checkIn/')
+  @Post('/checkIn/parking/:parkingId/car/:carId')
+  async checkIn(
+    @GetUser() user: User,
+    @Param('parkingId') parkingId: string,
+    @Param('carId') carId: string,
+  ): Promise<Booking> {
+    return await this.bookingService.checkIn(user, parkingId, carId);
+  }
 }

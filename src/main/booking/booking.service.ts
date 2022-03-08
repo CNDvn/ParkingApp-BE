@@ -69,8 +69,32 @@ export class BookingService extends BaseService<Booking> {
         checkinTime: null,
       });
     };
-    return this.bookingRepository.bookSlot(addToDB);
+    return this.bookingRepository.transactionCustom(addToDB);
   }
 
-  
+  async checkIn(
+    user: User,
+    parkingId: string,
+    carId: string,
+  ): Promise<Booking> {
+    const car = await this.carService.getAllOwnCar(user, carId);
+    const parking = await this.parkingService.getParking(parkingId);
+
+    const booking = await this.bookingRepository.findOne({
+      car: car,
+      parking: parking,
+      status: StatusEnum.PENDING,
+    });
+
+    if (!booking) throw new BadRequestException('Check in fail');
+
+    const addToDB = async (): Promise<Booking> => {
+      this.carService.update(car.id, { status: StatusEnum.IN_PARKING });
+      return await this.update(booking.id, {
+        checkinTime: new Date(),
+        status: StatusEnum.CHECK_IN,
+      });
+    };
+    return this.bookingRepository.transactionCustom(addToDB);
+  }
 }

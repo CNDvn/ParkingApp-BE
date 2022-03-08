@@ -24,6 +24,7 @@ class Car extends BaseEntity {
   @Column('varchar', { name: 'Model', length: 20, nullable: false })
   public modelCode: string;
 
+  @AutoMap()
   @Column('varchar', {
     name: 'Status',
     length: 20,

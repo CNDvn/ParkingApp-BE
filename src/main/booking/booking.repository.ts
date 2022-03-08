@@ -3,7 +3,7 @@ import Booking from './booking.entity';
 
 @EntityRepository(Booking)
 export class BookingRepository extends Repository<Booking> {
-  async bookSlot(fn: () => Promise<Booking>): Promise<Booking> {
+  async transactionCustom(fn: () => Promise<Booking>): Promise<Booking> {
     const connection = getConnection();
     const queryRunner = connection.createQueryRunner();
     await queryRunner.connect();
