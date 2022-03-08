@@ -15,17 +15,13 @@ class Booking extends BaseEntity {
   })
   public startTime: Date;
 
-  @Column('datetime', { name: 'EndTime' })
-  public endTime: Date;
-
-  @Column('datetime', { name: 'ReservationTime' })
-  public reservationTime: Date;
+  @Column('datetime', {
+    name: 'CheckinTime',
+  })
+  public checkinTime: Date;
 
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
-
-  @Column('int', { name: 'Deposit' })
-  public deposit: number;
 
   @ManyToOne(() => Service, (service) => service.bookings)
   @JoinColumn({ name: 'ServiceId' })

@@ -17,6 +17,16 @@ class Wallet extends BaseEntity {
   public currentBalance: number;
 
   @AutoMap()
+  @Column('decimal', {
+    name: 'FrozenMoney',
+    default: 0,
+    nullable: false,
+    precision: 12,
+    scale: 3,
+  })
+  public frozenMoney: number;
+
+  @AutoMap()
   @Column('datetime', { name: 'ExpiredTime' })
   public expiredTime: Date;
 

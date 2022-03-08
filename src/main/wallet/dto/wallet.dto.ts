@@ -7,6 +7,9 @@ export class WalletDTO extends BaseDto {
   public currentBalance: number;
 
   @AutoMap()
+  public frozenMoney: number;
+
+  @AutoMap()
   public expiredTime: string;
 
   @AutoMap()

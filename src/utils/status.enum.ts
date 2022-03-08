@@ -4,6 +4,9 @@ export enum StatusEnum {
   PROCESSING = 'processing',
   EMPTY = 'empty',
   Full = 'full',
+  BOOKED = 'booked',
+  INPARKING = 'inParking',
+  PAID = 'paid',
 }
 
 export enum StatusSortEnum {
