@@ -1,6 +1,7 @@
 import { AutoMap } from '@automapper/classes';
 import { ImageUrlViewDto } from '../../image/dto/image-url-view.dto';
 import { BaseDto } from '../../base/base.dto';
+import TypeCarDto from 'src/main/type-car/dto/type-car.dto';
 
 export class CarResponseDto extends BaseDto {
   @AutoMap()
@@ -13,4 +14,6 @@ export class CarResponseDto extends BaseDto {
   public modelCode: string;
   @AutoMap()
   public images: ImageUrlViewDto[];
+  @AutoMap({ typeFn: () => TypeCarDto })
+  public typeCar: TypeCarDto;
 }
