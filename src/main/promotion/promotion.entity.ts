@@ -1,7 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import Business from '../business/business.entity';
 import CustomerPromotion from '../customer-promotion/customer-promotion.entity';
 import Parking from '../parking/parking.entity';
 
