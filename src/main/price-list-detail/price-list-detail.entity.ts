@@ -1,3 +1,4 @@
+import { AutoMap } from '@automapper/classes';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import PriceList from '../price-list/price-list.entity';
@@ -5,15 +6,16 @@ import TypeCar from '../type-car/type-car.entity';
 
 @Entity()
 class PriceListDetail extends BaseEntity {
-  @Column('int', { name: 'Price', nullable: false })
+  @AutoMap()
+  @Column('decimal', {
+    name: 'Price',
+    nullable: false,
+    precision: 12,
+    scale: 3,
+  })
   public price: number;
 
-  @Column('int', { name: 'Deposit', default: 0, nullable: false })
-  public deposit: number;
-
-  @Column('int', { name: 'TimePercent' })
-  public timePercent: number;
-
+  @AutoMap({ typeFn: () => TypeCar })
   @ManyToOne(() => TypeCar, (typeCar) => typeCar.priceListDetails)
   @JoinColumn({ name: 'TypeCarId' })
   public typeCar: TypeCar;

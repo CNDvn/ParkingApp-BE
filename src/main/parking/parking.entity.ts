@@ -45,6 +45,7 @@ class Parking extends BaseEntity {
   @Column('varchar', { name: 'PhoneNumber', length: 20, nullable: false })
   public phoneNumber: string;
 
+  @AutoMap({ typeFn: () => PriceList })
   @OneToMany(() => PriceList, (priceList) => priceList.parking)
   public priceLists: PriceList[];
 
