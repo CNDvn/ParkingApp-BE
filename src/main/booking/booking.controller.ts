@@ -43,7 +43,7 @@ export class BookingController {
     @GetUser() user: User,
     @Param('parkingId') parkingId: string,
     @Param('carId') carId: string,
-  ): Promise<Payment> {
+  ): Promise<Payment[]> {
     return await this.bookingService.checkOut(user, parkingId, carId);
   }
 
