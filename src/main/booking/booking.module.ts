@@ -25,5 +25,6 @@ import { BookingProfile } from './booking.profile';
   ],
   controllers: [BookingController],
   providers: [BookingService, BookingProfile],
+  exports: [BookingService],
 })
 export class BookingModule {}

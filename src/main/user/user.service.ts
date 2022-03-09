@@ -21,6 +21,7 @@ import { FilterPaginationBase } from '../base/filter.pagnigation';
 import UserDTO from './user.dto';
 import type { Mapper } from '@automapper/types';
 import { InjectMapper } from '@automapper/nestjs';
+import Business from '../business/business.entity';
 @Injectable()
 export class UserService extends BaseService<User> {
   constructor(
@@ -135,5 +136,9 @@ export class UserService extends BaseService<User> {
       userDto.push(this.mapper.map(item, UserDTO, User));
     }
     return [userDto, count];
+  }
+
+  async findUserByBusiness(business: Business): Promise<User> {
+    return await this.userRepository.findOne({ where: { business: business } });
   }
 }
