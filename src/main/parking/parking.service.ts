@@ -118,4 +118,14 @@ export class ParkingService extends BaseService<Parking> {
     }
     return [parkingDTO, count];
   }
+
+  async findByIdAndRelations(
+    id: string,
+    relations: string[],
+  ): Promise<Parking> {
+    return await this.parkingRepository.findOne(
+      { id: id },
+      { relations: relations },
+    );
+  }
 }

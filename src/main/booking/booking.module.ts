@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { BookingController } from './booking.controller';
+import { PaymentModule } from '../payment/payment.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BookingController } from './booking.controller';
     CarModule,
     WalletModule,
     ParkingSlotModule,
+    PaymentModule,
   ],
   controllers: [BookingController],
   providers: [BookingService],
