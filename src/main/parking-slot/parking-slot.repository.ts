@@ -62,7 +62,7 @@ export class ParkingSlotRepository extends Repository<ParkingSlot> {
       .into(ParkingSlot)
       .values({
         locationName: nameSlot.toUpperCase(),
-        status: StatusEnum.ACTIVE,
+        status: StatusEnum.EMPTY,
         parking,
         createdBy: business.id,
       })
