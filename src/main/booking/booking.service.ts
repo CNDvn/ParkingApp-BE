@@ -6,7 +6,7 @@ import { CarService } from './../car/car.service';
 import User from 'src/main/user/user.entity';
 import { BookingRepository } from './booking.repository';
 import { BaseService } from './../base/base.service';
-import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import Booking from './booking.entity';
 
 @Injectable()

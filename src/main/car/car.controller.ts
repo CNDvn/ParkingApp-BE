@@ -13,18 +13,47 @@ import User from '../user/user.entity';
 import { CarService } from './car.service';
 import { CarCreateDto } from './dto/car-create.dto';
 import Car from './car.entity';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Roles } from '../auth/role/roles.decorator';
 import { RoleEnum } from '../auth/role/role.enum';
 import { MapInterceptor } from '@automapper/nestjs';
 import { CarResponseDto } from './dto/car-response.dto';
 import { StatusEnum } from '../../utils/status.enum';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileToBodyInterceptor } from 'src/interceptor/file.interceptor';
+import { BaseMultipleFiles } from '../base/base.images.dto';
+import { ImageService } from '../image/image.service';
 
 @Controller('cars')
 @ApiBearerAuth()
 @ApiTags('Cars')
 export class CarController {
-  constructor(private readonly carService: CarService) {}
+  constructor(
+    private readonly carService: CarService,
+    private imageService: ImageService,
+  ) {}
+
+  @Roles(RoleEnum.CUSTOMER)
+  @Post('/:id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FilesInterceptor('images'), new FileToBodyInterceptor())
+  @ApiResponse({
+    status: 201,
+    description: 'Upload Images Success',
+  })
+  async uploadImagesCar(
+    @GetUser() user: User,
+    @Body() baseMultipleFiles: BaseMultipleFiles,
+    @Param('id') id: string,
+  ): Promise<string> {
+    const car = await this.carService.getOwnCar(user, id);
+    return this.imageService.createImagesCar(user, baseMultipleFiles, car);
+  }
 
   @Roles(RoleEnum.CUSTOMER)
   @Post()

@@ -54,7 +54,6 @@ export class CarService extends BaseService<Car> {
       {
         id: id,
         customer: user.customer,
-        status: StatusEnum.ACTIVE,
       },
       { relations: ['typeCar', 'images'] },
     );
