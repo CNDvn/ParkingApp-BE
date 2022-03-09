@@ -2,12 +2,24 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Booking from '../booking/booking.entity';
 import Transaction from '../transaction/transaction.entity';
+import { AutoMap } from '@automapper/classes';
 
 @Entity()
 class Payment extends BaseEntity {
-  @Column('int', { name: 'Amount', nullable: false })
-  public amount: string;
+  @AutoMap()
+  @Column('decimal', {
+    name: 'Amount',
+    nullable: false,
+    precision: 12,
+    scale: 3,
+  })
+  public amount: number;
 
+  @AutoMap()
+  @Column('datetime', { name: 'EndTime', default: () => `now()` })
+  public endTime: Date;
+
+  @AutoMap()
   @Column('varchar', { name: 'Type', nullable: false })
   public type: string;
 
