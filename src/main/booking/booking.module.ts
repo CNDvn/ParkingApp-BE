@@ -10,6 +10,7 @@ import { Module } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { BookingController } from './booking.controller';
 import { PaymentModule } from '../payment/payment.module';
+import { BookingProfile } from './booking.profile';
 
 @Module({
   imports: [
@@ -23,6 +24,6 @@ import { PaymentModule } from '../payment/payment.module';
     PaymentModule,
   ],
   controllers: [BookingController],
-  providers: [BookingService],
+  providers: [BookingService, BookingProfile],
 })
 export class BookingModule {}

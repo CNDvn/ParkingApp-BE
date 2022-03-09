@@ -65,13 +65,17 @@ export class BookingService extends BaseService<Booking> {
       await this.carService.update(car.id, {
         status: StatusEnum.BOOKED,
       });
-      return await this.bookingRepository.save({
+      const booking = await this.bookingRepository.save({
         car: car,
         parking: parking,
         status: StatusEnum.PENDING,
         parkingSlot: slotEmpty,
         checkinTime: null,
         price: priceAHour.price,
+      });
+      return await this.bookingRepository.findOne({
+        where: { id: booking.id },
+        relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'],
       });
     };
     return this.bookingRepository.transactionCustom(addToDB);
@@ -104,9 +108,13 @@ export class BookingService extends BaseService<Booking> {
 
     const addToDB = async (): Promise<Booking> => {
       await this.carService.update(car.id, { status: StatusEnum.IN_PARKING });
-      return await this.update(booking.id, {
+      await this.update(booking.id, {
         checkinTime: new Date(),
         status: StatusEnum.CHECK_IN,
+      });
+      return await this.bookingRepository.findOne({
+        where: booking.id,
+        relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'],
       });
     };
     return this.bookingRepository.transactionCustom(addToDB);
@@ -116,23 +124,37 @@ export class BookingService extends BaseService<Booking> {
     user: User,
     parkingId: string,
     carId: string,
-  ): Promise<Payment> {
+  ): Promise<Payment[]> {
     const car = await this.carService.getAllOwnCar(user, carId);
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
-    const booking = await this.bookingRepository.findOne({
-      car: car,
-      parking: parking,
-      status: StatusEnum.IN_PARKING,
-    });
-    return await this.paymentService.createPayment(booking, wallet);
+    const booking = await this.bookingRepository.findOne(
+      {
+        car: car,
+        parking: parking,
+        status: StatusEnum.IN_PARKING,
+      },
+      { relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'] },
+    );
+    if (booking.payments.length === 0)
+      return [await this.paymentService.createPayment(booking, wallet)];
+    return booking.payments;
   }
 
   async getPresentBooking(user: User, carId: string): Promise<Booking> {
     const car = await this.carService.getAllOwnCar(user, carId);
 
-    return await this.bookingRepository.findOne({
-      where: { car: car, status: [StatusEnum.PENDING, StatusEnum.BOOKED] },
-    });
+    const result = (
+      await this.bookingRepository.find({
+        where: { car: car },
+        relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'],
+      })
+    ).filter((booking) => booking.status !== StatusEnum.PAID);
+
+    if (result.length !== 1)
+      throw new BadRequestException(
+        'Get booking invalid. please contact with my admin system',
+      );
+    return result[0];
   }
 }
