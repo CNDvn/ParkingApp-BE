@@ -85,4 +85,61 @@ export class SharedService {
       throw new BadRequestException('OTP is wrong and time up.!');
     }
   }
+
+  public calculateTotalAmount(
+    amountOneHour: number,
+    milliseconds: number,
+  ): number {
+    const hourBook = milliseconds / 1000 / 60 / 60;
+    let total = 0;
+    if (hourBook <= 2) {
+      total = amountOneHour * 2;
+    } else if (hourBook > 2 && hourBook <= 4) {
+      total =
+        amountOneHour * 2 +
+        amountOneHour * (hourBook - 2) +
+        amountOneHour * (hourBook - 2) * (5 / 100);
+    } else if (hourBook > 4 && hourBook <= 6) {
+      total =
+        amountOneHour * 2 +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (5 / 100) +
+        amountOneHour * (hourBook - 4) +
+        amountOneHour * (hourBook - 4) * (10 / 100);
+    } else if (hourBook > 6 && hourBook <= 8) {
+      total =
+        amountOneHour * 2 +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (5 / 100) +
+        amountOneHour * 4 +
+        amountOneHour * 4 * (10 / 100) +
+        amountOneHour * (hourBook - 6) +
+        amountOneHour * (hourBook - 6) * (15 / 100);
+    } else if (hourBook > 8 && hourBook <= 10) {
+      total =
+        amountOneHour * 2 +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (5 / 100) +
+        amountOneHour * 4 +
+        amountOneHour * 4 * (10 / 100) +
+        amountOneHour * 6 +
+        amountOneHour * 6 * (15 / 100) +
+        amountOneHour * (hourBook - 8) +
+        amountOneHour * (hourBook - 8) * (20 / 100);
+    } else if (hourBook > 10) {
+      total =
+        amountOneHour * 2 +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (5 / 100) +
+        amountOneHour * 4 +
+        amountOneHour * 4 * (10 / 100) +
+        amountOneHour * 6 +
+        amountOneHour * 6 * (15 / 100) +
+        amountOneHour * 8 +
+        amountOneHour * 8 * (20 / 100) +
+        amountOneHour * (hourBook - 10) +
+        amountOneHour * (hourBook - 10) * (20 / 100);
+    }
+    return total;
+  }
 }
