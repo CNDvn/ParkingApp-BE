@@ -17,13 +17,14 @@ export class TransactionService extends BaseService<Transaction> {
   }
 
   async createTransaction(
-    wallet: Wallet,
+    walletCustomer: Wallet,
+    walletBusiness: Wallet,
     payments: Payment[],
     booking: Booking,
   ): Promise<Transaction> {
     let amount = 0;
     payments.forEach((payment) => (amount += payment.amount));
-    if (+wallet.currentBalance + wallet.frozenMoney < amount)
+    if (+walletCustomer.currentBalance + walletCustomer.frozenMoney < amount)
       throw new BadRequestException(
         'There is not enough money in your wallet for checkout',
       );
@@ -31,12 +32,16 @@ export class TransactionService extends BaseService<Transaction> {
 
     if (amountInFiveHours > amount) {
       const priceReturn = +amountInFiveHours - amount;
-      await this.walletService.update(wallet.id, {
-        frozenMoney: +wallet.frozenMoney - priceReturn - amount,
-        currentBalance: +wallet.currentBalance + priceReturn,
-      });
+      const addToDB = async (): Promise<Transaction> => {
+        await this.walletService.update(walletCustomer.id, {
+          frozenMoney: +walletCustomer.frozenMoney - priceReturn - amount,
+          currentBalance: +walletCustomer.currentBalance + priceReturn,
+        });
+
+        return null;
+      };
     }
 
-    return null;
+    return await null;
   }
 }

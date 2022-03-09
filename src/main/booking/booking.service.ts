@@ -156,4 +156,14 @@ export class BookingService extends BaseService<Booking> {
       );
     return result[0];
   }
+
+  async getByIdWithRelations(
+    bookingId: string,
+    relations: string[],
+  ): Promise<Booking> {
+    return this.bookingRepository.findOne({
+      where: { id: bookingId },
+      relations: relations,
+    });
+  }
 }

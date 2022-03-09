@@ -17,8 +17,8 @@ export class PaymentController {
   @Roles(RoleEnum.CUSTOMER)
   async payment(
     @GetUser() user: User,
-    @Param('bookingId') bookingId: Promise<string>,
+    @Param('bookingId') bookingId: string,
   ): Promise<Transaction> {
-    return await null;
+    return await this.paymentService.payment(bookingId, user);
   }
 }
