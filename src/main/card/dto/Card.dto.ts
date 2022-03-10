@@ -1,13 +1,12 @@
 import { BaseDto } from '../../base/base.dto';
-import { Column, JoinColumn, ManyToOne } from 'typeorm';
 import Bank from '../../bank/bank.entity';
 
-export class Card extends BaseDto {
+export class CardDto extends BaseDto {
   public amount: number;
 
-  public date: Date;
+  public dateValidFrom: string;
 
-  public code: string;
+  public cardNumber: string;
 
   public cardHolder: string;
 

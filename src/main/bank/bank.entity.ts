@@ -10,7 +10,7 @@ class Bank extends BaseEntity {
   public name: string;
 
   @AutoMap()
-  @Column('varchar', { name: 'BankId', nullable: false, length: 100 })
+  @Column('varchar', { name: 'BankCode', nullable: false, length: 10 })
   public bankCode: string;
 
   @OneToMany(() => Card, (card) => card.bank)

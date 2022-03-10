@@ -7,7 +7,7 @@ export class BankDto extends BaseDto {
   @AutoMap()
   public name: string;
 
-  @ApiProperty({ name: 'bankId' })
+  @ApiProperty({ name: 'bankCode' })
   @AutoMap()
-  public bankId: string;
+  public bankCode: string;
 }

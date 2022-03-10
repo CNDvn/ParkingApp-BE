@@ -10,10 +10,10 @@ export class BankService extends BaseService<Bank> {
     super(transferTypeRepository);
   }
 
-  async addType(transferTypeDto: BankDto): Promise<Bank> {
+  async addType(bank: BankDto): Promise<Bank> {
     return await this.transferTypeRepository.save({
-      name: transferTypeDto.name,
-      bankCode: transferTypeDto.bankId,
+      name: bank.name,
+      bankCode: bank.bankCode,
     });
   }
 }
