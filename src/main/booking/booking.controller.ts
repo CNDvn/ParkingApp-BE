@@ -37,7 +37,7 @@ export class BookingController {
     return await this.bookingService.checkIn(user, parkingId, carId);
   }
 
-  @Post('/:bookingId/checkOut')
+  @Post('/checkOut/parking/:parkingId/car/:carId')
   @Roles(RoleEnum.CUSTOMER)
   async checkOut(
     @GetUser() user: User,

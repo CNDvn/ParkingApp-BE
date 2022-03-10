@@ -33,6 +33,12 @@ export class BookingService extends BaseService<Booking> {
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
 
+    for (const item of parking.priceLists[0].priceListDetails) {
+      if (item.typeCar.id !== car.typeCar.id) {
+        throw new BadRequestException('This parking can not contain your car');
+      }
+    }
+
     if (car.status !== StatusEnum.ACTIVE)
       throw new BadRequestException('Your car is not ready to book');
 
