@@ -83,7 +83,7 @@ export class BookingService extends BaseService<Booking> {
         relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
       });
     };
-    return this.bookingRepository.transactionCustom(addToDB);
+    return await this.bookingRepository.transactionCustom(addToDB);
   }
 
   async checkIn(
@@ -122,7 +122,7 @@ export class BookingService extends BaseService<Booking> {
         relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
       });
     };
-    return this.bookingRepository.transactionCustom(addToDB);
+    return await this.bookingRepository.transactionCustom(addToDB);
   }
 
   async checkOut(
@@ -172,7 +172,7 @@ export class BookingService extends BaseService<Booking> {
     bookingId: string,
     relations: string[],
   ): Promise<Booking> {
-    return this.bookingRepository.findOne({
+    return await this.bookingRepository.findOne({
       where: { id: bookingId },
       relations: relations,
     });
