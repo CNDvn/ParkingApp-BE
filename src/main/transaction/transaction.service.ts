@@ -6,6 +6,7 @@ import Wallet from '../wallet/wallet.entity';
 import Payment from '../payment/payment.entity';
 import Booking from '../booking/booking.entity';
 import { WalletService } from '../wallet/wallet.service';
+import paymentEntity from '../payment/payment.entity';
 
 @Injectable()
 export class TransactionService extends BaseService<Transaction> {
@@ -19,29 +20,67 @@ export class TransactionService extends BaseService<Transaction> {
   async createTransaction(
     walletCustomer: Wallet,
     walletBusiness: Wallet,
-    payments: Payment[],
+    payment: Payment,
     booking: Booking,
   ): Promise<Transaction> {
-    let amount = 0;
-    payments.forEach((payment) => (amount += payment.amount));
+    const amount = payment.amount;
     if (+walletCustomer.currentBalance + walletCustomer.frozenMoney < amount)
       throw new BadRequestException(
         'There is not enough money in your wallet for checkout',
       );
-    const amountInFiveHours = +booking.price * 5;
 
-    if (amountInFiveHours > amount) {
-      const priceReturn = +amountInFiveHours - amount;
+    const priceFiveHours = booking.price * 5;
+
+    let addToDB: () => Promise<Transaction>;
+
+    if (priceFiveHours >= amount) {
       const addToDB = async (): Promise<Transaction> => {
+        const priceReturn = priceFiveHours - amount;
         await this.walletService.update(walletCustomer.id, {
-          frozenMoney: +walletCustomer.frozenMoney - priceReturn - amount,
+          frozenMoney: +walletCustomer.frozenMoney - amount - priceReturn,
           currentBalance: +walletCustomer.currentBalance + priceReturn,
         });
+        await this.walletService.update(walletBusiness.id, {
+          currentBalance: +walletBusiness.currentBalance + amount,
+        });
 
-        return null;
+        return await this.transactionRepository.save({
+          amount: amount,
+          payment: payment,
+          walletForm: walletCustomer,
+          walletTo: walletBusiness,
+        });
       };
+      return await this.transactionRepository.transaction(addToDB);
     }
 
-    return await null;
+    if (+walletCustomer.currentBalance + priceFiveHours >= amount) {
+      const addToDB = async (): Promise<Transaction> => {
+        const remainingAmount = +amount - priceFiveHours;
+        await this.walletService.update(walletCustomer.id, {
+          frozenMoney: +walletCustomer.frozenMoney - priceFiveHours,
+          currentBalance: +walletCustomer.currentBalance - remainingAmount,
+        });
+        await this.walletService.update(walletBusiness.id, {
+          currentBalance: +walletBusiness.currentBalance + amount,
+        });
+
+        return await this.transactionRepository.save({
+          amount: amount,
+          payment: payment,
+          walletForm: walletCustomer,
+          walletTo: walletBusiness,
+        });
+      };
+      return await this.transactionRepository.transaction(addToDB);
+    }
+
+    if (+walletCustomer.currentBalance + priceFiveHours < amount) {
+      throw new BadRequestException(
+        'There is not enough money in your wallet for checkout',
+      );
+    }
+
+    throw new BadRequestException('Payment failed');
   }
 }

@@ -123,7 +123,7 @@ export class BookingService extends BaseService<Booking> {
     user: User,
     parkingId: string,
     carId: string,
-  ): Promise<Payment[]> {
+  ): Promise<Payment> {
     const car = await this.carService.getAllOwnCar(user, carId);
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
@@ -135,9 +135,9 @@ export class BookingService extends BaseService<Booking> {
       },
       { relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'] },
     );
-    if (booking.payments.length === 0)
-      return [await this.paymentService.createPayment(booking, wallet)];
-    return booking.payments;
+    if (!booking.payment)
+      return await this.paymentService.createPayment(booking, wallet);
+    return booking.payment;
   }
 
   async getPresentBooking(user: User, carId: string): Promise<Booking> {

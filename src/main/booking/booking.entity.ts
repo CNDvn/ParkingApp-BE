@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Car from '../car/car.entity';
 import ParkingSlot from '../parking-slot/parking-slot.entity';
@@ -53,8 +60,8 @@ class Booking extends BaseEntity {
   public parkingSlot: ParkingSlot;
 
   @AutoMap({ typeFn: () => Payment })
-  @OneToMany(() => Payment, (payment) => payment.booking)
-  public payments: Payment[];
+  @OneToOne(() => Payment, (payment) => payment.booking)
+  public payment: Payment;
 
   @AutoMap({ typeFn: () => Car })
   @ManyToOne(() => Car, (car) => car.bookings)

@@ -57,7 +57,7 @@ export class PaymentService extends BaseService<Payment> {
       'payments',
       'car',
     ]);
-    const walletCusomter = await this.walletService.getWalletMe(user.id);
+    const walletCustomer = await this.walletService.getWalletMe(user.id);
     const business = (
       await this.parkingService.findByIdAndRelations(booking.parking.id, [
         'business',
@@ -69,12 +69,12 @@ export class PaymentService extends BaseService<Payment> {
         await this.userService.findUserByBusiness(business)
       ).id,
     );
-    await this.transactionService.createTransaction(
-      walletCusomter,
+
+    return await this.transactionService.createTransaction(
+      walletCustomer,
       walletBusiness,
-      booking.payments,
+      booking.payment,
       booking,
     );
-    return await null;
   }
 }
