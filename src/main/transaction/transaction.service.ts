@@ -31,45 +31,44 @@ export class TransactionService extends BaseService<Transaction> {
     const priceFiveHours = booking.price * 5;
 
     if (priceFiveHours >= amount) {
-      const addToDB = async (): Promise<Transaction> => {
-        const priceReturn = priceFiveHours - amount;
-        await this.walletService.update(walletCustomer.id, {
-          frozenMoney: +walletCustomer.frozenMoney - amount - priceReturn,
-          currentBalance: +walletCustomer.currentBalance + priceReturn,
-        });
-        await this.walletService.update(walletBusiness.id, {
-          currentBalance: +walletBusiness.currentBalance + amount,
-        });
+      const priceReturn = priceFiveHours - amount;
+      walletCustomer.frozenMoney =
+        +walletCustomer.frozenMoney - amount - priceReturn;
+      walletCustomer.currentBalance =
+        +walletCustomer.currentBalance + priceReturn;
 
-        return await this.transactionRepository.save({
-          amount: amount,
-          payment: payment,
-          walletForm: walletCustomer,
-          walletTo: walletBusiness,
-        });
-      };
-      return await this.transactionRepository.transaction(addToDB);
+      walletBusiness.currentBalance = +walletBusiness.currentBalance + amount;
+
+      const transaction: Transaction = new Transaction();
+      transaction.amount = amount;
+      transaction.payment = payment;
+      transaction.walletForm = walletCustomer;
+      transaction.walletTo = walletBusiness;
+      return await this.transactionRepository.createTransaction(
+        walletCustomer,
+        walletBusiness,
+        transaction,
+      );
     }
 
     if (+walletCustomer.currentBalance + priceFiveHours >= amount) {
-      const addToDB = async (): Promise<Transaction> => {
-        const remainingAmount = +amount - priceFiveHours;
-        await this.walletService.update(walletCustomer.id, {
-          frozenMoney: +walletCustomer.frozenMoney - priceFiveHours,
-          currentBalance: +walletCustomer.currentBalance - remainingAmount,
-        });
-        await this.walletService.update(walletBusiness.id, {
-          currentBalance: +walletBusiness.currentBalance + amount,
-        });
+      const remainingAmount = +amount - priceFiveHours;
+      walletCustomer.frozenMoney = +walletCustomer.frozenMoney - priceFiveHours;
+      walletCustomer.currentBalance =
+        +walletCustomer.currentBalance - remainingAmount;
 
-        return await this.transactionRepository.save({
-          amount: amount,
-          payment: payment,
-          walletForm: walletCustomer,
-          walletTo: walletBusiness,
-        });
-      };
-      return await this.transactionRepository.transaction(addToDB);
+      walletBusiness.currentBalance = +walletBusiness.currentBalance + amount;
+
+      const transaction: Transaction = new Transaction();
+      transaction.amount = amount;
+      transaction.payment = payment;
+      transaction.walletForm = walletCustomer;
+      transaction.walletTo = walletBusiness;
+      return await this.transactionRepository.createTransaction(
+        walletCustomer,
+        walletBusiness,
+        transaction,
+      );
     }
 
     if (+walletCustomer.currentBalance + priceFiveHours < amount) {

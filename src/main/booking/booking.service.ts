@@ -10,6 +10,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import Booking from './booking.entity';
 import { PaymentService } from '../payment/payment.service';
 import Payment from '../payment/payment.entity';
+import ParkingSlot from '../parking-slot/parking-slot.entity';
 
 @Injectable()
 export class BookingService extends BaseService<Booking> {
@@ -59,31 +60,23 @@ export class BookingService extends BaseService<Booking> {
     if (!slotEmpty)
       throw new BadRequestException('This parking not emty slot now');
 
-    const addToDB = async (): Promise<Booking> => {
-      await this.walletService.update(wallet.id, {
-        currentBalance: wallet.currentBalance,
-        frozenMoney: wallet.frozenMoney,
-      });
-      await this.parkingSlotService.update(slotEmpty.id, {
-        status: StatusEnum.Full,
-      });
-      await this.carService.update(car.id, {
-        status: StatusEnum.BOOKED,
-      });
-      const booking = await this.bookingRepository.save({
-        car: car,
-        parking: parking,
-        status: StatusEnum.PENDING,
-        parkingSlot: slotEmpty,
-        checkinTime: null,
-        price: priceAHour.price,
-      });
-      return await this.bookingRepository.findOne({
-        where: { id: booking.id },
-        relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
-      });
-    };
-    return await this.bookingRepository.transactionCustom(addToDB);
+    slotEmpty.status = StatusEnum.Full;
+    car.status = StatusEnum.BOOKED;
+    const booking: Booking = new Booking();
+    booking.car = car;
+    booking.parking = parking;
+    booking.status = StatusEnum.PENDING;
+    booking.parkingSlot = slotEmpty;
+    booking.checkinTime = null;
+    booking.price = priceAHour.price;
+
+    const result = await this.bookingRepository.bookSlot(
+      wallet,
+      slotEmpty,
+      car,
+      booking,
+    );
+    return result;
   }
 
   async checkIn(
@@ -111,18 +104,8 @@ export class BookingService extends BaseService<Booking> {
 
     if (!booking) throw new BadRequestException('Check in fail');
 
-    const addToDB = async (): Promise<Booking> => {
-      await this.carService.update(car.id, { status: StatusEnum.IN_PARKING });
-      await this.update(booking.id, {
-        checkinTime: new Date(),
-        status: StatusEnum.CHECK_IN,
-      });
-      return await this.bookingRepository.findOne({
-        where: booking.id,
-        relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
-      });
-    };
-    return await this.bookingRepository.transactionCustom(addToDB);
+    const result = await this.bookingRepository.checkIn(car, booking);
+    return result;
   }
 
   async checkOut(
