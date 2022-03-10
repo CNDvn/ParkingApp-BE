@@ -120,7 +120,7 @@ export class BookingService extends BaseService<Booking> {
       {
         car: car,
         parking: parking,
-        status: StatusEnum.IN_PARKING,
+        status: StatusEnum.CHECK_IN,
       },
       { relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'] },
     );

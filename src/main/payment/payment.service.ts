@@ -81,7 +81,7 @@ export class PaymentService extends BaseService<Payment> {
       'service',
       'parking',
       'parkingSlot',
-      'payments',
+      'payment',
       'car',
     ]);
     const walletCustomer = await this.walletService.getWalletMe(user.id);

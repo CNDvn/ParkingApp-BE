@@ -19,10 +19,6 @@ class Payment extends BaseEntity {
   @Column('datetime', { name: 'EndTime', default: () => `now()` })
   public endTime: Date;
 
-  @AutoMap()
-  @Column('varchar', { name: 'Type', nullable: false })
-  public type: string;
-
   @OneToOne(() => Transaction, (transaction) => transaction.payment)
   public transaction: Transaction;
 
