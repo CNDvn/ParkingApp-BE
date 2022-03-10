@@ -25,8 +25,8 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
 import { RoleModule } from './main/role/role.module';
-import { TranferTypeModule } from './main/tranfer-type/tranfer-type.module';
-import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
+import { BankModule } from './main/bank/bank.module';
+import { CardModule } from './main/card/card.module';
 import { ImageModule } from './main/image/image.module';
 import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
 import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.module';
@@ -69,8 +69,8 @@ import { RedisModule } from './redis/redis.module';
     PriceListDetailModule,
     AuthModule,
     RoleModule,
-    TranferTypeModule,
-    CashTransferModule,
+    BankModule,
+    CardModule,
     ImageModule,
     AutoMapperModuleModule,
     VnpayModule,
