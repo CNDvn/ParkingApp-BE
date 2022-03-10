@@ -71,6 +71,7 @@ export class ParkingRepository extends Repository<Parking> {
       .leftJoinAndSelect('parking.parkingSlots', 'parking_slot')
       .leftJoinAndSelect('parking.business', 'business')
       .leftJoinAndSelect('parking.priceLists', 'priceLists')
+      .leftJoinAndSelect('priceLists.parking', 'parkingPrice')
       .andWhere('priceLists.status = :statusPriceList', {
         statusPriceList: StatusEnum.ACTIVE,
       })
