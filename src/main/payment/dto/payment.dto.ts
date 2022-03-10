@@ -7,7 +7,4 @@ export class PaymentDto extends BaseDto {
 
   @AutoMap()
   public endTime: Date;
-
-  @AutoMap()
-  public type: string;
 }
