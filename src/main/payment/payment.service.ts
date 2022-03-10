@@ -16,6 +16,10 @@ import User from '../user/user.entity';
 import { ParkingService } from '../parking/parking.service';
 import { UserService } from '../user/user.service';
 import { TransactionService } from '../transaction/transaction.service';
+import { SharedService } from '../../shared/shared/shared.service';
+import { StatusEnum } from '../../utils/status.enum';
+import { CarService } from '../car/car.service';
+import { ParkingSlotService } from '../parking-slot/parking-slot.service';
 
 @Injectable()
 export class PaymentService extends BaseService<Payment> {
@@ -27,6 +31,9 @@ export class PaymentService extends BaseService<Payment> {
     private parkingService: ParkingService,
     private userService: UserService,
     private transactionService: TransactionService,
+    private sharedService: SharedService,
+    private carService: CarService,
+    private parkingSlotService: ParkingSlotService,
   ) {
     super(paymentRepository);
   }
@@ -34,8 +41,7 @@ export class PaymentService extends BaseService<Payment> {
   async createPayment(booking: Booking, wallet: Wallet): Promise<Payment> {
     const endTime = new Date();
     const diff = Math.abs(endTime.getTime() - booking.startTime.getTime());
-    const hours = Math.floor(diff / 1000 / 60 / 60);
-    const amount = hours * booking.price; //cần làm lại cho đúng thuật toán tính tiền
+    const amount = this.sharedService.calculateTotalAmount(booking.price, diff);
 
     if (amount > wallet.frozenMoney + wallet.currentBalance)
       throw new BadRequestException(
@@ -44,6 +50,27 @@ export class PaymentService extends BaseService<Payment> {
 
     return await this.paymentRepository.save({
       booking: booking,
+      endTime: endTime,
+      amount: amount,
+    });
+  }
+
+  async updatePayment(
+    idPayment: string,
+    booking: Booking,
+    wallet: Wallet,
+  ): Promise<Payment> {
+    const endTime = new Date();
+    const diff = Math.abs(endTime.getTime() - booking.startTime.getTime());
+    const amount = this.sharedService.calculateTotalAmount(booking.price, diff);
+
+    if (amount > wallet.frozenMoney + wallet.currentBalance)
+      throw new BadRequestException(
+        'There is not enough money in your wallet for checkout',
+      );
+
+    return await this.paymentRepository.save({
+      id: idPayment,
       endTime: endTime,
       amount: amount,
     });
@@ -70,11 +97,23 @@ export class PaymentService extends BaseService<Payment> {
       ).id,
     );
 
-    return await this.transactionService.createTransaction(
+    const transaction = await this.transactionService.createTransaction(
       walletCustomer,
       walletBusiness,
       booking.payment,
       booking,
     );
+
+    if (transaction) {
+      await this.bookService.update(booking.id, { status: StatusEnum.PAID });
+      await this.carService.update(booking.car.id, {
+        status: StatusEnum.ACTIVE,
+      });
+      await this.parkingSlotService.update(booking.parkingSlot.id, {
+        status: StatusEnum.EMPTY,
+      });
+    }
+
+    return transaction;
   }
 }

@@ -6,7 +6,6 @@ import Wallet from '../wallet/wallet.entity';
 import Payment from '../payment/payment.entity';
 import Booking from '../booking/booking.entity';
 import { WalletService } from '../wallet/wallet.service';
-import paymentEntity from '../payment/payment.entity';
 
 @Injectable()
 export class TransactionService extends BaseService<Transaction> {
@@ -30,8 +29,6 @@ export class TransactionService extends BaseService<Transaction> {
       );
 
     const priceFiveHours = booking.price * 5;
-
-    let addToDB: () => Promise<Transaction>;
 
     if (priceFiveHours >= amount) {
       const addToDB = async (): Promise<Transaction> => {

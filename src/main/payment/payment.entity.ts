@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Booking from '../booking/booking.entity';
 import Transaction from '../transaction/transaction.entity';

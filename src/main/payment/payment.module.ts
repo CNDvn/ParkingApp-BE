@@ -9,6 +9,9 @@ import { WalletModule } from '../wallet/wallet.module';
 import { BookingModule } from '../booking/booking.module';
 import { ParkingModule } from '../parking/parking.module';
 import { UserModule } from '../user/user.module';
+import { SharedModule } from '../../shared/shared/shared.module';
+import { CarModule } from '../car/car.module';
+import { ParkingSlotModule } from '../parking-slot/parking-slot.module';
 
 @Module({
   imports: [
@@ -19,6 +22,9 @@ import { UserModule } from '../user/user.module';
     ParkingModule,
     UserModule,
     TransactionModule,
+    SharedModule,
+    CarModule,
+    ParkingSlotModule,
   ],
   controllers: [PaymentController],
   providers: [PaymentService, PaymentProfile],
