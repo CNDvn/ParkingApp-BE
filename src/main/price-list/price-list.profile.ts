@@ -1,5 +1,5 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { Mapper } from '@automapper/core';
+import { mapFrom, Mapper } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import PriceListDTO from './dto/price-list.dto';
 import PriceList from './price-list.entity';
@@ -12,7 +12,12 @@ export class PriceListProfile extends AutomapperProfile {
 
   mapProfile() {
     return (mapper: Mapper): void => {
-      mapper.createMap(PriceList, PriceListDTO);
+      mapper.createMap(PriceList, PriceListDTO).forMember(
+        (destination: PriceListDTO) => destination.nameParking,
+        mapFrom((source: PriceList) => {
+          return source.parking.name;
+        }),
+      );
     };
   }
 }

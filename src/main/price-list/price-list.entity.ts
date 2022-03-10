@@ -21,7 +21,7 @@ class PriceList extends BaseEntity {
   )
   public priceListDetails: PriceListDetail[];
 
-  @AutoMap({ typeFn: () => Parking })
+  // @AutoMap({ typeFn: () => Parking })
   @ManyToOne(() => Parking, (parking) => parking.priceLists)
   @JoinColumn({ name: 'ParkingId' })
   public parking: Parking;
