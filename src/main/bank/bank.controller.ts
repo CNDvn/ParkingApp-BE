@@ -6,23 +6,24 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
 import { MapInterceptor } from '@automapper/nestjs';
+import { Public } from '../auth/public';
 
-@Controller('transfer-types')
+@Controller('banks')
 @ApiBearerAuth()
-@ApiTags('TransferTypes')
+@ApiTags('Banks')
 export class BankController {
-  constructor(private readonly tranferTypeService: BankService) {}
+  constructor(private readonly bankService: BankService) {}
 
   @Post()
   @Roles(RoleEnum.ADMIN)
   @UseInterceptors(MapInterceptor(BankDto, Bank))
-  async createType(@Body() dto: BankDto): Promise<Bank> {
-    return await this.tranferTypeService.addType(dto);
+  async createBank(@Body() dto: BankDto): Promise<Bank> {
+    return await this.bankService.addBank(dto);
   }
 
   @Get()
   @UseInterceptors(MapInterceptor(BankDto, Bank, { isArray: true }))
-  async GetAllType(): Promise<Bank[]> {
-    return await this.tranferTypeService.getAll();
+  async GetAllBank(): Promise<Bank[]> {
+    return await this.bankService.getAll();
   }
 }

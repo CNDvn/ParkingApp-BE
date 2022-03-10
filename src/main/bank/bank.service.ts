@@ -6,14 +6,18 @@ import { BankDto } from './dto/bank.dto';
 
 @Injectable()
 export class BankService extends BaseService<Bank> {
-  constructor(private transferTypeRepository: BankRepository) {
-    super(transferTypeRepository);
+  constructor(private bankRepository: BankRepository) {
+    super(bankRepository);
   }
 
-  async addType(bank: BankDto): Promise<Bank> {
-    return await this.transferTypeRepository.save({
+  async addBank(bank: BankDto): Promise<Bank> {
+    return await this.bankRepository.save({
       name: bank.name,
       bankCode: bank.bankCode,
     });
+  }
+
+  async getByBankCode(bankCode: string): Promise<Bank> {
+    return await this.bankRepository.findOne({ where: { bankCode: bankCode } });
   }
 }

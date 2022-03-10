@@ -29,6 +29,7 @@ export class UsersRepository extends Repository<User> {
       const customer = this.createQueryBuilder('user')
         .leftJoinAndSelect('user.role', 'role')
         .leftJoinAndSelect('user.customer', 'customer')
+        .leftJoinAndSelect('user.cards', 'cards')
         .where('user.id = :id', { id: user.id })
         .getOne();
       return customer;
@@ -36,6 +37,7 @@ export class UsersRepository extends Repository<User> {
       const business = this.createQueryBuilder('user')
         .leftJoinAndSelect('user.role', 'role')
         .leftJoinAndSelect('user.business', 'business')
+        .leftJoinAndSelect('user.cards', 'cards')
         .where('user.id = :id', { id: user.id })
         .getOne();
       return business;
@@ -101,6 +103,7 @@ export class UsersRepository extends Repository<User> {
       .leftJoinAndSelect('user.customer', 'customer')
       .leftJoinAndSelect('user.business', 'business')
       .leftJoinAndSelect('user.role', 'roles')
+      .leftJoinAndSelect('user.cards', 'cards')
       .andWhere('roles.name LIKE :role', {
         role: roles === 'no' ? '%%' : `${roles}%`,
       })

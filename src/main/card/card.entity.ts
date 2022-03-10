@@ -3,6 +3,7 @@ import BaseEntity from '../base/base.entity';
 import Bank from '../bank/bank.entity';
 import Transaction from '../transaction/transaction.entity';
 import { AutoMap } from '@automapper/classes';
+import User from '../user/user.entity';
 
 @Entity()
 class Card extends BaseEntity {
@@ -25,6 +26,10 @@ class Card extends BaseEntity {
 
   @OneToMany(() => Transaction, (transaction) => transaction.card)
   public transactions: Transaction[];
+
+  @ManyToOne(() => User, (user) => user.cards)
+  @JoinColumn({ name: 'UserId' })
+  public user: User;
 }
 
 export default Card;

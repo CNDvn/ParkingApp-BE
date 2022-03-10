@@ -1,14 +1,17 @@
+import { BankDto } from '../../bank/dto/bank.dto';
 import { BaseDto } from '../../base/base.dto';
-import Bank from '../../bank/bank.entity';
+import { AutoMap } from '@automapper/classes';
 
 export class CardDto extends BaseDto {
-  public amount: number;
-
+  @AutoMap()
   public dateValidFrom: string;
 
+  @AutoMap()
   public cardNumber: string;
 
+  @AutoMap()
   public cardHolder: string;
 
-  public bank: Bank;
+  @AutoMap({ typeFn: () => BankDto })
+  public bank: BankDto;
 }
