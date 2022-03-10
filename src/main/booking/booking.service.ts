@@ -74,7 +74,7 @@ export class BookingService extends BaseService<Booking> {
       });
       return await this.bookingRepository.findOne({
         where: { id: booking.id },
-        relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'],
+        relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
       });
     };
     return this.bookingRepository.transactionCustom(addToDB);
@@ -113,7 +113,7 @@ export class BookingService extends BaseService<Booking> {
       });
       return await this.bookingRepository.findOne({
         where: booking.id,
-        relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'],
+        relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
       });
     };
     return this.bookingRepository.transactionCustom(addToDB);
@@ -123,7 +123,7 @@ export class BookingService extends BaseService<Booking> {
     user: User,
     parkingId: string,
     carId: string,
-  ): Promise<Payment[]> {
+  ): Promise<Payment> {
     const car = await this.carService.getAllOwnCar(user, carId);
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
@@ -133,11 +133,16 @@ export class BookingService extends BaseService<Booking> {
         parking: parking,
         status: StatusEnum.IN_PARKING,
       },
-      { relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'] },
+      { relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'] },
     );
-    if (booking.payments.length === 0)
-      return [await this.paymentService.createPayment(booking, wallet)];
-    return booking.payments;
+    if (!booking.payment)
+      return await this.paymentService.createPayment(booking, wallet);
+
+    return await this.paymentService.updatePayment(
+      booking.payment.id,
+      booking,
+      wallet,
+    );
   }
 
   async getPresentBooking(user: User, carId: string): Promise<Booking> {
@@ -146,7 +151,7 @@ export class BookingService extends BaseService<Booking> {
     const result = (
       await this.bookingRepository.find({
         where: { car: car },
-        relations: ['service', 'parking', 'parkingSlot', 'payments', 'car'],
+        relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
       })
     ).filter((booking) => booking.status !== StatusEnum.PAID);
 

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import CashTransfer from '../cash-transfer/cash-transfer.entity';
 import Payment from '../payment/payment.entity';
@@ -23,7 +23,7 @@ class Transaction extends BaseEntity {
   @JoinColumn({ name: 'FormWalletId' })
   public walletForm: Wallet;
 
-  @ManyToOne(() => Payment, (payment) => payment.transactions)
+  @OneToOne(() => Payment, (payment) => payment.transaction)
   @JoinColumn({ name: 'PaymentId' })
   public payment: Payment;
 
