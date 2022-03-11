@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { BankService } from './bank.service';
 import Bank from './bank.entity';
-import { BankDto } from './dto/bank.dto';
+import BankDto from './dto/bank.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
