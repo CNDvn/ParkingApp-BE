@@ -1,6 +1,5 @@
 import { Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseDto } from '../../base/base.dto';
 
 export class CardCreateDto {
   @Matches(/[0-9]{2}-[0-9]{4}/, { message: 'dateValidFrom invalid' })

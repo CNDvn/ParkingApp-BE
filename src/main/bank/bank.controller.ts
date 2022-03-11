@@ -6,7 +6,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../auth/role/role.enum';
 import { Roles } from '../auth/role/roles.decorator';
 import { MapInterceptor } from '@automapper/nestjs';
-import { Public } from '../auth/public';
 
 @Controller('banks')
 @ApiBearerAuth()

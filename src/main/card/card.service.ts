@@ -1,4 +1,3 @@
-import { CardController } from './card.controller';
 import { BankService } from './../bank/bank.service';
 import { CardCreateDto } from './dto/card-create.dto';
 import { CardRepository } from './card.repository';
