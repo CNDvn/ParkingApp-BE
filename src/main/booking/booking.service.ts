@@ -10,7 +10,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import Booking from './booking.entity';
 import { PaymentService } from '../payment/payment.service';
 import Payment from '../payment/payment.entity';
-import ParkingSlot from '../parking-slot/parking-slot.entity';
 
 @Injectable()
 export class BookingService extends BaseService<Booking> {
