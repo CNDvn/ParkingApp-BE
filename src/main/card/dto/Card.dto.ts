@@ -2,7 +2,7 @@ import { BankDto } from '../../bank/dto/bank.dto';
 import { BaseDto } from '../../base/base.dto';
 import { AutoMap } from '@automapper/classes';
 
-export class CardDto extends BaseDto {
+export default class CardDto extends BaseDto {
   @AutoMap()
   public dateValidFrom: string;
 

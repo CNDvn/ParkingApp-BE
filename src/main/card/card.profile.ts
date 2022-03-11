@@ -1,8 +1,8 @@
-import { CardDto } from './dto/card.dto';
 import { Injectable } from '@nestjs/common';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Mapper, MappingProfile } from '@automapper/core';
 import Card from './card.entity';
+import CardDto from './dto/card.dto';
 
 @Injectable()
 export class CardProfile extends AutomapperProfile {
