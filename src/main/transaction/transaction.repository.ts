@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { EntityRepository, getConnection, Repository } from 'typeorm';
 import Wallet from '../wallet/wallet.entity';
 import Transaction from './transaction.entity';
@@ -15,10 +16,18 @@ export class TransactionRepository extends Repository<Transaction> {
     await queryRunner.startTransaction();
 
     try {
-      walletCustomer = await queryRunner.manager.save(walletCustomer);
-      walletBusiness = await queryRunner.manager.save(walletBusiness);
-      const result = await queryRunner.manager.save(transaction);
-      await queryRunner.commitTransaction();
+      walletCustomer = await queryRunner.manager.save<Wallet>(walletCustomer);
+      walletBusiness = await queryRunner.manager.save<Wallet>(walletBusiness);
+
+      const a = queryRunner.manager.create(Transaction, {
+        amount: transaction.amount,
+        payment: transaction.payment,
+        walletForm: walletCustomer,
+        walletTo: walletBusiness,
+      });
+      const result = await queryRunner.manager.save<Transaction>(a);
+      // await queryRunner.commitTransaction();
+      await queryRunner.rollbackTransaction();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -26,6 +35,10 @@ export class TransactionRepository extends Repository<Transaction> {
       console.log('error transaction in Booking repository');
       // eslint-disable-next-line no-console
       console.log(error);
+      throw new HttpException(
+        'The transaction failed!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     } finally {
       await queryRunner.release();
     }

@@ -57,7 +57,9 @@ export class TransactionService extends BaseService<Transaction> {
       walletCustomer.currentBalance =
         +walletCustomer.currentBalance - remainingAmount;
 
-      walletBusiness.currentBalance = +walletBusiness.currentBalance + amount;
+      walletBusiness.currentBalance =
+        parseFloat(walletBusiness.currentBalance.toString()) +
+        parseFloat(amount.toString());
 
       const transaction: Transaction = new Transaction();
       transaction.amount = amount;

@@ -139,6 +139,10 @@ export class UserService extends BaseService<User> {
   }
 
   async findUserByBusiness(business: Business): Promise<User> {
-    return await this.userRepository.findOne({ where: { business: business } });
+    const user = await this.userRepository.findOne({
+      where: { business: business },
+      relations: ['business'],
+    });
+    return user;
   }
 }
