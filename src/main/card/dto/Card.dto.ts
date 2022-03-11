@@ -1,4 +1,4 @@
-import { BankDto } from '../../bank/dto/bank.dto';
+import BankDto from '../../bank/dto/bank.dto';
 import { BaseDto } from '../../base/base.dto';
 import { AutoMap } from '@automapper/classes';
 

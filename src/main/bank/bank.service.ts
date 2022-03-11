@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseService } from '../base/base.service';
 import Bank from './bank.entity';
 import { BankRepository } from './bank.repository';
-import { BankDto } from './dto/bank.dto';
+import BankDto from './dto/bank.dto';
 
 @Injectable()
 export class BankService extends BaseService<Bank> {
