@@ -31,13 +31,17 @@ export class CardService extends BaseService<Card> {
   async getOwnCard(user: User, id: string): Promise<Card> {
     const card = await this.cardRepository.findOne({
       where: { id: id, user: user },
+      relations: ['bank'],
     });
     if (!card) throw new BadRequestException('This card not found');
     return card;
   }
 
   async getAllOwnCard(user: User): Promise<Card[]> {
-    const cards = await this.cardRepository.find({ where: { user: user } });
+    const cards = await this.cardRepository.find({
+      where: { user: user },
+      relations: ['bank'],
+    });
     return cards;
   }
 
