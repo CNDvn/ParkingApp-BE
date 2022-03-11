@@ -26,8 +26,7 @@ export class TransactionRepository extends Repository<Transaction> {
         walletTo: walletBusiness,
       });
       const result = await queryRunner.manager.save<Transaction>(a);
-      // await queryRunner.commitTransaction();
-      await queryRunner.rollbackTransaction();
+      await queryRunner.commitTransaction();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
