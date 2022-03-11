@@ -14,7 +14,7 @@ import Card from './card.entity';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import User from '../user/user.entity';
 import { MapInterceptor } from '@automapper/nestjs';
-import { CardDto } from './dto/card.dto';
+import CardDto from './dto/card.dto';
 
 @Controller('cards')
 @ApiTags('Cards')
