@@ -36,14 +36,14 @@ export class UserService extends BaseService<User> {
   async findByUsername(username: string): Promise<User> {
     return await this.userRepository.findOne(
       { username },
-      { relations: ['role', 'customer', 'business'] },
+      { relations: ['role', 'customer', 'business', 'cards'] },
     );
   }
 
   async findUserByOTP(otp: number): Promise<User> {
     return await this.userRepository.findOne(
       { phoneNumberVerifyCode: otp },
-      { relations: ['role', 'customer', 'business'] },
+      { relations: ['role', 'customer', 'business', 'cards'] },
     );
   }
 

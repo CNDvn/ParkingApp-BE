@@ -1,11 +1,12 @@
 import { AutoMap } from '@automapper/classes';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
 import Business from '../business/business.entity';
 import Customer from '../customer/customer.entity';
 import Role from '../role/role.entity';
 import Wallet from '../wallet/wallet.entity';
 import { StatusEnum } from '../../utils/status.enum';
+import Card from '../card/card.entity';
 
 @Entity()
 class User extends BaseEntity {
@@ -106,6 +107,9 @@ class User extends BaseEntity {
   @AutoMap({ typeFn: () => Role })
   @ManyToOne(() => Role, (role) => role.users, { onDelete: 'CASCADE' })
   public role: Role;
+
+  @OneToMany(() => Card, (card) => card.user)
+  public cards: Card[];
 }
 
 export default User;
