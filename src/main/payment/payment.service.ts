@@ -91,11 +91,9 @@ export class PaymentService extends BaseService<Payment> {
       ])
     ).business;
 
-    const walletBusiness = await this.walletService.getWalletMe(
-      (
-        await this.userService.findUserByBusiness(business)
-      ).id,
-    );
+    const userExist = await this.userService.findUserByBusiness(business);
+
+    const walletBusiness = await this.walletService.getWalletMe(userExist.id);
 
     const transaction = await this.transactionService.createTransaction(
       walletCustomer,

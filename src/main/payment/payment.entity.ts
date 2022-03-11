@@ -23,7 +23,7 @@ class Payment extends BaseEntity {
   public transaction: Transaction;
 
   @OneToOne(() => Booking, (booking) => booking.payment)
-  @JoinColumn({ name: 'PaymentId' })
+  @JoinColumn({ name: 'BookingId' })
   public booking: Booking;
 }
 
