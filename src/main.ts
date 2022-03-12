@@ -66,6 +66,7 @@ async function bootstrap(): Promise<void> {
     // },
     exposedHeaders: ['Set-Cookie'],
   });
+  process.env.TZ = 'Asia/Ho_Chi_Minh';
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port, () => {
     // eslint-disable-next-line no-console
