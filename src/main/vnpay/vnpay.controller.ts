@@ -37,6 +37,7 @@ export class VnpayController {
   }
 
   @Get('/ipn')
+  @Public()
   vnpayIpn(@Query() vnpayDto: VnpayDto): { RspCode: string; Message: string } {
     return this.vnpayService.vnpayIpn(vnpayDto);
   }

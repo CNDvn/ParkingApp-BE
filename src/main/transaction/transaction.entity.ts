@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import Card from '../card/card.entity';
+import CashTransfer from '../cash-transfer/cash-transfer.entity';
 import Payment from '../payment/payment.entity';
 import Wallet from '../wallet/wallet.entity';
 
@@ -27,8 +27,8 @@ class Transaction extends BaseEntity {
   @JoinColumn({ name: 'PaymentId' })
   public payment: Payment;
 
-  @ManyToOne(() => Card, (card) => card.transactions)
-  @JoinColumn({ name: 'CardId' })
-  public card: Card;
+  @OneToOne(() => CashTransfer, (cashTransfer) => cashTransfer.transaction)
+  @JoinColumn({ name: 'CashTransferId' })
+  public cashTransfer: CashTransfer;
 }
 export default Transaction;

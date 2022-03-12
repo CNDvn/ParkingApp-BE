@@ -1,4 +1,4 @@
-import { Injectable, Query } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as querystring from 'qs';
 import * as crypto from 'crypto';
@@ -75,7 +75,13 @@ export class VnpayService {
       // kiem tra xem du lieu trong db co hop le khong va thong bao ket qua
       return { message: 'success', code: vnpayDto.vnp_ResponseCode };
     } else {
-      return { message: 'success', code: '97' };
+      // return { message: 'Invalid signature', code: '97' };
+      // eslint-disable-next-line no-console
+      console.log({ message: 'Invalid signature', code: '97' });
+      throw new HttpException(
+        'Invalid signature',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

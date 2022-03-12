@@ -57,7 +57,7 @@ export class BookingService extends BaseService<Booking> {
       await this.parkingSlotService.getAllSlotIdParking(parkingId)
     ).find((item) => item.status === StatusEnum.EMPTY);
     if (!slotEmpty)
-      throw new BadRequestException('This parking not emty slot now');
+      throw new BadRequestException('This parking not empty slot now');
 
     slotEmpty.status = StatusEnum.Full;
     car.status = StatusEnum.BOOKED;

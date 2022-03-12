@@ -5,9 +5,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as firebaseAdmin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { resolve } from 'path';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(ConfigService);
   const port: number = configService.get('PORT');
@@ -66,6 +68,13 @@ async function bootstrap(): Promise<void> {
     // },
     exposedHeaders: ['Set-Cookie'],
   });
+
+  //hbs
+  app.useStaticAssets(resolve('./src/public'));
+  app.setBaseViewsDir(resolve('./src/views'));
+  app.setViewEngine('hbs');
+  //end hbs
+
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port, () => {
     // eslint-disable-next-line no-console

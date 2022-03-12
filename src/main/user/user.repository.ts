@@ -29,7 +29,6 @@ export class UsersRepository extends Repository<User> {
       const customer = this.createQueryBuilder('user')
         .leftJoinAndSelect('user.role', 'role')
         .leftJoinAndSelect('user.customer', 'customer')
-        .leftJoinAndSelect('user.cards', 'cards')
         .where('user.id = :id', { id: user.id })
         .getOne();
       return customer;
@@ -37,7 +36,6 @@ export class UsersRepository extends Repository<User> {
       const business = this.createQueryBuilder('user')
         .leftJoinAndSelect('user.role', 'role')
         .leftJoinAndSelect('user.business', 'business')
-        .leftJoinAndSelect('user.cards', 'cards')
         .where('user.id = :id', { id: user.id })
         .getOne();
       return business;
@@ -54,7 +52,7 @@ export class UsersRepository extends Repository<User> {
     if (result.affected === 0) {
       return 'This user not exist';
     }
-    return `Delete Successfull ${id}`;
+    return `Delete Successfully ${id}`;
   }
 
   async updateUser(id: string, data: UserUpdateProfileDto): Promise<string> {
@@ -103,12 +101,11 @@ export class UsersRepository extends Repository<User> {
       .leftJoinAndSelect('user.customer', 'customer')
       .leftJoinAndSelect('user.business', 'business')
       .leftJoinAndSelect('user.role', 'roles')
-      .leftJoinAndSelect('user.cards', 'cards')
       .andWhere('roles.name LIKE :role', {
         role: roles === 'no' ? '%%' : `${roles}%`,
       })
       .andWhere(
-        '(user.firstName LIKE :search OR user.lastname LIKE :search OR user.username LIKE :search OR user.email LIKE :search OR user.phoneNumber LIKE :search)',
+        '(user.firstName LIKE :search OR user.lastName LIKE :search OR user.username LIKE :search OR user.email LIKE :search OR user.phoneNumber LIKE :search)',
         {
           search: search ? `%${search}%` : '%%',
         },
