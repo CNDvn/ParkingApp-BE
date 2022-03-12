@@ -75,6 +75,8 @@ async function bootstrap(): Promise<void> {
   app.setViewEngine('hbs');
   //end hbs
 
+  process.env.TZ = 'Asia/Ho_Chi_Minh';
+
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port, () => {
     // eslint-disable-next-line no-console

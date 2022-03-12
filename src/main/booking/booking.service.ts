@@ -33,10 +33,16 @@ export class BookingService extends BaseService<Booking> {
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
 
-    for (const item of parking.priceLists[0].priceListDetails) {
-      if (item.typeCar.id !== car.typeCar.id) {
-        throw new BadRequestException('This parking can not contain your car');
-      }
+    // for (const item of parking.priceLists[0].priceListDetails) {
+    //   if (item.typeCar.id !== car.typeCar.id) {
+    //     throw new BadRequestException('This parking can not contain your car');
+    //   }
+    // }
+    const carPrice = parking.priceLists[0].priceListDetails.find((item) => {
+      return item.typeCar.id === car.typeCar.id;
+    });
+    if (!carPrice) {
+      throw new BadRequestException('This parking can not contain your car');
     }
 
     if (car.status !== StatusEnum.ACTIVE)
@@ -68,6 +74,7 @@ export class BookingService extends BaseService<Booking> {
     booking.parkingSlot = slotEmpty;
     booking.checkinTime = null;
     booking.price = priceAHour.price;
+    booking.startTime = new Date();
 
     const result = await this.bookingRepository.bookSlot(
       wallet,
@@ -143,10 +150,12 @@ export class BookingService extends BaseService<Booking> {
       })
     ).filter((booking) => booking.status !== StatusEnum.PAID);
 
-    if (result.length !== 1)
+    if (result.length > 1)
       throw new BadRequestException(
         'Get booking invalid. please contact with my admin system',
       );
+    if (result.length < 1) throw new BadRequestException('This car is free');
+
     return result[0];
   }
 
@@ -158,5 +167,19 @@ export class BookingService extends BaseService<Booking> {
       where: { id: bookingId },
       relations: relations,
     });
+  }
+
+  async getHistoryBookingByIdCar(
+    carID: string,
+    user: User,
+  ): Promise<Booking[]> {
+    const car = await this.carService.getOwnCar(user, carID);
+    const bookings = await this.bookingRepository.find({
+      relations: ['car', 'parkingSlot', 'service', 'parking', 'payment'],
+      where: {
+        car: car,
+      },
+    });
+    return bookings;
   }
 }

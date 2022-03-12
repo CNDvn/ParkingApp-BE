@@ -24,7 +24,7 @@ export class TransactionService extends BaseService<Transaction> {
     booking: Booking,
   ): Promise<Transaction> {
     const amount = payment.amount;
-    if (+walletCustomer.currentBalance + walletCustomer.frozenMoney < amount)
+    if (+walletCustomer.currentBalance + +walletCustomer.frozenMoney < amount)
       throw new BadRequestException(
         'There is not enough money in your wallet for checkout',
       );

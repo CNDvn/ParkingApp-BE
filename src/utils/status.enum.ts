@@ -9,6 +9,7 @@ export enum StatusEnum {
   CHECK_IN = 'checkIn',
   PAID = 'paid',
   PENDING = 'pending',
+  REJECT = 'reject',
 }
 
 export enum StatusSortEnum {

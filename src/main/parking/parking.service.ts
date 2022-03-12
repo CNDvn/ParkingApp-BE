@@ -11,7 +11,9 @@ import { BaseService } from '../base/base.service';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
-import ParkingFilterPagination from './dto/parking-pagination.filter';
+import ParkingFilterPagination, {
+  ParkingFilterPaginationStatus,
+} from './dto/parking-pagination.filter';
 import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
 import { ParkingRepository } from './parking.repository';
@@ -105,12 +107,19 @@ export class ParkingService extends BaseService<Parking> {
     throw new HttpException('Parking not existed', HttpStatus.BAD_REQUEST);
   }
 
+  async rejectParking(idParking: string): Promise<Parking> {
+    const parking = await this.parkingRepository.getParking(idParking);
+    if (parking)
+      return await this.update(idParking, { status: StatusEnum.REJECT });
+    throw new HttpException('Parking not existed', HttpStatus.BAD_REQUEST);
+  }
+
   async getParkingProcessing(
-    parkingFilterPagination: ParkingFilterPagination,
+    parkingFilterPagination: ParkingFilterPaginationStatus,
   ): Promise<[ParkingDTO[], number]> {
     const [list, count] = await this.parkingRepository.getAllParkings(
       parkingFilterPagination,
-      StatusEnum.PROCESSING,
+      parkingFilterPagination.statusParking,
     );
     const parkingDTO: ParkingDTO[] = [];
     for (const item of list) {
