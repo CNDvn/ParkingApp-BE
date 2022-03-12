@@ -1,9 +1,11 @@
+import { ParkingInfoDto } from './../../parking/dto/parking-info.dto';
 import { BaseDto } from '../../base/base.dto';
 import { AutoMap } from '@automapper/classes';
 import ServiceDTO from '../../service/service.dto';
 import ParkingSlotDTO from '../../parking-slot/parking-slot.dto';
 import { PaymentDto } from '../../payment/dto/payment.dto';
 import { CarResponseDto } from '../../car/dto/car-response.dto';
+import ParkingDTO from 'src/main/parking/dto/parking.dto';
 
 export class BookingDto extends BaseDto {
   @AutoMap()
@@ -29,4 +31,7 @@ export class BookingDto extends BaseDto {
 
   @AutoMap({ typeFn: () => CarResponseDto })
   public car: CarResponseDto;
+
+  @AutoMap({ typeFn: () => ParkingInfoDto })
+  public parking: ParkingInfoDto;
 }

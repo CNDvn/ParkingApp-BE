@@ -143,10 +143,12 @@ export class BookingService extends BaseService<Booking> {
       })
     ).filter((booking) => booking.status !== StatusEnum.PAID);
 
-    if (result.length !== 1)
+    if (result.length > 1)
       throw new BadRequestException(
         'Get booking invalid. please contact with my admin system',
       );
+    if (result.length < 1) throw new BadRequestException('This car is free');
+
     return result[0];
   }
 

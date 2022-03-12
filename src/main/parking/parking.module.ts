@@ -1,3 +1,4 @@
+import { ParkingInfoProfile } from './parking-info.profile';
 import {
   MiddlewareConsumer,
   Module,
@@ -23,7 +24,12 @@ import { RedisModule } from 'src/redis/redis.module';
     RedisModule,
   ],
   controllers: [ParkingController],
-  providers: [ParkingService, ParkingProfile, ParkingDetailProfile],
+  providers: [
+    ParkingService,
+    ParkingProfile,
+    ParkingDetailProfile,
+    ParkingInfoProfile,
+  ],
   exports: [ParkingService],
 })
 export class ParkingModule implements NestModule {
