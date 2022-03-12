@@ -68,6 +68,7 @@ export class BookingService extends BaseService<Booking> {
     booking.parkingSlot = slotEmpty;
     booking.checkinTime = null;
     booking.price = priceAHour.price;
+    booking.startTime = new Date();
 
     const result = await this.bookingRepository.bookSlot(
       wallet,
