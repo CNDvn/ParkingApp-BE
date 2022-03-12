@@ -64,7 +64,9 @@ export class ParkingController {
     @Body() baseMultipleFiles: BaseMultipleFiles,
     @Param('id') id: string,
   ): Promise<string> {
-    const data = await this.parkingService.getParking(id);
+    const data = await this.parkingService.findByIdAndRelations(id, [
+      'business',
+    ]);
     if (!data) {
       throw new BadRequestException('parking not found');
     }
