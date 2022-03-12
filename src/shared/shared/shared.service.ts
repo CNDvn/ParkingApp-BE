@@ -111,8 +111,8 @@ export class SharedService {
         amountOneHour * 2 +
         amountOneHour * 2 +
         amountOneHour * 2 * (5 / 100) +
-        amountOneHour * 4 +
-        amountOneHour * 4 * (10 / 100) +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (10 / 100) +
         amountOneHour * (hourBook - 6) +
         amountOneHour * (hourBook - 6) * (15 / 100);
     } else if (hourBook > 8 && hourBook <= 10) {
@@ -120,10 +120,10 @@ export class SharedService {
         amountOneHour * 2 +
         amountOneHour * 2 +
         amountOneHour * 2 * (5 / 100) +
-        amountOneHour * 4 +
-        amountOneHour * 4 * (10 / 100) +
-        amountOneHour * 6 +
-        amountOneHour * 6 * (15 / 100) +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (10 / 100) +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (15 / 100) +
         amountOneHour * (hourBook - 8) +
         amountOneHour * (hourBook - 8) * (20 / 100);
     } else if (hourBook > 10) {
@@ -131,14 +131,14 @@ export class SharedService {
         amountOneHour * 2 +
         amountOneHour * 2 +
         amountOneHour * 2 * (5 / 100) +
-        amountOneHour * 4 +
-        amountOneHour * 4 * (10 / 100) +
-        amountOneHour * 6 +
-        amountOneHour * 6 * (15 / 100) +
-        amountOneHour * 8 +
-        amountOneHour * 8 * (20 / 100) +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (10 / 100) +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (15 / 100) +
+        amountOneHour * 2 +
+        amountOneHour * 2 * (20 / 100) +
         amountOneHour * (hourBook - 10) +
-        amountOneHour * (hourBook - 10) * (20 / 100);
+        amountOneHour * (hourBook - 10) * (25 / 100);
     }
     return total;
   }
