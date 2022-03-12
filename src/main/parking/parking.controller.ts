@@ -31,7 +31,9 @@ import {
 import { ImageService } from '../image/image.service';
 import User from '../user/user.entity';
 import { ParkingCreateDTO } from './dto/parking-create.dto';
-import ParkingFilterPagination from './dto/parking-pagination.filter';
+import ParkingFilterPagination, {
+  ParkingFilterPaginationStatus,
+} from './dto/parking-pagination.filter';
 import ParkingDetailDto from './dto/parking-detail.dto';
 import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
@@ -86,10 +88,10 @@ export class ParkingController {
   }
 
   @Roles(RoleEnum.ADMIN)
-  @Get('/processing')
+  @Get('/admin')
   @UseInterceptors(HttpCacheInterceptor)
   async getParkingProcessing(
-    @Query() parkingFilterPagination: ParkingFilterPagination,
+    @Query() parkingFilterPagination: ParkingFilterPaginationStatus,
   ): Promise<IPaginateResponse<ParkingDTO> | { message: string }> {
     const [list, count] = await this.parkingService.getParkingProcessing(
       parkingFilterPagination,
@@ -189,5 +191,12 @@ export class ParkingController {
   @UseInterceptors(MapInterceptor(ParkingDetailDto, Parking))
   async confirmParking(@Param('id') id: string): Promise<Parking> {
     return await this.parkingService.confirmParking(id);
+  }
+
+  @Put('/:id/reject')
+  @Roles(RoleEnum.ADMIN)
+  @UseInterceptors(MapInterceptor(ParkingDetailDto, Parking))
+  async rejectParking(@Param('id') id: string): Promise<Parking> {
+    return await this.parkingService.rejectParking(id);
   }
 }
