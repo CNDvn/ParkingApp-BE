@@ -162,4 +162,18 @@ export class BookingService extends BaseService<Booking> {
       relations: relations,
     });
   }
+
+  async getHistoryBookingByIdCar(
+    carID: string,
+    user: User,
+  ): Promise<Booking[]> {
+    const car = await this.carService.getOwnCar(user, carID);
+    const bookings = await this.bookingRepository.find({
+      relations: ['car', 'parkingSlot', 'service', 'parkingSlot', 'parking'],
+      where: {
+        car: car,
+      },
+    });
+    return bookings;
+  }
 }
