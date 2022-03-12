@@ -169,7 +169,7 @@ export class BookingService extends BaseService<Booking> {
   ): Promise<Booking[]> {
     const car = await this.carService.getOwnCar(user, carID);
     const bookings = await this.bookingRepository.find({
-      relations: ['car', 'parkingSlot', 'service', 'parkingSlot', 'parking'],
+      relations: ['car', 'parkingSlot', 'service', 'parking', 'payment'],
       where: {
         car: car,
       },
