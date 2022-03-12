@@ -5,7 +5,6 @@ import ServiceDTO from '../../service/service.dto';
 import ParkingSlotDTO from '../../parking-slot/parking-slot.dto';
 import { PaymentDto } from '../../payment/dto/payment.dto';
 import { CarResponseDto } from '../../car/dto/car-response.dto';
-import ParkingDTO from 'src/main/parking/dto/parking.dto';
 
 export class BookingDto extends BaseDto {
   @AutoMap()
@@ -27,7 +26,7 @@ export class BookingDto extends BaseDto {
   public parkingSlot: ParkingSlotDTO;
 
   @AutoMap({ typeFn: () => PaymentDto })
-  public payments: PaymentDto[];
+  public payment: PaymentDto;
 
   @AutoMap({ typeFn: () => CarResponseDto })
   public car: CarResponseDto;

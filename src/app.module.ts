@@ -35,6 +35,7 @@ import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { VnpayModule } from './main/vnpay/vnpay.module';
 import { RedisModule } from './redis/redis.module';
+import { HistoryModule } from './main/history/history.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { RedisModule } from './redis/redis.module';
     ImageModule,
     AutoMapperModuleModule,
     VnpayModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [
