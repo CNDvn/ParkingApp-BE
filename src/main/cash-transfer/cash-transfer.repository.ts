@@ -1,7 +1,5 @@
 import { EntityRepository, getConnection, Repository } from 'typeorm';
 import CashTransfer from './cash-transfer.entity';
-import Image from '../image/image.entity';
-import Car from '../car/car.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { VnpayDto } from '../vnpay/vnpay.dto';
 import Transaction from '../transaction/transaction.entity';

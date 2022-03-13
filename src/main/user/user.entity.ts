@@ -79,7 +79,7 @@ class User extends BaseEntity {
   public email: string;
 
   @AutoMap()
-  @Column('varchar', { name: 'Address', nullable: false })
+  @Column('nvarchar', { name: 'Address', nullable: false })
   public address: string;
 
   @AutoMap()

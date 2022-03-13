@@ -44,7 +44,7 @@ export class TypeCarController {
   @Get()
   @UseInterceptors(MapInterceptor(TypeCarDto, TypeCar, { isArray: true }))
   async getAll(): Promise<TypeCar[]> {
-    return await this.typeCarService.getAll();
+    return await this.typeCarService.getAllTypeCars();
   }
 
   @Get('/:id')

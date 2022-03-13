@@ -1,4 +1,4 @@
-import { Controller, Param, Post, Req } from '@nestjs/common';
+import { Controller, Param, Post } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/role/roles.decorator';
@@ -6,8 +6,6 @@ import { RoleEnum } from '../auth/role/role.enum';
 import { GetUser } from '../../decorator/getUser.decorator';
 import User from '../user/user.entity';
 import Transaction from '../transaction/transaction.entity';
-import { CashTransferCreateDto } from '../cash-transfer/dto/cash-transfer-create.dto';
-import { Request } from 'express';
 
 @Controller('payments')
 @ApiTags('Payments')

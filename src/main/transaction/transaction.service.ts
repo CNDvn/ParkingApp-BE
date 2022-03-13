@@ -6,7 +6,6 @@ import Wallet from '../wallet/wallet.entity';
 import Payment from '../payment/payment.entity';
 import Booking from '../booking/booking.entity';
 import { WalletService } from '../wallet/wallet.service';
-import User from '../user/user.entity';
 
 @Injectable()
 export class TransactionService extends BaseService<Transaction> {

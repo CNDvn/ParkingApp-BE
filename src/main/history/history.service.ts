@@ -7,7 +7,11 @@ import User from '../user/user.entity';
 export class HistoryService {
   constructor(private bookingService: BookingService) {}
 
-  getMeHistory(user: User, idCar: string): Promise<Booking[]> {
-    return this.bookingService.getHistoryBookingByIdCar(idCar, user);
+  async getMeHistory(user: User, idCar: string): Promise<Booking[]> {
+    return await this.bookingService.getHistoryBookingByIdCar(idCar, user);
+  }
+
+  getBusinessHistory(user: User, idCar: string): Promise<Booking[]> {
+    return this.bookingService.getHistoryBookingByIdParking(idCar, user);
   }
 }

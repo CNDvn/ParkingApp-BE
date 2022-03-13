@@ -1,15 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import Bank from '../bank/bank.entity';
 import Transaction from '../transaction/transaction.entity';
-import { AutoMap } from '@automapper/classes';
 import User from '../user/user.entity';
 
 @Entity()

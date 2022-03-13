@@ -8,4 +8,8 @@ export class TypeCarService extends BaseService<TypeCar> {
   constructor(private typeCarRepository: TypeCarRepository) {
     super(typeCarRepository);
   }
+
+  async getAllTypeCars(): Promise<TypeCar[]> {
+    return await this.typeCarRepository.find({ order: { createdAt: 'ASC' } });
+  }
 }
