@@ -2,17 +2,11 @@ import { BankService } from './../bank/bank.service';
 import { CashTransferCreateDto } from './dto/cash-transfer-create.dto';
 import { CashTransferRepository } from './cash-transfer.repository';
 import { BaseService } from './../base/base.service';
-import {
-  Injectable,
-  BadRequestException,
-  ParseFloatPipe,
-} from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import CashTransfer from './cash-transfer.entity';
 import User from '../user/user.entity';
 import { VnpayService } from '../vnpay/vnpay.service';
 import { VnpayDto } from '../vnpay/vnpay.dto';
-import * as querystring from 'qs';
-import crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { TransactionService } from '../transaction/transaction.service';

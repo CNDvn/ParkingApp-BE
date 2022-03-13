@@ -1,6 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import CashTransfer from '../cash-transfer/cash-transfer.entity';
 import { AutoMap } from '@automapper/classes';
 
 @Entity()
