@@ -6,7 +6,7 @@ import Customer from '../customer/customer.entity';
 import Role from '../role/role.entity';
 import Wallet from '../wallet/wallet.entity';
 import { StatusEnum } from '../../utils/status.enum';
-import Card from '../card/card.entity';
+import CashTransfer from '../cash-transfer/cash-transfer.entity';
 
 @Entity()
 class User extends BaseEntity {
@@ -108,8 +108,8 @@ class User extends BaseEntity {
   @ManyToOne(() => Role, (role) => role.users, { onDelete: 'CASCADE' })
   public role: Role;
 
-  @OneToMany(() => Card, (card) => card.user)
-  public cards: Card[];
+  @OneToMany(() => CashTransfer, (cashTransfer) => cashTransfer.user)
+  public cashTransfers: CashTransfer[];
 }
 
 export default User;

@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import BaseEntity from '../base/base.entity';
-import Card from '../card/card.entity';
+import CashTransfer from '../cash-transfer/cash-transfer.entity';
 import { AutoMap } from '@automapper/classes';
 
 @Entity()
@@ -12,9 +12,6 @@ class Bank extends BaseEntity {
   @AutoMap()
   @Column('varchar', { name: 'BankCode', nullable: false, length: 10 })
   public bankCode: string;
-
-  @OneToMany(() => Card, (card) => card.bank)
-  public cards: Card[];
 }
 
 export default Bank;

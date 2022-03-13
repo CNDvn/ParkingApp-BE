@@ -6,6 +6,7 @@ import Wallet from '../wallet/wallet.entity';
 import Payment from '../payment/payment.entity';
 import Booking from '../booking/booking.entity';
 import { WalletService } from '../wallet/wallet.service';
+import User from '../user/user.entity';
 
 @Injectable()
 export class TransactionService extends BaseService<Transaction> {
@@ -23,7 +24,7 @@ export class TransactionService extends BaseService<Transaction> {
     booking: Booking,
   ): Promise<Transaction> {
     const amount = payment.amount;
-    if (+walletCustomer.currentBalance + walletCustomer.frozenMoney < amount)
+    if (+walletCustomer.currentBalance + +walletCustomer.frozenMoney < amount)
       throw new BadRequestException(
         'There is not enough money in your wallet for checkout',
       );

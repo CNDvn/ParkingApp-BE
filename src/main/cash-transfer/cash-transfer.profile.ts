@@ -1,17 +1,17 @@
-import { CardResDto } from './dto/card-res.dto';
+import { CashTransferResDto } from './dto/cash-transfer-res.dto';
 import { Injectable } from '@nestjs/common';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Mapper, MappingProfile } from '@automapper/core';
-import Card from './card.entity';
+import CashTransfer from './cash-transfer.entity';
 
 @Injectable()
-export class CardProfile extends AutomapperProfile {
+export class CashTransferProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
   mapProfile(): MappingProfile {
     return (mapper: Mapper): void => {
-      mapper.createMap(Card, CardResDto);
+      mapper.createMap(CashTransfer, CashTransferResDto);
     };
   }
 }

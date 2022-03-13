@@ -50,6 +50,7 @@
     "firebase-admin": "^10.0.2",
     "form-data": "^4.0.0",
     "geojson": "^0.5.0",
+    "hbs": "^4.2.0",
     "mysql2": "^2.3.3",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",

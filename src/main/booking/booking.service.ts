@@ -33,10 +33,16 @@ export class BookingService extends BaseService<Booking> {
     const parking = await this.parkingService.getParking(parkingId);
     const wallet = await this.walletService.getWalletMe(user.id);
 
-    for (const item of parking.priceLists[0].priceListDetails) {
-      if (item.typeCar.id !== car.typeCar.id) {
-        throw new BadRequestException('This parking can not contain your car');
-      }
+    // for (const item of parking.priceLists[0].priceListDetails) {
+    //   if (item.typeCar.id !== car.typeCar.id) {
+    //     throw new BadRequestException('This parking can not contain your car');
+    //   }
+    // }
+    const carPrice = parking.priceLists[0].priceListDetails.find((item) => {
+      return item.typeCar.id === car.typeCar.id;
+    });
+    if (!carPrice) {
+      throw new BadRequestException('This parking can not contain your car');
     }
 
     if (car.status !== StatusEnum.ACTIVE)
@@ -57,7 +63,7 @@ export class BookingService extends BaseService<Booking> {
       await this.parkingSlotService.getAllSlotIdParking(parkingId)
     ).find((item) => item.status === StatusEnum.EMPTY);
     if (!slotEmpty)
-      throw new BadRequestException('This parking not emty slot now');
+      throw new BadRequestException('This parking not empty slot now');
 
     slotEmpty.status = StatusEnum.Full;
     car.status = StatusEnum.BOOKED;
