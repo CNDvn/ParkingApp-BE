@@ -6,8 +6,6 @@ import { RoleEnum } from '../auth/role/role.enum';
 import { GetUser } from '../../decorator/getUser.decorator';
 import User from '../user/user.entity';
 import Transaction from '../transaction/transaction.entity';
-import { CashTransferCreateDto } from '../cash-transfer/dto/cash-transfer-create.dto';
-import { Request } from 'express';
 
 @Controller('payments')
 @ApiTags('Payments')

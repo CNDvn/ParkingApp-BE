@@ -182,4 +182,27 @@ export class BookingService extends BaseService<Booking> {
     });
     return bookings;
   }
+
+  async getHistoryBookingByIdParking(
+    parkingID: string,
+    user: User,
+  ): Promise<Booking[]> {
+    const parking = await this.parkingService.getParkingIdBusiness(
+      parkingID,
+      user.business.id,
+    );
+    if (!parking) {
+      throw new BadRequestException('You not have a parking ');
+    }
+    const bookings = await this.bookingRepository.find({
+      relations: ['car', 'parkingSlot', 'service', 'parking', 'payment'],
+      where: {
+        parking: parking,
+      },
+      order: {
+        checkinTime: 'DESC',
+      },
+    });
+    return bookings;
+  }
 }

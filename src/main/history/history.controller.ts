@@ -23,4 +23,14 @@ export class HistoryController {
   ): Promise<Booking[]> {
     return await this.historyService.getMeHistory(user, idCar);
   }
+
+  @Roles(RoleEnum.BUSINESS)
+  @Get('/me/parking/:idParking')
+  @UseInterceptors(MapInterceptor(BookingDto, Booking, { isArray: true }))
+  async getHistoryBusiness(
+    @GetUser() user: User,
+    @Param('idParking') idParking: string,
+  ): Promise<Booking[]> {
+    return await this.historyService.getBusinessHistory(user, idParking);
+  }
 }
