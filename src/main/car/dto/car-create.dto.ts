@@ -11,6 +11,4 @@ export class CarCreateDto {
   public modelCode: string;
   @ApiProperty({ type: String, description: 'typeCarId' })
   public typeCarId: string;
-  @ApiProperty({ type: [String], description: 'imageIds' })
-  public images: string[];
 }

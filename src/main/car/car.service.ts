@@ -89,12 +89,6 @@ export class CarService extends BaseService<Car> {
     const typeCar = await this.typeCarService.findById(carDto.typeCarId);
     if (!typeCar)
       throw new HttpException('type car invalid', HttpStatus.BAD_REQUEST);
-    if (carDto.images.length !== 0) {
-      const images = await this.imageService.findByIds(carDto.images);
-      if (!images || images.length === 0)
-        throw new HttpException('Image invalid', HttpStatus.BAD_REQUEST);
-      car.images = images;
-    }
     car.nPlates = carDto.nPlates;
     car.brand = carDto.brand;
     car.color = carDto.color;
