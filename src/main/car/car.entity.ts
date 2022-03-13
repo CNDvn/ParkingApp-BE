@@ -45,6 +45,7 @@ class Car extends BaseEntity {
   @OneToMany(() => Booking, (booking) => booking.car)
   public bookings: Booking[];
 
+  @AutoMap({ typeFn: () => Image })
   @OneToMany(() => Image, (image) => image.car)
   public images: Image[];
 }
