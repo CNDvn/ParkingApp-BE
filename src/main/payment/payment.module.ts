@@ -12,6 +12,8 @@ import { UserModule } from '../user/user.module';
 import { SharedModule } from '../../shared/shared/shared.module';
 import { CarModule } from '../car/car.module';
 import { ParkingSlotModule } from '../parking-slot/parking-slot.module';
+import { VnpayModule } from '../vnpay/vnpay.module';
+import { BankModule } from '../bank/bank.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { ParkingSlotModule } from '../parking-slot/parking-slot.module';
     SharedModule,
     CarModule,
     ParkingSlotModule,
+    VnpayModule,
+    BankModule,
   ],
   controllers: [PaymentController],
   providers: [PaymentService, PaymentProfile],

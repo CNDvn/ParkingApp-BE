@@ -26,7 +26,7 @@ import { JwtAuthGuard } from './main/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from './main/auth/role/roles.guard';
 import { RoleModule } from './main/role/role.module';
 import { BankModule } from './main/bank/bank.module';
-import { CardModule } from './main/card/card.module';
+import { CashTransferModule } from './main/cash-transfer/cash-transfer.module';
 import { ImageModule } from './main/image/image.module';
 import { AllExceptionsFilter } from './exception/catch-all-exception.filter';
 import { AutoMapperModuleModule } from './auto-mapper-module/auto-mapper-module.module';
@@ -71,7 +71,7 @@ import { HistoryModule } from './main/history/history.module';
     AuthModule,
     RoleModule,
     BankModule,
-    CardModule,
+    CashTransferModule,
     ImageModule,
     AutoMapperModuleModule,
     VnpayModule,
