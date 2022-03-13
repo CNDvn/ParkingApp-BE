@@ -100,17 +100,21 @@ export class ParkingService extends BaseService<Parking> {
     );
   }
 
-  async confirmParking(idParking: string): Promise<Parking> {
+  async confirmParking(idParking: string): Promise<string> {
     const parking = await this.parkingRepository.getParking(idParking);
-    if (parking)
-      return await this.update(idParking, { status: StatusEnum.ACTIVE });
+    if (parking) {
+      await this.update(idParking, { status: StatusEnum.ACTIVE });
+      return 'Confirm Parking Success';
+    }
     throw new HttpException('Parking not existed', HttpStatus.BAD_REQUEST);
   }
 
-  async rejectParking(idParking: string): Promise<Parking> {
+  async rejectParking(idParking: string): Promise<string> {
     const parking = await this.parkingRepository.getParking(idParking);
-    if (parking)
-      return await this.update(idParking, { status: StatusEnum.REJECT });
+    if (parking) {
+      await this.update(idParking, { status: StatusEnum.REJECT });
+      return 'Reject Parking Success';
+    }
     throw new HttpException('Parking not existed', HttpStatus.BAD_REQUEST);
   }
 

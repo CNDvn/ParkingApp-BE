@@ -190,15 +190,13 @@ export class ParkingController {
 
   @Put('/:id/confirm')
   @Roles(RoleEnum.ADMIN)
-  @UseInterceptors(MapInterceptor(ParkingDetailDto, Parking))
-  async confirmParking(@Param('id') id: string): Promise<Parking> {
+  async confirmParking(@Param('id') id: string): Promise<string> {
     return await this.parkingService.confirmParking(id);
   }
 
   @Put('/:id/reject')
   @Roles(RoleEnum.ADMIN)
-  @UseInterceptors(MapInterceptor(ParkingDetailDto, Parking))
-  async rejectParking(@Param('id') id: string): Promise<Parking> {
+  async rejectParking(@Param('id') id: string): Promise<string> {
     return await this.parkingService.rejectParking(id);
   }
 }
