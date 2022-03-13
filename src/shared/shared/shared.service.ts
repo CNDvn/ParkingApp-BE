@@ -93,7 +93,7 @@ export class SharedService {
     const hourBook = milliseconds / 1000 / 60 / 60;
     let total = 0;
     if (hourBook <= 2) {
-      total = amountOneHour * 2;
+      total = amountOneHour * hourBook;
     } else if (hourBook > 2 && hourBook <= 4) {
       total =
         amountOneHour * 2 +
