@@ -4,6 +4,7 @@ import User from '../user/user.entity';
 import { CarCreateDto } from './dto/car-create.dto';
 import TypeCar from '../type-car/type-car.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import Image from '../image/image.entity';
 
 @EntityRepository(Car)
 export class CarRepository extends Repository<Car> {
@@ -17,6 +18,10 @@ export class CarRepository extends Repository<Car> {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const images: Image[] = await queryRunner.manager.findByIds(
+        Image,
+        carDto.images,
+      );
       const car = queryRunner.manager.create(Car, {
         nPlates: carDto.nPlates,
         brand: carDto.brand,
@@ -25,6 +30,7 @@ export class CarRepository extends Repository<Car> {
         typeCar: typeCar,
         createdBy: user.id,
         customer: user.customer,
+        images: images,
       });
 
       await queryRunner.manager.save(car);
