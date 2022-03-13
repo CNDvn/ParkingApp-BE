@@ -191,12 +191,14 @@ export class ParkingController {
   @Put('/:id/confirm')
   @Roles(RoleEnum.ADMIN)
   async confirmParking(@Param('id') id: string): Promise<string> {
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.confirmParking(id);
   }
 
   @Put('/:id/reject')
   @Roles(RoleEnum.ADMIN)
   async rejectParking(@Param('id') id: string): Promise<string> {
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.rejectParking(id);
   }
 }
