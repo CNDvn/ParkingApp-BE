@@ -36,7 +36,8 @@ jobs:
       DOCKER_TAG: latest
     executor: docker/docker
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.13
       - checkout
       - docker/check:
           docker-username: DOCKER_USER
