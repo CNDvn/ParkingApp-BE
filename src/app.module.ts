@@ -36,6 +36,7 @@ import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { VnpayModule } from './main/vnpay/vnpay.module';
 import { RedisModule } from './redis/redis.module';
 import { HistoryModule } from './main/history/history.module';
+import { PushNotificationModule } from './main/push-notification/push-notification.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { HistoryModule } from './main/history/history.module';
     AutoMapperModuleModule,
     VnpayModule,
     HistoryModule,
+    PushNotificationModule,
   ],
   controllers: [AppController],
   providers: [
