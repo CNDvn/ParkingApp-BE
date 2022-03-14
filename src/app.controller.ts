@@ -1,3 +1,4 @@
+import { Public } from './main/auth/public';
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -13,6 +14,12 @@ export class AppController {
     private readonly appService: AppService,
     private smsService: SmsService,
   ) {}
+
+  @Get('/testDocker')
+  @Public()
+  testDocker(): string {
+    return 'This is docker commit';
+  }
 
   @Get()
   async getHello(@GetUser() user: User): Promise<MessageInstance> {
