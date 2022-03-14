@@ -37,7 +37,7 @@ jobs:
     executor: docker/docker
     steps:
       - setup_remote_docker:
-          version: 20.10.13
+          version: 20.10.12
       - checkout
       - docker/check:
           docker-username: DOCKER_USER
