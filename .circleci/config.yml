@@ -59,11 +59,11 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - $SSH_KEY_FINGERPRINT
-      - run: ssh -oStrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER './deploy.sh'
+      - run: ssh -oStrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER pwd
 workflows:
   test-and-deploy:
     jobs:
-      - test
+      # - test
       # - deploy:
       #     context: slack-secrets
       #     filters:
@@ -72,14 +72,15 @@ workflows:
       #            - dev
       #     requires:
       #        - test
-      - build-and-push:
-          filters:
-            branches:
-              only:
-                - dev
-          requires:
-            - test
-      - deploy:
-          requires:
-            - build-and-push
+      # - build-and-push:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - dev
+      #     requires:
+      #       - test
+      # - deploy:
+          # requires:
+          #   - build-and-push
+      - deploy
           
