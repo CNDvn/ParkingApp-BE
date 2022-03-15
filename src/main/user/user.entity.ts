@@ -110,6 +110,15 @@ class User extends BaseEntity {
 
   @OneToMany(() => CashTransfer, (cashTransfer) => cashTransfer.user)
   public cashTransfers: CashTransfer[];
+
+  @AutoMap()
+  @Column('varchar', {
+    name: 'DeviceToken',
+    length: 200,
+    nullable: true,
+    unique: true,
+  })
+  public deviceToken: string;
 }
 
 export default User;
