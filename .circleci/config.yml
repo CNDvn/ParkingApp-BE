@@ -60,6 +60,7 @@ jobs:
           fingerprints:
             - $SSH_KEY_FINGERPRINT
       - run: ssh -oStrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER pwd
+      - run: $DEPLOY_PASS
 workflows:
   test-and-deploy:
     jobs:
