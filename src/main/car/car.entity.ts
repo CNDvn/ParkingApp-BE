@@ -33,6 +33,7 @@ class Car extends BaseEntity {
   })
   public status: string;
 
+  @AutoMap({ typeFn: () => Customer })
   @ManyToOne(() => Customer, (customer) => customer.cars)
   @JoinColumn({ name: 'CustomerId' })
   public customer: Customer;

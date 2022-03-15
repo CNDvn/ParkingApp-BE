@@ -12,6 +12,8 @@ import ParkingSlotDTO from './parking-slot.dto';
 import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
+import { StatusEnum } from 'src/utils/status.enum';
+import User from '../user/user.entity';
 
 @Injectable()
 export class ParkingSlotService extends BaseService<ParkingSlot> {
@@ -79,5 +81,37 @@ export class ParkingSlotService extends BaseService<ParkingSlot> {
     }
 
     return [parkingSlotDto, count];
+  }
+
+  async getParkingSlot(id: string): Promise<ParkingSlot> {
+    const slot = await this.parkingSlotRepository.findOne(id, {
+      where: {
+        status: StatusEnum.Full,
+      },
+      relations: [
+        'bookings',
+        'bookings.car',
+        'bookings.car.typeCar',
+        'bookings.car.images',
+        'bookings.car.customer',
+        'bookings.car.customer.user',
+      ],
+    });
+    if (!slot) {
+      return await this.parkingSlotRepository.findOne(id, {
+        where: {
+          status: StatusEnum.EMPTY,
+        },
+        relations: [
+          'bookings',
+          'bookings.car',
+          'bookings.car.typeCar',
+          'bookings.car.images',
+          'bookings.car.customer',
+          'bookings.car.customer.user',
+        ],
+      });
+    }
+    return slot;
   }
 }

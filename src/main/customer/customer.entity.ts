@@ -11,6 +11,7 @@ class Customer extends BaseEntity {
   @Column('int', { name: 'Level', nullable: false, default: 0 })
   public level: number;
 
+  @AutoMap({ typeFn: () => User })
   @OneToOne(() => User, (user) => user.customer, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'UserId' })
   public user: User;
