@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { IsBeforeConstraint } from 'src/validator/isBefore.validation';
 import { IsPhoneNumberVN } from 'src/validator/isPhoneNumber.validation';
-class Coordinate {
+export class Coordinate {
   @Min(-90)
   @Max(90)
   @ApiProperty({

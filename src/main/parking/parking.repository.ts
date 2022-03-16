@@ -1,7 +1,8 @@
+import { BadRequestException } from '@nestjs/common';
 import { StatusEnum } from 'src/utils/status.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import Business from '../business/business.entity';
-import { ParkingCreateDTO } from './dto/parking-create.dto';
+import { Coordinate, ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingFilterPagination from './dto/parking-pagination.filter';
 import Parking from './parking.entity';
 @EntityRepository(Parking)
@@ -31,6 +32,18 @@ export class ParkingRepository extends Repository<Parking> {
       })
       .execute();
     return 'create parking succesfully';
+  }
+  async updateLongLat(id: string, dto: Coordinate): Promise<Parking> {
+    const parking = await this.findOne({ id: id });
+
+    if (!parking) throw new BadRequestException('parking not exist');
+
+    parking.coordinate = {
+      type: 'Point',
+      coordinates: [dto.latitude, dto.longitude],
+    };
+
+    return await this.save(parking);
   }
 
   async getAllParkings(

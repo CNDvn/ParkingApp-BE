@@ -10,7 +10,7 @@ import { StatusEnum } from 'src/utils/status.enum';
 import { BaseService } from '../base/base.service';
 import { BusinessService } from '../business/business.service';
 import User from '../user/user.entity';
-import { ParkingCreateDTO } from './dto/parking-create.dto';
+import { Coordinate, ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingFilterPagination, {
   ParkingFilterPaginationStatus,
 } from './dto/parking-pagination.filter';
@@ -140,5 +140,9 @@ export class ParkingService extends BaseService<Parking> {
       { id: id },
       { relations: relations },
     );
+  }
+
+  async updateLongLat(id: string, dto: Coordinate): Promise<Parking> {
+    return await this.parkingRepository.updateLongLat(id, dto);
   }
 }
