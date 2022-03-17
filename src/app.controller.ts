@@ -18,7 +18,7 @@ export class AppController {
   @Get('/testDocker')
   @Public()
   testDocker(): string {
-    return 'This is docker commit';
+    return 'This is docker commit maybe done';
   }
 
   @Get()
