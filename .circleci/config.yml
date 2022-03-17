@@ -72,13 +72,14 @@ workflows:
       #            - dev
       #     requires:
       #        - test
-      - build-and-push:
+      # - build-and-push:
       #     filters:
       #       branches:
       #         only:
       #           - dev
       #     requires:
       #       - test
+      - build-and-push
       - deploy:
           requires:
             - build-and-push
