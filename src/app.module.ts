@@ -34,8 +34,9 @@ import SmsService from './utils/sms.service';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { VnpayModule } from './main/vnpay/vnpay.module';
-import { RedisModule } from './redis/redis.module';
+// import { RedisModule } from './redis/redis.module';
 import { HistoryModule } from './main/history/history.module';
+import { PushNotificationModule } from './main/push-notification/push-notification.module';
 
 @Module({
   imports: [
@@ -45,11 +46,11 @@ import { HistoryModule } from './main/history/history.module';
       validationSchema: Joi.object({
         MYSQL_PORT: Joi.number().required(),
         PORT: Joi.number(),
-        REDIS_PORT: Joi.number(),
-        REDIS_HOST: Joi.string().required(),
+        // REDIS_PORT: Joi.number(),
+        // REDIS_HOST: Joi.string().required(),
       }),
     }),
-    RedisModule,
+    // RedisModule,
     AutoMapperModuleModule,
     DatabaseModule,
     CustomerModule,
@@ -76,6 +77,7 @@ import { HistoryModule } from './main/history/history.module';
     AutoMapperModuleModule,
     VnpayModule,
     HistoryModule,
+    PushNotificationModule,
   ],
   controllers: [AppController],
   providers: [

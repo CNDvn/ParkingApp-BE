@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import { RoleEnum } from '../auth/role/role.enum';
@@ -15,12 +23,23 @@ import {
   paginateResponse,
 } from '../base/filter.pagnigation';
 import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
+import ParkingSlot from './parking-slot.entity';
+import { Public } from '../auth/public';
+import { MapInterceptor } from '@automapper/nestjs';
+import ParkingSlotStatusDTO from './dto/parking-slot.status.dto';
 
 @ApiBearerAuth()
 @ApiTags('ParkingSlots')
 @Controller('parking-slots')
 export class ParkingSlotController {
   constructor(private readonly parkingSlotService: ParkingSlotService) {}
+
+  @Roles(RoleEnum.BUSINESS)
+  @UseInterceptors(MapInterceptor(ParkingSlotStatusDTO, ParkingSlot))
+  @Get('/:id')
+  async getDetailSlot(@Param('id') id: string): Promise<ParkingSlot> {
+    return await this.parkingSlotService.getParkingSlot(id);
+  }
 
   @Roles(RoleEnum.BUSINESS)
   @Post('/parkings/:idParking')
