@@ -63,23 +63,22 @@ jobs:
 workflows:
   test-and-deploy:
     jobs:
-      # - test
-      # - deploy:
-      #     context: slack-secrets
-      #     filters:
-      #        branches:
-      #          only:
-      #            - dev
-      #     requires:
-      #        - test
-      # - build-and-push:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - dev
-      #     requires:
-      #       - test
-      - build-and-push
+      - test
+      - deploy:
+          context: slack-secrets
+          filters:
+             branches:
+               only:
+                 - dev
+          requires:
+             - test
+      - build-and-push:
+          filters:
+            branches:
+              only:
+                - dev
+          requires:
+            - test
       - deploy:
           requires:
             - build-and-push
