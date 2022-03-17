@@ -59,7 +59,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - $SSH_KEY_FINGERPRINT
-      - run: ssh -o StrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER pwd
+      - run: ssh -o StrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER './deploy.sh'
 workflows:
   test-and-deploy:
     jobs:
@@ -72,15 +72,14 @@ workflows:
       #            - dev
       #     requires:
       #        - test
-      # - build-and-push:
+      - build-and-push:
       #     filters:
       #       branches:
       #         only:
       #           - dev
       #     requires:
       #       - test
-      # - deploy:
-          # requires:
-          #   - build-and-push
-      - deploy
+      - deploy:
+          requires:
+            - build-and-push
           
