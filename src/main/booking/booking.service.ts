@@ -1,3 +1,5 @@
+import { BusinessService } from './../business/business.service';
+import { SharedService } from 'src/shared/shared/shared.service';
 import { ParkingSlotService } from './../parking-slot/parking-slot.service';
 import { StatusEnum } from './../../utils/status.enum';
 import { WalletService } from './../wallet/wallet.service';
@@ -10,6 +12,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import Booking from './booking.entity';
 import { PaymentService } from '../payment/payment.service';
 import Payment from '../payment/payment.entity';
+import { TypeTimeEnum } from 'src/utils/typeTime.enum';
+import Transaction from '../transaction/transaction.entity';
 
 @Injectable()
 export class BookingService extends BaseService<Booking> {
@@ -20,6 +24,8 @@ export class BookingService extends BaseService<Booking> {
     private walletService: WalletService,
     private parkingSlotService: ParkingSlotService,
     private paymentService: PaymentService,
+    private sharedService: SharedService,
+    private businessService: BusinessService,
   ) {
     super(bookingRepository);
   }
@@ -204,5 +210,62 @@ export class BookingService extends BaseService<Booking> {
       },
     });
     return bookings;
+  }
+
+  async cancel(user: User, carId: string): Promise<Booking> {
+    const now = new Date();
+    const car = await this.carService.findById(carId);
+    const bookings = await this.bookingRepository.find({
+      where: { car, status: StatusEnum.PENDING },
+      relations: [
+        'car',
+        'car.customer',
+        'car.customer.user',
+        'car.customer.user.wallet',
+        'parkingSlot',
+        'parking',
+        'parking.business',
+        'parking.business.user',
+        'parking.business.user.wallet',
+        'payment',
+      ],
+    });
+
+    if (bookings.length > 1) throw new BadRequestException('data error');
+    if (bookings.length < 1)
+      throw new BadRequestException('This car not booked');
+
+    const booking = bookings[0];
+
+    const intervalBooking = this.sharedService.transformTime(
+      now.getTime() - booking.startTime.getTime(),
+      TypeTimeEnum.M,
+    );
+
+    if (intervalBooking <= 2) {
+      booking.car.status = StatusEnum.ACTIVE;
+      booking.status = StatusEnum.CANCEL;
+      booking.parkingSlot.status = StatusEnum.EMPTY;
+      booking.car.customer.user.wallet.frozenMoney =
+        parseFloat(booking.car.customer.user.wallet.frozenMoney.toString()) -
+        parseFloat(booking.price.toString()) * 5;
+      booking.car.customer.user.wallet.currentBalance =
+        parseFloat(booking.car.customer.user.wallet.currentBalance.toString()) +
+        parseFloat(booking.price.toString()) * 5;
+
+      return await this.bookingRepository.cancel(booking, intervalBooking);
+    }
+
+    if (intervalBooking <= 30) {
+      if (!booking.payment) booking.payment = new Payment();
+      booking.payment.amount = booking.price / 2;
+      booking.payment.endTime = now;
+      return await this.bookingRepository.cancel(booking, intervalBooking);
+    }
+    if (!booking.payment) booking.payment = new Payment();
+    booking.payment.amount = booking.price * (intervalBooking / 60);
+    booking.payment.endTime = now;
+
+    return await this.bookingRepository.cancel(booking, intervalBooking);
   }
 }

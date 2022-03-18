@@ -1,3 +1,4 @@
+import { TypeTimeEnum } from './../../utils/typeTime.enum';
 import User from 'src/main/user/user.entity';
 import { UserService } from 'src/main/user/user.service';
 import {
@@ -141,5 +142,13 @@ export class SharedService {
         amountOneHour * (hourBook - 10) * (25 / 100);
     }
     return total;
+  }
+
+  public transformTime(time: number, type: TypeTimeEnum): number {
+    let result = time / 1000;
+    if (type === TypeTimeEnum.S) return result;
+    result = result / 60;
+    if (type === TypeTimeEnum.M) return result;
+    return result / 60;
   }
 }
