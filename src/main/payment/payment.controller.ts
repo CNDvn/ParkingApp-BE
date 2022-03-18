@@ -21,4 +21,13 @@ export class PaymentController {
   ): Promise<Transaction> {
     return await this.paymentService.payment(bookingId, user);
   }
+
+  @Post('/cancel/booking/:bookingId')
+  @Roles(RoleEnum.CUSTOMER)
+  async paymentCancalBooking(
+    @GetUser() user: User,
+    @Param('bookingId') bookingId: string,
+  ): Promise<Transaction> {
+    return await this.paymentService.paymentCancelBooking(bookingId, user);
+  }
 }

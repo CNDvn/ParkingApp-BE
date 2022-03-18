@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+  Put,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import User from '../user/user.entity';
@@ -54,5 +61,14 @@ export class BookingController {
     @Param('carId') carId: string,
   ): Promise<Booking> {
     return await this.bookingService.getPresentBooking(user, carId);
+  }
+
+  @Put('/cancel/car/:carId')
+  @UseInterceptors(MapInterceptor(BookingDto, Booking))
+  async cancel(
+    @GetUser() user: User,
+    @Param('carId') carId: string,
+  ): Promise<Booking> {
+    return await this.bookingService.cancel(user, carId);
   }
 }
