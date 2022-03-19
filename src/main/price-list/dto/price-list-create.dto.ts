@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Min, Validate } from 'class-validator';
+import { IsUUID, Min, Validate } from 'class-validator';
 import { IsNotBlank } from 'src/validator/is-not-blank.validation';
 
 export class PriceListDetail {
@@ -16,6 +16,7 @@ export class PriceListCreate {
   @ApiProperty({ type: String, description: 'name' })
   public name: string;
 
+  @IsUUID('3', { each: true })
   @ApiProperty({ type: [PriceListDetail], description: 'priceListDetails' })
   public priceListDetails: PriceListDetail[];
 }

@@ -38,6 +38,7 @@ import ParkingDetailDto from './dto/parking-detail.dto';
 import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
+import { ParkingUpdateDTO } from './dto/parking-update.dto';
 // import { HttpCacheInterceptor } from 'src/interceptor/httpCache.interceptor';
 // import { RedisService } from 'src/redis/redis.service';
 
@@ -49,7 +50,15 @@ export class ParkingController {
     private readonly parkingService: ParkingService,
     private imageService: ImageService, // private redisService: RedisService,
   ) {}
-
+  @Roles(RoleEnum.ADMIN, RoleEnum.BUSINESS)
+  @Put('/:id')
+  async updateParking(
+    @Param('id') id: string,
+    @Body() updateParkingDTO: ParkingUpdateDTO,
+  ): Promise<string> {
+    // await this.redisService.clearCache('/api/v1/parkings');
+    return await this.parkingService.updateParking(id, updateParkingDTO);
+  }
   @Roles(RoleEnum.BUSINESS)
   @Post('/:id')
   @ApiConsumes('multipart/form-data')
