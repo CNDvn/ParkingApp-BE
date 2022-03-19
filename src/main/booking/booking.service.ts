@@ -201,7 +201,14 @@ export class BookingService extends BaseService<Booking> {
       throw new BadRequestException('You not have a parking ');
     }
     const bookings = await this.bookingRepository.find({
-      relations: ['car', 'parkingSlot', 'service', 'parking', 'payment'],
+      relations: [
+        'car',
+        'car.images',
+        'parkingSlot',
+        'service',
+        'parking',
+        'payment',
+      ],
       where: {
         parking: parking,
       },

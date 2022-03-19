@@ -13,7 +13,7 @@ export class CarResponseDto extends BaseDto {
   public color: string;
   @AutoMap()
   public modelCode: string;
-  @AutoMap()
+  @AutoMap({ typeFn: () => ImageUrlViewDto })
   public images: ImageUrlViewDto[];
   @AutoMap({ typeFn: () => TypeCarDto })
   public typeCar: TypeCarDto;
