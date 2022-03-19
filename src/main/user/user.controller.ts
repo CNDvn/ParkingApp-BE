@@ -78,6 +78,7 @@ export class UserController {
     return await this.userService.updateUser(user.id, data);
   }
 
+  @Roles(RoleEnum.ADMIN)
   @Put('/:id/status')
   @ApiQuery({ name: 'status', enum: StatusUser })
   @ApiResponse({
