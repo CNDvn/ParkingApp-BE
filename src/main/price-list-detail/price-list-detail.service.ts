@@ -12,7 +12,10 @@ export class PriceListDetailService extends BaseService<PriceListDetail> {
 
   async findPriceListDetailByIdPriceList(
     priceList: PriceList,
-  ): Promise<PriceListDetail> {
-    return this.priceListDetailRepository.findOne({ priceList });
+  ): Promise<PriceListDetail[]> {
+    return this.priceListDetailRepository.find({
+      where: { priceList },
+      relations: ['typeCar'],
+    });
   }
 }
