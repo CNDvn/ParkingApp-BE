@@ -7,5 +7,6 @@ import { UserModule } from '../user/user.module';
   imports: [UserModule],
   controllers: [PushNotificationController],
   providers: [PushNotificationService],
+  exports: [PushNotificationService],
 })
 export class PushNotificationModule {}
