@@ -24,7 +24,6 @@ import {
 } from '../base/filter.pagnigation';
 import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filter';
 import ParkingSlot from './parking-slot.entity';
-import { Public } from '../auth/public';
 import { MapInterceptor } from '@automapper/nestjs';
 import ParkingSlotStatusDTO from './dto/parking-slot.status.dto';
 

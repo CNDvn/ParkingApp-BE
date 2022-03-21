@@ -4,7 +4,6 @@ import Car from '../car/car.entity';
 import Booking from './booking.entity';
 import Wallet from '../wallet/wallet.entity';
 import ParkingSlot from '../parking-slot/parking-slot.entity';
-import Payment from '../payment/payment.entity';
 
 @EntityRepository(Booking)
 export class BookingRepository extends Repository<Booking> {

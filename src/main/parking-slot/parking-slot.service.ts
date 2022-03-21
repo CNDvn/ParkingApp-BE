@@ -13,7 +13,6 @@ import { ParkingSlotPaginationFilter } from './dto/parking-slot-pagination.filte
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { StatusEnum } from 'src/utils/status.enum';
-import User from '../user/user.entity';
 
 @Injectable()
 export class ParkingSlotService extends BaseService<ParkingSlot> {

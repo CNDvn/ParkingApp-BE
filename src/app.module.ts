@@ -37,6 +37,7 @@ import { VnpayModule } from './main/vnpay/vnpay.module';
 // import { RedisModule } from './redis/redis.module';
 import { HistoryModule } from './main/history/history.module';
 import { PushNotificationModule } from './main/push-notification/push-notification.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { PushNotificationModule } from './main/push-notification/push-notificati
         // REDIS_HOST: Joi.string().required(),
       }),
     }),
+    ScheduleModule.forRoot(),
     // RedisModule,
     AutoMapperModuleModule,
     DatabaseModule,
