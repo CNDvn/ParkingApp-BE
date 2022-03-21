@@ -14,6 +14,7 @@ class ParkingSlot extends BaseEntity {
   @Column('varchar', { name: 'Status', length: 20, nullable: false })
   public status: string;
 
+  @AutoMap({ typeFn: () => Booking })
   @OneToMany(() => Booking, (booking) => booking.parkingSlot)
   public bookings: Booking[];
 

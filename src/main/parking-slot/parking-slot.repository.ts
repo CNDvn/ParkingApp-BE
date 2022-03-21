@@ -29,7 +29,10 @@ export class ParkingSlotRepository extends Repository<ParkingSlot> {
         .insert()
         .into(ParkingSlot)
         .values({
-          locationName: prefixName.toUpperCase() + '-' + (i + 1),
+          locationName:
+            i > 8
+              ? prefixName.toUpperCase() + '-' + (i + 1)
+              : prefixName.toUpperCase() + '-' + '0' + (i + 1),
           status: StatusEnum.EMPTY,
           parking,
           createdBy: business.id,

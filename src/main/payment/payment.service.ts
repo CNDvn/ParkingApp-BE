@@ -114,4 +114,45 @@ export class PaymentService extends BaseService<Payment> {
 
     return transaction;
   }
+  async paymentCancelBooking(
+    bookingId: string,
+    user: User,
+  ): Promise<Transaction> {
+    const booking = await this.bookService.getByIdWithRelations(bookingId, [
+      'service',
+      'parking',
+      'parkingSlot',
+      'payment',
+      'car',
+    ]);
+    const walletCustomer = await this.walletService.getWalletMe(user.id);
+    const business = (
+      await this.parkingService.findByIdAndRelations(booking.parking.id, [
+        'business',
+      ])
+    ).business;
+
+    const userExist = await this.userService.findUserByBusiness(business);
+
+    const walletBusiness = await this.walletService.getWalletMe(userExist.id);
+
+    const transaction = await this.transactionService.createTransaction(
+      walletCustomer,
+      walletBusiness,
+      booking.payment,
+      booking,
+    );
+
+    if (transaction) {
+      await this.bookService.update(booking.id, { status: StatusEnum.CANCEL });
+      await this.carService.update(booking.car.id, {
+        status: StatusEnum.ACTIVE,
+      });
+      await this.parkingSlotService.update(booking.parkingSlot.id, {
+        status: StatusEnum.EMPTY,
+      });
+    }
+
+    return transaction;
+  }
 }

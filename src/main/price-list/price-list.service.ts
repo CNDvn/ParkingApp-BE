@@ -176,22 +176,20 @@ export class PriceListService extends BaseService<PriceList> {
       throw new BadRequestException("You can't not host of parking");
     }
 
-    const priceListUpdated = await this.update(priceList.id, {
+    const priceListUpdated = await this.update(id, {
       name: priceListUpdate.name,
     });
     const priceListDetail =
-      await this.priceListDetail.findPriceListDetailByIdPriceList(
-        priceListUpdated,
-      );
+      await this.priceListDetail.findPriceListDetailByIdPriceList(priceList);
 
     for (const item of priceListUpdate.priceListDetails) {
       const typeCar = await this.typeCarService.findById(item.typeCarId);
       if (!typeCar) {
         throw new BadRequestException('TypeCar not found ' + item.typeCarId);
       }
-      for (const i of priceList.priceListDetails) {
+      for (const i of priceListDetail) {
         if (i.typeCar.id === typeCar.id) {
-          await this.priceListDetail.update(priceListDetail.id, {
+          await this.priceListDetail.update(i.id, {
             price: item.price,
             typeCar: typeCar,
             priceList: priceListUpdated,

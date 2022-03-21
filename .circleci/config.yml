@@ -1,8 +1,10 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.0
-  heroku: circleci/heroku@1.2.6
+  # heroku: circleci/heroku@1.2.6
   slack: circleci/slack@4.8.2
+  docker: circleci/docker@1.6.0
+
 jobs:
   test:
     docker:
@@ -15,12 +17,49 @@ jobs:
       - run: yarn install
       - run: yarn run lint
       - run: yarn run test
-  deploy:
-    executor: heroku/default
+  # deploy:
+  #   executor: heroku/default
+  #   steps:
+  #     - checkout
+  #     - heroku/install
+  #     - heroku/deploy-via-git
+  #     - slack/notify:
+  #         event: fail
+  #         template: basic_fail_1
+  #         # mentions: '@EngineeringTeam'
+  #     - slack/notify:
+  #         event: pass
+  #         template: basic_success_1
+  build-and-push:
+    environment:
+      DOCKER_IMAGE: parking-app-be
+      DOCKER_TAG: latest
+    executor: docker/docker
     steps:
+      - setup_remote_docker:
+          version: 20.10.12
       - checkout
-      - heroku/install
-      - heroku/deploy-via-git
+      - docker/check:
+          docker-username: DOCKER_USER
+          docker-password: DOCKER_PASSWORD
+      - docker/build:
+          image: $DOCKER_USER/$DOCKER_IMAGE
+          tag: $DOCKER_TAG
+
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: $DOCKER_USER/$DOCKER_IMAGE
+          tag: $DOCKER_TAG
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+  deploy:
+    executor: docker/docker
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - $SSH_KEY_FINGERPRINT
+      - run: ssh -o StrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER './deploy.sh'
       - slack/notify:
           event: fail
           template: basic_fail_1
@@ -32,11 +71,22 @@ workflows:
   test-and-deploy:
     jobs:
       - test
-      - deploy:
-          context: slack-secrets
+      # - deploy:
+      #     context: slack-secrets
+      #     filters:
+      #        branches:
+      #          only:
+      #            - dev
+      #     requires:
+      #        - test
+      - build-and-push:
           filters:
-             branches:
-               only:
-                 - dev
+            branches:
+              only:
+                - dev
           requires:
-             - test
+            - test
+      - deploy:
+          requires:
+            - build-and-push
+          

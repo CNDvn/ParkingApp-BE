@@ -14,6 +14,7 @@ import { ParkingCreateDTO } from './dto/parking-create.dto';
 import ParkingFilterPagination, {
   ParkingFilterPaginationStatus,
 } from './dto/parking-pagination.filter';
+import { ParkingUpdateDTO } from './dto/parking-update.dto';
 import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
 import { ParkingRepository } from './parking.repository';
@@ -140,5 +141,30 @@ export class ParkingService extends BaseService<Parking> {
       { id: id },
       { relations: relations },
     );
+  }
+
+  async updateParking(
+    idParking: string,
+    updateParkingDTO: ParkingUpdateDTO,
+  ): Promise<string> {
+    const parking = await this.parkingRepository.getParking(idParking);
+    if (parking) {
+      await this.update(idParking, {
+        name: updateParkingDTO.name,
+        address: updateParkingDTO.address,
+        coordinate: {
+          type: 'Point',
+          coordinates: [
+            updateParkingDTO.coordinate.latitude,
+            updateParkingDTO.coordinate.longitude,
+          ],
+        },
+        openTime: updateParkingDTO.openTime,
+        closeTime: updateParkingDTO.closeTime,
+        phoneNumber: updateParkingDTO.phoneNumber,
+      });
+      return 'Update Parking Success';
+    }
+    throw new HttpException('Parking not existed', HttpStatus.BAD_REQUEST);
   }
 }

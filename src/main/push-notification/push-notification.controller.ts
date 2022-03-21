@@ -25,7 +25,7 @@ export class PushNotificationController {
     );
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.CUSTOMER, RoleEnum.BUSINESS)
   @Put('/deviceToken')
   async sendDeviceToken(
     @Body() deviceToken: DeviceToken,

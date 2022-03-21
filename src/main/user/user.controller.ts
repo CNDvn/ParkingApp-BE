@@ -34,6 +34,7 @@ import {
 import { StatusSortEnum } from 'src/utils/status.enum';
 import { ApiListResponse } from 'src/decorator/apiPaginateResponse.decorator';
 import { UserSortEnum } from './user.enum';
+import { StatusUser } from './dto/user-update-status.dto';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -75,6 +76,20 @@ export class UserController {
     @Body() data: UserUpdateProfileDto,
   ): Promise<string> {
     return await this.userService.updateUser(user.id, data);
+  }
+
+  @Roles(RoleEnum.ADMIN)
+  @Put('/:id/status')
+  @ApiQuery({ name: 'status', enum: StatusUser })
+  @ApiResponse({
+    status: 200,
+    description: 'Ban User And Active User',
+  })
+  async updateStatus(
+    @Query('status') status: StatusUser = StatusUser.BAN,
+    @Param('id') id: string,
+  ): Promise<string> {
+    return await this.userService.updateStatusUser(id, status);
   }
 
   @Put('avatar')

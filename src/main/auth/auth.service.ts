@@ -47,6 +47,12 @@ export class AuthService {
       password,
       user.password,
     );
+    if (user.status === StatusEnum.BAN) {
+      throw new HttpException(
+        { message: 'Account Banned' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     if (user && isMatch && user.status === StatusEnum.ACTIVE) {
       user.password = undefined;
       if (user.role.name === role) {

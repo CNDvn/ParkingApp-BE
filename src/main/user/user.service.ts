@@ -22,6 +22,7 @@ import UserDTO from './user.dto';
 import type { Mapper } from '@automapper/types';
 import { InjectMapper } from '@automapper/nestjs';
 import Business from '../business/business.entity';
+import { StatusUser } from './dto/user-update-status.dto';
 @Injectable()
 export class UserService extends BaseService<User> {
   constructor(
@@ -71,6 +72,17 @@ export class UserService extends BaseService<User> {
       throw new BadRequestException(`${id} id not found`);
     }
     return await this.userRepository.updateUser(id, data);
+  }
+
+  async updateStatusUser(id: string, status: StatusUser): Promise<string> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new BadRequestException(`${id} id not found`);
+    }
+    await this.update(id, { status: status });
+    return status === StatusUser.ACTIVE
+      ? 'Active User Success'
+      : 'Ban User Success';
   }
 
   async updateRefreshToken(user: User): Promise<User> {
