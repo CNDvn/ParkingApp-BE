@@ -154,7 +154,11 @@ export class BookingService extends BaseService<Booking> {
         where: { car: car },
         relations: ['service', 'parking', 'parkingSlot', 'payment', 'car'],
       })
-    ).filter((booking) => booking.status !== StatusEnum.PAID);
+    ).filter(
+      (booking) =>
+        booking.status !== StatusEnum.PAID &&
+        booking.status !== StatusEnum.CANCEL,
+    );
 
     if (result.length > 1)
       throw new BadRequestException(
