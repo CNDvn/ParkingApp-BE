@@ -14,6 +14,7 @@ import { BookingService } from './booking.service';
 import { BookingController } from './booking.controller';
 import { PaymentModule } from '../payment/payment.module';
 import { BookingProfile } from './booking.profile';
+import { PushNotificationModule } from '../push-notification/push-notification.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { BookingProfile } from './booking.profile';
     WalletModule,
     ParkingSlotModule,
     PaymentModule,
+    PushNotificationModule,
     SharedModule,
     BusinessModule,
   ],

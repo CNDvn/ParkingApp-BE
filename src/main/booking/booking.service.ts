@@ -12,6 +12,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import Booking from './booking.entity';
 import { PaymentService } from '../payment/payment.service';
 import Payment from '../payment/payment.entity';
+import { PushNotificationService } from '../push-notification/push-notification.service';
 import { TypeTimeEnum } from 'src/utils/typeTime.enum';
 import Transaction from '../transaction/transaction.entity';
 
@@ -24,6 +25,7 @@ export class BookingService extends BaseService<Booking> {
     private walletService: WalletService,
     private parkingSlotService: ParkingSlotService,
     private paymentService: PaymentService,
+    private pushNotifyService: PushNotificationService,
     private sharedService: SharedService,
     private businessService: BusinessService,
   ) {
@@ -87,6 +89,20 @@ export class BookingService extends BaseService<Booking> {
       slotEmpty,
       car,
       booking,
+    );
+    await this.pushNotifyService.sendNotify(
+      {
+        title: 'Parking App Notification ',
+        body: `Your car ${car.nPlates} booking success`,
+      },
+      user,
+    );
+    await this.pushNotifyService.sendNotify(
+      {
+        title: 'Parking App Notification ',
+        body: `You Have New Booking: ${user.username} - car: ${car.nPlates} `,
+      },
+      parking.business.user,
     );
     return result;
   }
