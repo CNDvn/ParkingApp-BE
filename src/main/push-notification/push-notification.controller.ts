@@ -1,4 +1,5 @@
 import { Body, Controller, Post, Put } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/decorator/getUser.decorator';
 import { RoleEnum } from '../auth/role/role.enum';
@@ -14,6 +15,12 @@ import { PushNotificationService } from './push-notification.service';
 @Controller('push-notification')
 export class PushNotificationController {
   constructor(private pushNotificationService: PushNotificationService) {}
+
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
+  async systemHandler(): Promise<void> {
+    return await this.pushNotificationService.systemHandlerService();
+  }
+
   @Post('/testNotify')
   async send(
     @Body() createPushNotificationDto: CreatePushNotificationDto,

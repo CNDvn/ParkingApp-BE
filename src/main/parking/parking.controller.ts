@@ -39,8 +39,8 @@ import ParkingDTO from './dto/parking.dto';
 import Parking from './parking.entity';
 import { ParkingService } from './parking.service';
 import { ParkingUpdateDTO } from './dto/parking-update.dto';
-// import { HttpCacheInterceptor } from 'src/interceptor/httpCache.interceptor';
-// import { RedisService } from 'src/redis/redis.service';
+import { HttpCacheInterceptor } from 'src/interceptor/httpCache.interceptor';
+import { RedisService } from 'src/redis/redis.service';
 
 @ApiBearerAuth()
 @ApiTags('Parkings')
@@ -48,7 +48,8 @@ import { ParkingUpdateDTO } from './dto/parking-update.dto';
 export class ParkingController {
   constructor(
     private readonly parkingService: ParkingService,
-    private imageService: ImageService, // private redisService: RedisService,
+    private imageService: ImageService,
+    private redisService: RedisService,
   ) {}
   @Roles(RoleEnum.ADMIN, RoleEnum.BUSINESS)
   @Put('/:id')
@@ -56,7 +57,7 @@ export class ParkingController {
     @Param('id') id: string,
     @Body() updateParkingDTO: ParkingUpdateDTO,
   ): Promise<string> {
-    // await this.redisService.clearCache('/api/v1/parkings');
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.updateParking(id, updateParkingDTO);
   }
   @Roles(RoleEnum.BUSINESS)
@@ -83,7 +84,7 @@ export class ParkingController {
         'you can not upload images for parking ' + data.name,
       );
     }
-    // await this.redisService.clearCache('/api/v1/parkings');
+    await this.redisService.clearCache('/api/v1/parkings');
     return this.imageService.createImagesParking(user, baseMultipleFiles, data);
   }
 
@@ -93,13 +94,13 @@ export class ParkingController {
     @Param('id') id: string,
     @GetUser() user: User,
   ): Promise<string> {
-    // await this.redisService.clearCache('/api/v1/parkings');
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.removeOwnerParking(id, user.business.id);
   }
 
   @Roles(RoleEnum.ADMIN)
   @Get('/admin')
-  // @UseInterceptors(HttpCacheInterceptor)
+  @UseInterceptors(HttpCacheInterceptor)
   async getParkingProcessing(
     @Query() parkingFilterPagination: ParkingFilterPaginationStatus,
   ): Promise<IPaginateResponse<ParkingDTO> | { message: string }> {
@@ -117,7 +118,7 @@ export class ParkingController {
   }
 
   @Roles(RoleEnum.BUSINESS)
-  // @UseInterceptors(HttpCacheInterceptor)
+  @UseInterceptors(HttpCacheInterceptor)
   @Get('OwnerParking')
   @Get('me')
   @ApiResponse({
@@ -152,13 +153,13 @@ export class ParkingController {
     @GetUser() user: User,
     @Body() parkingCreateDTO: ParkingCreateDTO,
   ): Promise<string> {
-    // await this.redisService.clearCache('/api/v1/parkings');
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.createParking(user, parkingCreateDTO);
   }
 
   @Public()
   @Get()
-  // @UseInterceptors(HttpCacheInterceptor)
+  @UseInterceptors(HttpCacheInterceptor)
   @ApiResponse({
     status: 201,
     description: 'Get All Parking Success',
@@ -199,14 +200,14 @@ export class ParkingController {
   @Put('/:id/confirm')
   @Roles(RoleEnum.ADMIN)
   async confirmParking(@Param('id') id: string): Promise<string> {
-    // await this.redisService.clearCache('/api/v1/parkings');
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.confirmParking(id);
   }
 
   @Put('/:id/reject')
   @Roles(RoleEnum.ADMIN)
   async rejectParking(@Param('id') id: string): Promise<string> {
-    // await this.redisService.clearCache('/api/v1/parkings');
+    await this.redisService.clearCache('/api/v1/parkings');
     return await this.parkingService.rejectParking(id);
   }
 }

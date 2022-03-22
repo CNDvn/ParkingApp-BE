@@ -14,14 +14,14 @@ import { ParkingProfile } from './parking.profile';
 import { ParkingDetailProfile } from './parking-detail.profile';
 import { PagerMiddleware } from 'src/middleware/pagerMiddleware';
 import { ImageModule } from '../image/image.module';
-// import { RedisModule } from 'src/redis/redis.module';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ParkingRepository]),
     BusinessModule,
     ImageModule,
-    // RedisModule,
+    RedisModule,
   ],
   controllers: [ParkingController],
   providers: [

@@ -1,6 +1,5 @@
 import { BusinessModule } from './../business/business.module';
 import { SharedModule } from './../../shared/shared/shared.module';
-import { SharedService } from 'src/shared/shared/shared.service';
 import { ParkingSlotModule } from './../parking-slot/parking-slot.module';
 import { WalletModule } from './../wallet/wallet.module';
 import { CarModule } from './../car/car.module';

@@ -14,7 +14,6 @@ import { PaymentService } from '../payment/payment.service';
 import Payment from '../payment/payment.entity';
 import { PushNotificationService } from '../push-notification/push-notification.service';
 import { TypeTimeEnum } from 'src/utils/typeTime.enum';
-import Transaction from '../transaction/transaction.entity';
 
 @Injectable()
 export class BookingService extends BaseService<Booking> {
@@ -294,5 +293,13 @@ export class BookingService extends BaseService<Booking> {
     booking.payment.endTime = now;
 
     return await this.bookingRepository.cancel(booking, intervalBooking);
+  }
+  async getAllBookingInParking(): Promise<Booking[]> {
+    return await this.bookingRepository.find({
+      where: {
+        status: StatusEnum.CHECK_IN,
+      },
+      relations: ['car', 'car.customer', 'car.customer.user'],
+    });
   }
 }
