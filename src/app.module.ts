@@ -34,7 +34,7 @@ import SmsService from './utils/sms.service';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { VnpayModule } from './main/vnpay/vnpay.module';
-import { RedisModule } from './redis/redis.module';
+// import { RedisModule } from './redis/redis.module';
 import { HistoryModule } from './main/history/history.module';
 import { PushNotificationModule } from './main/push-notification/push-notification.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -52,7 +52,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       }),
     }),
     ScheduleModule.forRoot(),
-    RedisModule,
+    // RedisModule,
     AutoMapperModuleModule,
     DatabaseModule,
     CustomerModule,
