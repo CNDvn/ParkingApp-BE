@@ -34,7 +34,7 @@ import SmsService from './utils/sms.service';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { VnpayModule } from './main/vnpay/vnpay.module';
-// import { RedisModule } from './redis/redis.module';
+import { RedisModule } from './redis/redis.module';
 import { HistoryModule } from './main/history/history.module';
 import { PushNotificationModule } from './main/push-notification/push-notification.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -47,12 +47,12 @@ import { ScheduleModule } from '@nestjs/schedule';
       validationSchema: Joi.object({
         MYSQL_PORT: Joi.number().required(),
         PORT: Joi.number(),
-        // REDIS_PORT: Joi.number(),
-        // REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number(),
+        REDIS_HOST: Joi.string().required(),
       }),
     }),
     ScheduleModule.forRoot(),
-    // RedisModule,
+    RedisModule,
     AutoMapperModuleModule,
     DatabaseModule,
     CustomerModule,
