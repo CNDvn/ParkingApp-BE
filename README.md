@@ -1,6 +1,5 @@
 # Demo
 - [Demo Video](https://youtu.be/ayvu2b3eBoM)
-- [Something about the project]()
 
 # Parking App - Back End
 
