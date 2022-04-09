@@ -1,5 +1,5 @@
 # Demo
-- [Demo Video](https://youtu.be/ayvu2b3eBoM){:target="_blank"}
+- <a href="https://youtu.be/ayvu2b3eBoM" target="_blank">Demo Video</a>
 - [Something about the project]()
 
 # Parking App - Back End
